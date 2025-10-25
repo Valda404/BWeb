@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BWeb - Task Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Menu -->
+    <header class="top-menu">
+        <div class="logo">
+            <i class="fas fa-tasks"></i>
+            <h1>BWeb Task Manager</h1>
+        </div>
+        <nav class="top-nav">
+            <button id="sync-calendar" class="btn-sync" title="Sync with Google Calendar">
+                <i class="fab fa-google"></i> Sync Calendar
+            </button>
+            <button id="settings-btn" class="btn-settings" title="Settings">
+                <i class="fas fa-cog"></i>
+            </button>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <!-- Side Menu -->
+        <aside class="side-menu">
+            <nav class="category-nav">
+                <button class="category-btn active" data-category="today">
+                    <i class="fas fa-calendar-day"></i>
+                    <span>Today</span>
+                </button>
+                <button class="category-btn" data-category="week">
+                    <i class="fas fa-calendar-week"></i>
+                    <span>This Week</span>
+                </button>
+                <button class="category-btn" data-category="month">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>This Month</span>
+                </button>
+                <button class="category-btn" data-category="all">
+                    <i class="fas fa-list"></i>
+                    <span>All Tasks</span>
+                </button>
+                <button class="category-btn" data-category="completed">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Completed</span>
+                </button>
+                <button class="category-btn" data-category="priority">
+                    <i class="fas fa-star"></i>
+                    <span>Priority</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <div class="content-header">
+                <h2 id="category-title">Today's Tasks</h2>
+                <button id="add-task-btn" class="btn-add-task">
+                    <i class="fas fa-plus"></i> Add Task
+                </button>
+            </div>
+
+            <div class="task-stats">
+                <div class="stat-card">
+                    <i class="fas fa-clipboard-list"></i>
+                    <div>
+                        <span class="stat-number" id="total-tasks">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-hourglass-half"></i>
+                    <div>
+                        <span class="stat-number" id="pending-tasks">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-double"></i>
+                    <div>
+                        <span class="stat-number" id="completed-tasks">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tasks-container" id="tasks-container">
+                <!-- Tasks will be dynamically added here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Task Modal -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Add New Task</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="task-form">
+                    <div class="form-group">
+                        <label for="task-title">Task Title *</label>
+                        <input type="text" id="task-title" required placeholder="Enter task title">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Description</label>
+                        <textarea id="task-description" rows="3" placeholder="Enter task description"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="task-date">Due Date *</label>
+                            <input type="date" id="task-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-time">Due Time</label>
+                            <input type="time" id="task-time">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Priority Level</label>
+                        <select id="task-priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="sync-google">
+                            <span>Sync with Google Calendar</span>
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel">Cancel</button>
+                        <button type="submit" class="btn-submit">Save Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
