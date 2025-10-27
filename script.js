@@ -386,5 +386,114 @@ class TaskManager {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new TaskManager();
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem('bweb-logged-in');
+    
+    if (isLoggedIn) {
+        hideLoginModal();
+        new TaskManager();
+        initLogout();
+    } else {
+        showLoginModal();
+        initAuthForms();
+    }
 });
+
+// Logout function
+function initLogout() {
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('Opravdu se chcete odhlásit?')) {
+                localStorage.removeItem('bweb-logged-in');
+                localStorage.removeItem('bweb-user-email');
+                location.reload();
+            }
+        });
+    }
+}
+
+// Auth Functions
+function showLoginModal() {
+    const loginModal = document.getElementById('login-modal');
+    loginModal.classList.add('active');
+}
+
+function hideLoginModal() {
+    const loginModal = document.getElementById('login-modal');
+    loginModal.classList.remove('active');
+}
+
+function initAuthForms() {
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const showRegisterLink = document.getElementById('show-register');
+    const showLoginLink = document.getElementById('show-login');
+    
+    // Toggle between login and register
+    showRegisterLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+    });
+    
+    showLoginLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+    });
+    
+    // Handle login
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        
+        try {
+            // Zde bude Firebase autentizace
+            // Pro teď jen simulace
+            if (email && password.length >= 6) {
+                localStorage.setItem('bweb-logged-in', 'true');
+                localStorage.setItem('bweb-user-email', email);
+                alert('Přihlášení proběhlo úspěšně!');
+                hideLoginModal();
+                new TaskManager();
+            } else {
+                alert('Heslo musí mít alespoň 6 znaků');
+            }
+        } catch (error) {
+            alert('Chyba při přihlášení: ' + error.message);
+        }
+    });
+    
+    // Handle registration
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+        const passwordConfirm = document.getElementById('register-password-confirm').value;
+        
+        if (password !== passwordConfirm) {
+            alert('Hesla se neshodují!');
+            return;
+        }
+        
+        if (password.length < 6) {
+            alert('Heslo musí mít alespoň 6 znaků');
+            return;
+        }
+        
+        try {
+            // Zde bude Firebase registrace
+            // Pro teď jen simulace
+            localStorage.setItem('bweb-logged-in', 'true');
+            localStorage.setItem('bweb-user-email', email);
+            alert('Registrace proběhla úspěšně!');
+            hideLoginModal();
+            new TaskManager();
+        } catch (error) {
+            alert('Chyba při registraci: ' + error.message);
+        }
+    });
+}
+

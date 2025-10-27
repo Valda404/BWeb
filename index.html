@@ -18,6 +18,9 @@
             <button id="sync-calendar" class="btn-sync" title="Sync with Google Calendar">
                 <i class="fab fa-google"></i> Sync Calendar
             </button>
+            <button id="logout-btn" class="btn-settings" title="Odhlásit se">
+                <i class="fas fa-sign-out-alt"></i> Odhlásit
+            </button>
             <button id="settings-btn" class="btn-settings" title="Settings">
                 <i class="fas fa-cog"></i>
             </button>
@@ -139,6 +142,54 @@
                     <div class="form-actions">
                         <button type="button" class="btn-cancel">Cancel</button>
                         <button type="submit" class="btn-submit">Save Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal active">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Přihlášení</h3>
+            </div>
+            <div class="modal-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email *</label>
+                        <input type="email" id="login-email" required placeholder="Zadejte email">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Heslo *</label>
+                        <input type="password" id="login-password" required placeholder="Zadejte heslo">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Přihlásit se</button>
+                    </div>
+                    <div class="form-footer">
+                        <p>Nemáte účet? <a href="#" id="show-register">Zaregistrujte se</a></p>
+                    </div>
+                </form>
+                
+                <form id="register-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="register-email">Email *</label>
+                        <input type="email" id="register-email" required placeholder="Zadejte email">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Heslo *</label>
+                        <input type="password" id="register-password" required placeholder="Zadejte heslo (min. 6 znaků)">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password-confirm">Potvrzení hesla *</label>
+                        <input type="password" id="register-password-confirm" required placeholder="Zadejte heslo znovu">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Zaregistrovat se</button>
+                    </div>
+                    <div class="form-footer">
+                        <p>Už máte účet? <a href="#" id="show-login">Přihlaste se</a></p>
                     </div>
                 </form>
             </div>

@@ -661,3 +661,30 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* Login/Register Form Styles */
+#login-modal .modal-content {
+    max-width: 400px;
+}
+
+.form-footer {
+    margin-top: 1rem;
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.form-footer p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.form-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
