@@ -1,7 +1,7 @@
 // Task Manager Application
 class TaskManager {
     constructor() {
-        this.tasks = this.loadTasks();
+        this.tasks = [];
         this.currentCategory = 'today';
         this.editingTaskId = null;
         this.init();
@@ -11,8 +11,7 @@ class TaskManager {
         this.cacheDOMElements();
         this.attachEventListeners();
         this.setDefaultDate();
-        this.renderTasks();
-        this.updateStats();
+        this.loadTasksFromFirebase();
     }
 
     cacheDOMElements() {
@@ -375,10 +374,24 @@ class TaskManager {
     }
 
     saveTasks() {
-        localStorage.setItem('bweb-tasks', JSON.stringify(this.tasks));
+        console.log('💾 Ukládám úkoly do Firebase...', this.tasks);
+        window.firebaseHelpers.saveTasks(this.tasks)
+            .then(() => console.log('✅ Úkoly uloženy do Firebase'))
+            .catch(err => console.error('❌ Chyba při ukládání:', err));
+    }
+
+    loadTasksFromFirebase() {
+        console.log('📥 Načítám úkoly z Firebase...');
+        window.firebaseHelpers.listenToTasks((tasks) => {
+            console.log('✅ Úkoly načteny z Firebase:', tasks);
+            this.tasks = Array.isArray(tasks) ? tasks : [];
+            this.renderTasks();
+            this.updateStats();
+        });
     }
 
     loadTasks() {
+        // Deprecated - používáme Firebase
         const saved = localStorage.getItem('bweb-tasks');
         return saved ? JSON.parse(saved) : [];
     }
@@ -386,28 +399,40 @@ class TaskManager {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if user is logged in
-    const isLoggedIn = localStorage.getItem('bweb-logged-in');
-    
-    if (isLoggedIn) {
-        hideLoginModal();
-        new TaskManager();
-        initLogout();
-    } else {
-        showLoginModal();
-        initAuthForms();
-    }
+    // Wait for Firebase to initialize
+    setTimeout(() => {
+        if (window.firebaseHelpers) {
+            window.firebaseHelpers.onAuthChange((user) => {
+                if (user) {
+                    console.log('✅ Uživatel přihlášen:', user.email);
+                    hideLoginModal();
+                    new TaskManager();
+                    initLogout();
+                } else {
+                    console.log('❌ Uživatel není přihlášen');
+                    showLoginModal();
+                    initAuthForms();
+                }
+            });
+        } else {
+            console.error('❌ Firebase se nepodařilo inicializovat');
+        }
+    }, 500);
 });
 
 // Logout function
 function initLogout() {
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
+        logoutBtn.addEventListener('click', async () => {
             if (confirm('Opravdu se chcete odhlásit?')) {
-                localStorage.removeItem('bweb-logged-in');
-                localStorage.removeItem('bweb-user-email');
-                location.reload();
+                try {
+                    await window.firebaseHelpers.signOut();
+                    location.reload();
+                } catch (error) {
+                    console.error('Chyba při odhlášení:', error);
+                    alert('Chyba při odhlášení');
+                }
             }
         });
     }
@@ -450,18 +475,11 @@ function initAuthForms() {
         const password = document.getElementById('login-password').value;
         
         try {
-            // Zde bude Firebase autentizace
-            // Pro teď jen simulace
-            if (email && password.length >= 6) {
-                localStorage.setItem('bweb-logged-in', 'true');
-                localStorage.setItem('bweb-user-email', email);
-                alert('Přihlášení proběhlo úspěšně!');
-                hideLoginModal();
-                new TaskManager();
-            } else {
-                alert('Heslo musí mít alespoň 6 znaků');
-            }
+            await window.firebaseHelpers.signIn(email, password);
+            alert('Přihlášení proběhlo úspěšně!');
+            // Firebase onAuthChange se postará o přesměrování
         } catch (error) {
+            console.error('Chyba přihlášení:', error);
             alert('Chyba při přihlášení: ' + error.message);
         }
     });
@@ -484,14 +502,11 @@ function initAuthForms() {
         }
         
         try {
-            // Zde bude Firebase registrace
-            // Pro teď jen simulace
-            localStorage.setItem('bweb-logged-in', 'true');
-            localStorage.setItem('bweb-user-email', email);
+            await window.firebaseHelpers.signUp(email, password);
             alert('Registrace proběhla úspěšně!');
-            hideLoginModal();
-            new TaskManager();
+            // Firebase onAuthChange se postará o přesměrování
         } catch (error) {
+            console.error('Chyba registrace:', error);
             alert('Chyba při registraci: ' + error.message);
         }
     });
