@@ -1,54 +1,58 @@
-/* Global Styles */
+/* ===== GLOBÁLNÍ STYLY ===== */
+/* Aplikuje se na všechny elementy (*) na stránce */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin: 0;           /* Odstraní výchozí vnější odsazení */
+    padding: 0;          /* Odstraní výchozí vnitřní odsazení */
+    box-sizing: border-box;  /* Šířka/výška zahrnuje padding a border */
 }
 
+/* ===== CSS PROMĚNNÉ (CUSTOM PROPERTIES) ===== */
+/* :root = kořenový element (HTML), proměnné jsou dostupné všude */
 :root {
-    /* Color Palette */
-    --primary-color: #4a90e2;
-    --secondary-color: #50c878;
-    --danger-color: #e74c3c;
-    --warning-color: #f39c12;
-    --dark-bg: #2c3e50;
-    --light-bg: #ecf0f1;
-    --white: #ffffff;
-    --text-dark: #2c3e50;
-    --text-light: #7f8c8d;
-    --border-color: #dfe6e9;
+    /* ===== Barevná paleta ===== */
+    --primary-color: #4a90e2;      /* Hlavní modrá barva */
+    --secondary-color: #50c878;    /* Doplňková zelená barva */
+    --danger-color: #e74c3c;       /* Červená pro varování/nebezpečí */
+    --warning-color: #f39c12;      /* Oranžová pro upozornění */
+    --dark-bg: #2c3e50;            /* Tmavé pozadí (menu) */
+    --light-bg: #ecf0f1;           /* Světlé pozadí (stránka) */
+    --white: #ffffff;              /* Bílá */
+    --text-dark: #2c3e50;          /* Tmavá barva textu */
+    --text-light: #7f8c8d;         /* Světlá barva textu (méně důležitý) */
+    --border-color: #dfe6e9;       /* Barva okrajů */
     
-    /* Priority Colors */
-    --priority-low: #95a5a6;
-    --priority-medium: #3498db;
-    --priority-high: #f39c12;
-    --priority-urgent: #e74c3c;
+    /* ===== Barvy priorit úkolů ===== */
+    --priority-low: #95a5a6;       /* Šedá pro nízkou prioritu */
+    --priority-medium: #3498db;    /* Modrá pro střední prioritu */
+    --priority-high: #f39c12;      /* Oranžová pro vysokou prioritu */
+    --priority-urgent: #e74c3c;    /* Červená pro urgentní úkoly */
     
-    /* Shadows */
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-    --shadow-lg: 0 10px 20px rgba(0,0,0,0.15);
+    /* ===== Stíny (shadows) ===== */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);    /* Malý stín */
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);    /* Střední stín */
+    --shadow-lg: 0 10px 20px rgba(0,0,0,0.15); /* Velký stín */
 }
 
+/* ===== ZÁKLADNÍ STYLY BODY ===== */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--light-bg);
-    color: var(--text-dark);
-    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Font celé stránky */
+    background-color: var(--light-bg);   /* Světlé pozadí */
+    color: var(--text-dark);             /* Tmavá barva textu */
+    line-height: 1.6;                    /* Výška řádku (mezera mezi řádky textu) */
 }
 
-/* Top Menu */
+/* ===== HORNÍ MENU ===== */
 .top-menu {
-    background-color: var(--dark-bg);
-    color: var(--white);
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--shadow-md);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    background-color: var(--dark-bg);    /* Tmavé pozadí menu */
+    color: var(--white);                 /* Bílý text */
+    padding: 1rem 2rem;                  /* Vnitřní odsazení (nahoru/dolů 1rem, vlevo/vpravo 2rem) */
+    display: flex;                       /* Flexbox layout (prvky vedle sebe) */
+    justify-content: space-between;      /* Mezera mezi prvky (logo vlevo, tlačítka vpravo) */
+    align-items: center;                 /* Vertikální zarovnání na střed */
+    box-shadow: var(--shadow-md);        /* Stín pod menu */
+    position: sticky;                    /* Přilepí se k horní části při scrollování */
+    top: 0;                              /* Přilepeno nahoře */
+    z-index: 1000;                       /* Vysoká hodnota = bude nad ostatními prvky */
 }
 
 .logo {
@@ -114,577 +118,664 @@ body {
 }
 
 .category-btn {
-    background: none;
-    border: none;
-    padding: 1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    cursor: pointer;
-    font-size: 1rem;
-    color: var(--text-dark);
-    transition: all 0.3s ease;
-    border-left: 3px solid transparent;
+    background: none;              /* Bez pozadí */
+    border: none;                  /* Bez okraje */
+    padding: 1rem 1.5rem;          /* Vnitřní odsazení */
+    display: flex;                 /* Flexbox */
+    align-items: center;           /* Zarovnání na střed */
+    gap: 1rem;                     /* Mezera mezi ikonou a textem */
+    cursor: pointer;               /* Ukazatel ruky */
+    font-size: 1rem;               /* Velikost textu */
+    color: var(--text-dark);       /* Tmavá barva textu */
+    transition: all 0.3s ease;     /* Plynulá animace změn */
+    border-left: 3px solid transparent;  /* Průhledný levý okraj (zobrazí se při aktivaci) */
 }
 
+/* Ikony v tlačítkách kategorií */
 .category-btn i {
-    font-size: 1.2rem;
-    min-width: 20px;
+    font-size: 1.2rem;    /* Velikost ikony */
+    min-width: 20px;      /* Minimální šířka (aby byly ikony zarovnané) */
 }
 
+/* Efekt při najetí myší na tlačítko kategorie */
 .category-btn:hover {
-    background-color: var(--light-bg);
-    border-left-color: var(--primary-color);
+    background-color: var(--light-bg);       /* Světlé pozadí */
+    border-left-color: var(--primary-color); /* Modrý levý okraj */
 }
 
+/* Aktivní tlačítko (aktuálně vybraná kategorie) */
 .category-btn.active {
-    background-color: #e3f2fd;
-    border-left-color: var(--primary-color);
-    color: var(--primary-color);
-    font-weight: 600;
+    background-color: #e3f2fd;               /* Světle modré pozadí */
+    border-left-color: var(--primary-color); /* Modrý levý okraj */
+    color: var(--primary-color);             /* Modrý text */
+    font-weight: 600;                        /* Tučný text */
 }
 
-/* Category-specific colors */
+/* ===== SPECIFICKÉ BARVY PRO KAŽDOU KATEGORII (když je aktivní) ===== */
+/* Today - modrá */
 .category-btn[data-category="today"].active {
-    background-color: #e3f2fd;
-    color: #1976d2;
+    background-color: #e3f2fd;  /* Světle modrá */
+    color: #1976d2;             /* Tmavě modrá */
 }
 
+/* Week - fialová */
 .category-btn[data-category="week"].active {
-    background-color: #f3e5f5;
-    color: #7b1fa2;
+    background-color: #f3e5f5;  /* Světle fialová */
+    color: #7b1fa2;             /* Tmavě fialová */
 }
 
+/* Month - zelená */
 .category-btn[data-category="month"].active {
-    background-color: #e8f5e9;
-    color: #388e3c;
+    background-color: #e8f5e9;  /* Světle zelená */
+    color: #388e3c;             /* Tmavě zelená */
 }
 
+/* All - oranžová */
 .category-btn[data-category="all"].active {
-    background-color: #fff3e0;
-    color: #f57c00;
+    background-color: #fff3e0;  /* Světle oranžová */
+    color: #f57c00;             /* Tmavě oranžová */
 }
 
+/* Completed - tyrkysová */
 .category-btn[data-category="completed"].active {
-    background-color: #e0f2f1;
-    color: #00796b;
+    background-color: #e0f2f1;  /* Světle tyrkysová */
+    color: #00796b;             /* Tmavě tyrkysová */
 }
 
+/* Priority - růžová */
 .category-btn[data-category="priority"].active {
-    background-color: #fce4ec;
-    color: #c2185b;
+    background-color: #fce4ec;  /* Světle růžová */
+    color: #c2185b;             /* Tmavě růžová */
 }
 
-/* Content Area */
+/* ===== HLAVNÍ OBLAST OBSAHU (seznam úkolů) ===== */
 .content-area {
-    flex: 1;
-    padding: 2rem;
-    overflow-y: auto;
+    flex: 1;                /* Zabírá veškerý zbývající prostor */
+    padding: 2rem;          /* Vnitřní odsazení */
+    overflow-y: auto;       /* Posouvání při velkém množství obsahu */
 }
 
+/* Záhlaví obsahu (nadpis + tlačítko přidat úkol) */
 .content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+    display: flex;                    /* Flexbox layout */
+    justify-content: space-between;   /* Prvky na opačných stranách */
+    align-items: center;              /* Vertikální zarovnání */
+    margin-bottom: 2rem;              /* Mezera pod záhlavím */
 }
 
 .content-header h2 {
-    font-size: 2rem;
-    color: var(--text-dark);
+    font-size: 2rem;             /* Velikost nadpisu */
+    color: var(--text-dark);     /* Tmavá barva textu */
 }
 
+/* Tlačítko pro přidání nového úkolu */
 .btn-add-task {
-    background-color: var(--secondary-color);
-    color: var(--white);
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
+    background-color: var(--secondary-color);  /* Zelená barva */
+    color: var(--white);                       /* Bílý text */
+    border: none;                              /* Bez okraje */
+    padding: 0.8rem 1.5rem;                    /* Vnitřní odsazení */
+    border-radius: 6px;                        /* Zaoblené rohy */
+    cursor: pointer;                           /* Ukazatel ruky */
+    font-size: 1rem;                           /* Velikost textu */
+    display: flex;                             /* Flexbox pro ikonu + text */
+    align-items: center;                       /* Zarovnání na střed */
+    gap: 0.5rem;                               /* Mezera mezi ikonou a textem */
+    transition: all 0.3s ease;                 /* Plynulá animace */
 }
 
+/* Efekt při najetí myší na tlačítko přidat úkol */
 .btn-add-task:hover {
-    background-color: #3db864;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background-color: #3db864;       /* Tmavší zelená */
+    transform: translateY(-2px);     /* Posun nahoru */
+    box-shadow: var(--shadow-md);    /* Stín */
 }
 
-/* Task Statistics */
+/* ===== STATISTIKY ÚKOLŮ (kartičky s počty) ===== */
 .task-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    display: grid;                                    /* Grid layout */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  /* Responzivní sloupce */
+    gap: 1.5rem;                                      /* Mezery mezi kartičkami */
+    margin-bottom: 2rem;                              /* Mezera pod statistikami */
 }
 
+/* Jednotlivé kartičky statistik */
 .stat-card {
-    background: var(--white);
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    transition: all 0.3s ease;
+    background: var(--white);       /* Bílé pozadí */
+    padding: 1.5rem;                /* Vnitřní odsazení */
+    border-radius: 10px;            /* Zaoblené rohy */
+    box-shadow: var(--shadow-sm);   /* Jemný stín */
+    display: flex;                  /* Flexbox pro ikonu + obsah */
+    align-items: center;            /* Vertikální zarovnání */
+    gap: 1rem;                      /* Mezera mezi prvky */
+    transition: all 0.3s ease;      /* Plynulá animace */
 }
 
+/* Efekt při najetí myší na kartu statistik */
 .stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);    /* Posun nahoru */
+    box-shadow: var(--shadow-md);   /* Výraznější stín */
 }
 
+/* Ikona ve statistické kartě */
 .stat-card i {
-    font-size: 2.5rem;
-    color: var(--primary-color);
+    font-size: 2.5rem;               /* Velká ikona */
+    color: var(--primary-color);     /* Modrá barva */
 }
 
+/* Kontejner pro číslo a popisek statistiky */
 .stat-card div {
-    display: flex;
-    flex-direction: column;
+    display: flex;                /* Flexbox layout */
+    flex-direction: column;       /* Prvky pod sebou */
 }
 
+/* Číslo statistiky (např. počet úkolů) */
 .stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-dark);
+    font-size: 2rem;              /* Velký text */
+    font-weight: 700;             /* Tučné písmo */
+    color: var(--text-dark);      /* Tmavá barva */
 }
 
+/* Popisek statistiky (např. "Celkem úkolů") */
 .stat-label {
-    font-size: 0.9rem;
-    color: var(--text-light);
+    font-size: 0.9rem;            /* Menší text */
+    color: var(--text-light);     /* Světle šedá */
 }
 
-/* Tasks Container */
+/* ===== KONTEJNER SE SEZNAMEM ÚKOLŮ ===== */
 .tasks-container {
-    background: var(--white);
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
-    min-height: 400px;
+    background: var(--white);       /* Bílé pozadí */
+    border-radius: 10px;            /* Zaoblené rohy */
+    padding: 1.5rem;                /* Vnitřní odsazení */
+    box-shadow: var(--shadow-sm);   /* Jemný stín */
+    min-height: 400px;              /* Minimální výška */
 }
 
+/* ===== JEDNOTLIVÉ ÚKOLY ===== */
 .task-item {
-    background: var(--light-bg);
-    border-radius: 8px;
-    padding: 1.2rem;
-    margin-bottom: 1rem;
-    border-left: 4px solid var(--primary-color);
-    transition: all 0.3s ease;
-    animation: slideIn 0.3s ease;
+    background: var(--light-bg);            /* Světle šedé pozadí */
+    border-radius: 8px;                     /* Zaoblené rohy */
+    padding: 1.2rem;                        /* Vnitřní odsazení */
+    margin-bottom: 1rem;                    /* Mezera mezi úkoly */
+    border-left: 4px solid var(--primary-color);  /* Levý barevný okraj (podle priority) */
+    transition: all 0.3s ease;              /* Plynulá animace */
+    animation: slideIn 0.3s ease;           /* Animace při zobrazení */
 }
 
+/* Animace plynulého objevení úkolu */
 @keyframes slideIn {
     from {
-        opacity: 0;
-        transform: translateY(-10px);
+        opacity: 0;                    /* Začátek: průhledný */
+        transform: translateY(-10px);  /* Začátek: posunutý nahoru */
     }
     to {
-        opacity: 1;
-        transform: translateY(0);
+        opacity: 1;                    /* Konec: viditelný */
+        transform: translateY(0);      /* Konec: normální pozice */
     }
 }
 
+/* Efekt při najetí myší na úkol */
 .task-item:hover {
-    transform: translateX(5px);
-    box-shadow: var(--shadow-md);
+    transform: translateX(5px);     /* Posun doprava */
+    box-shadow: var(--shadow-md);   /* Stín */
 }
 
+/* Dokončený úkol (má třídu "completed") */
 .task-item.completed {
-    opacity: 0.7;
-    background: #f8f9fa;
+    opacity: 0.7;             /* Poloprůhledný */
+    background: #f8f9fa;      /* Světlejší pozadí */
 }
 
+/* Titul dokončeného úkolu (přeškrtnutý) */
 .task-item.completed .task-title {
-    text-decoration: line-through;
-    color: var(--text-light);
+    text-decoration: line-through;  /* Přeškrtnutý text */
+    color: var(--text-light);       /* Světle šedá */
 }
 
-/* Priority borders */
+/* ===== BAREVNÉ OKRAJE PODLE PRIORITY ===== */
+/* Nízká priorita - zelený okraj */
 .task-item.priority-low {
-    border-left-color: var(--priority-low);
+    border-left-color: var(--priority-low);     /* Zelená */
 }
 
+/* Střední priorita - žlutý okraj */
 .task-item.priority-medium {
-    border-left-color: var(--priority-medium);
+    border-left-color: var(--priority-medium);  /* Žlutá */
 }
 
+/* Vysoká priorita - oranžový okraj */
 .task-item.priority-high {
-    border-left-color: var(--priority-high);
+    border-left-color: var(--priority-high);    /* Oranžová */
 }
 
+/* Urgentní priorita - červený okraj */
 .task-item.priority-urgent {
-    border-left-color: var(--priority-urgent);
+    border-left-color: var(--priority-urgent);  /* Červená */
 }
 
+/* Záhlaví úkolu (checkbox + titul + tlačítka akcí) */
 .task-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 0.8rem;
+    display: flex;                    /* Flexbox layout */
+    justify-content: space-between;   /* Prvky na opačných stranách */
+    align-items: flex-start;          /* Zarovnání na začátek */
+    margin-bottom: 0.8rem;            /* Mezera pod záhlavím */
 }
 
 .task-title-section {
     flex: 1;
 }
 
+/* Titul/název úkolu */
 .task-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 0.3rem;
+    font-size: 1.1rem;           /* Velikost textu */
+    font-weight: 600;            /* Tučný text */
+    color: var(--text-dark);     /* Tmavá barva */
+    margin-bottom: 0.3rem;       /* Mezera pod titulem */
 }
 
+/* Popis úkolu */
 .task-description {
-    color: var(--text-light);
-    font-size: 0.95rem;
+    color: var(--text-light);    /* Světle šedá barva */
+    font-size: 0.95rem;          /* Menší text než titul */
 }
 
+/* Kontejner pro tlačítka akcí (dokončit, upravit, smazat) */
 .task-actions {
-    display: flex;
-    gap: 0.5rem;
+    display: flex;    /* Flexbox pro tlačítka vedle sebe */
+    gap: 0.5rem;      /* Mezera mezi tlačítky */
 }
 
+/* Základní styl pro tlačítka akcí */
 .task-actions button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.1rem;
-    padding: 0.3rem 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    background: none;             /* Bez pozadí */
+    border: none;                 /* Bez okraje */
+    cursor: pointer;              /* Ukazatel ruky */
+    font-size: 1.1rem;            /* Velikost ikony */
+    padding: 0.3rem 0.5rem;       /* Vnitřní odsazení */
+    border-radius: 4px;           /* Zaoblené rohy */
+    transition: all 0.2s ease;    /* Plynulá animace */
 }
 
+/* Tlačítko dokončit (zelená) */
 .btn-complete {
-    color: var(--secondary-color);
+    color: var(--secondary-color);  /* Zelená barva */
 }
 
+/* Efekt při najetí myší na tlačítko dokončit */
 .btn-complete:hover {
-    background-color: rgba(80, 200, 120, 0.1);
+    background-color: rgba(80, 200, 120, 0.1);  /* Světle zelené pozadí (10% průhlednost) */
 }
 
+/* Tlačítko upravit (modrá) */
 .btn-edit {
-    color: var(--primary-color);
+    color: var(--primary-color);    /* Modrá barva */
 }
 
+/* Efekt při najetí myší na tlačítko upravit */
 .btn-edit:hover {
-    background-color: rgba(74, 144, 226, 0.1);
+    background-color: rgba(74, 144, 226, 0.1);  /* Světle modré pozadí (10% průhlednost) */
 }
 
+/* Tlačítko smazat (červená) */
 .btn-delete {
-    color: var(--danger-color);
+    color: var(--danger-color);     /* Červená barva */
 }
 
+/* Efekt při najetí myší na tlačítko smazat */
 .btn-delete:hover {
-    background-color: rgba(231, 76, 60, 0.1);
+    background-color: rgba(231, 76, 60, 0.1);  /* Světle červené pozadí (10% průhlednost) */
 }
 
+/* Zápatí úkolu (obsahuje datum a štítek priority) */
 .task-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 0.8rem;
-    padding-top: 0.8rem;
-    border-top: 1px solid var(--border-color);
+    display: flex;                    /* Flexbox layout */
+    justify-content: space-between;   /* Prvky na opačných stranách */
+    align-items: center;              /* Vertikální zarovnání */
+    margin-top: 0.8rem;               /* Mezera nad zápatím */
+    padding-top: 0.8rem;              /* Vnitřní odsazení nahoře */
+    border-top: 1px solid var(--border-color);  /* Horní oddělovací čára */
 }
 
+/* Metadata úkolu (datum, kategorie atd.) */
 .task-meta {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.85rem;
-    color: var(--text-light);
+    display: flex;              /* Flexbox pro prvky vedle sebe */
+    gap: 1rem;                  /* Mezera mezi prvky */
+    font-size: 0.85rem;         /* Menší text */
+    color: var(--text-light);   /* Světle šedá */
 }
 
+/* Ikony v metadatech */
 .task-meta i {
-    margin-right: 0.3rem;
+    margin-right: 0.3rem;  /* Mezera mezi ikonou a textem */
 }
 
+/* ===== ŠTÍTEK PRIORITY ÚKOLU ===== */
 .task-priority {
-    display: inline-block;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
+    display: inline-block;      /* Inline element se šířkou/výškou */
+    padding: 0.3rem 0.8rem;     /* Vnitřní odsazení */
+    border-radius: 20px;        /* Zaoblené jako pilulka */
+    font-size: 0.8rem;          /* Malý text */
+    font-weight: 600;           /* Tučný text */
+    text-transform: uppercase;  /* VELKÁ PÍSMENA */
 }
 
+/* Nízká priorita - šedý štítek */
 .task-priority.low {
-    background-color: rgba(149, 165, 166, 0.2);
-    color: var(--priority-low);
+    background-color: rgba(149, 165, 166, 0.2);  /* Světle šedé pozadí (20% průhlednost) */
+    color: var(--priority-low);                  /* Zelená barva textu */
 }
 
+/* Střední priorita - modrý štítek */
 .task-priority.medium {
-    background-color: rgba(52, 152, 219, 0.2);
-    color: var(--priority-medium);
+    background-color: rgba(52, 152, 219, 0.2);   /* Světle modré pozadí */
+    color: var(--priority-medium);               /* Modrá barva textu */
 }
 
+/* Vysoká priorita - oranžový štítek */
 .task-priority.high {
-    background-color: rgba(243, 156, 18, 0.2);
-    color: var(--priority-high);
+    background-color: rgba(243, 156, 18, 0.2);   /* Světle oranžové pozadí */
+    color: var(--priority-high);                 /* Oranžová barva textu */
 }
 
+/* Urgentní priorita - červený štítek */
 .task-priority.urgent {
-    background-color: rgba(231, 76, 60, 0.2);
-    color: var(--priority-urgent);
+    background-color: rgba(231, 76, 60, 0.2);    /* Světle červené pozadí */
+    color: var(--priority-urgent);               /* Červená barva textu */
 }
 
+/* ===== PRÁZDNÝ STAV (když nejsou žádné úkoly) ===== */
 .empty-state {
-    text-align: center;
-    padding: 3rem;
-    color: var(--text-light);
+    text-align: center;          /* Zarovnání na střed */
+    padding: 3rem;               /* Vnitřní odsazení */
+    color: var(--text-light);    /* Světle šedá */
 }
 
+/* Ikona v prázdném stavu */
 .empty-state i {
-    font-size: 4rem;
-    color: var(--border-color);
-    margin-bottom: 1rem;
+    font-size: 4rem;                /* Velká ikona */
+    color: var(--border-color);     /* Světle šedá */
+    margin-bottom: 1rem;            /* Mezera pod ikonou */
 }
 
+/* Text v prázdném stavu */
 .empty-state p {
-    font-size: 1.1rem;
+    font-size: 1.1rem;  /* Větší text */
 }
 
-/* Modal */
+/* ===== MODÁLNÍ OKNA (pro formuláře a potvrzení) ===== */
 .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
-    animation: fadeIn 0.3s ease;
+    display: none;                              /* Skryté defaultně */
+    position: fixed;                            /* Fixní pozice */
+    top: 0;                                     /* Přilepené k hornímu okraji */
+    left: 0;                                    /* Přilepené k levému okraji */
+    width: 100%;                                /* Celá šířka obrazovky */
+    height: 100%;                               /* Celá výška obrazovky */
+    background-color: rgba(0, 0, 0, 0.5);       /* Poloprůhledné tmavé pozadí (overlay) */
+    z-index: 2000;                              /* Vysoko nad ostatními prvky */
+    animation: fadeIn 0.3s ease;                /* Animace objevení */
 }
 
+/* Animace postupného objevení overlay */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0; }     /* Začátek: průhledný */
+    to { opacity: 1; }       /* Konec: viditelný */
 }
 
+/* Aktivní modální okno (zobrazené) */
 .modal.active {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex;                  /* Flexbox pro centrování */
+    justify-content: center;        /* Horizontální střed */
+    align-items: center;            /* Vertikální střed */
 }
 
+/* Obsah modálního okna (bílý box) */
 .modal-content {
-    background: var(--white);
-    border-radius: 10px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: var(--shadow-lg);
-    animation: slideDown 0.3s ease;
+    background: var(--white);       /* Bílé pozadí */
+    border-radius: 10px;            /* Zaoblené rohy */
+    width: 90%;                     /* 90% šířky obrazovky */
+    max-width: 500px;               /* Maximálně 500px široké */
+    box-shadow: var(--shadow-lg);   /* Velký stín */
+    animation: slideDown 0.3s ease; /* Animace sklouznutí shora */
 }
 
+/* Animace sklouznutí modálu shora */
 @keyframes slideDown {
     from {
-        transform: translateY(-50px);
-        opacity: 0;
+        transform: translateY(-50px);   /* Začátek: posunutý nahoru */
+        opacity: 0;                     /* Začátek: průhledný */
     }
     to {
-        transform: translateY(0);
-        opacity: 1;
+        transform: translateY(0);       /* Konec: normální pozice */
+        opacity: 1;                     /* Konec: viditelný */
     }
 }
 
+/* Záhlaví modálního okna */
 .modal-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 1.5rem;                            /* Vnitřní odsazení */
+    border-bottom: 1px solid var(--border-color);  /* Spodní oddělovací čára */
+    display: flex;                              /* Flexbox */
+    justify-content: space-between;             /* Prvky na opačných stranách */
+    align-items: center;                        /* Vertikální zarovnání */
 }
 
+/* Nadpis v záhlaví modálu */
 .modal-header h3 {
-    font-size: 1.5rem;
-    color: var(--text-dark);
+    font-size: 1.5rem;           /* Velikost nadpisu */
+    color: var(--text-dark);     /* Tmavá barva */
 }
 
+/* Tlačítko pro zavření modálu (×) */
 .close-modal {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    color: var(--text-light);
-    line-height: 1;
-    transition: color 0.2s;
+    background: none;            /* Bez pozadí */
+    border: none;                /* Bez okraje */
+    font-size: 2rem;             /* Velký znak × */
+    cursor: pointer;             /* Ukazatel ruky */
+    color: var(--text-light);    /* Světle šedá */
+    line-height: 1;              /* Výška řádku */
+    transition: color 0.2s;      /* Plynulá změna barvy */
 }
 
+/* Efekt při najetí myší na tlačítko zavřít */
 .close-modal:hover {
-    color: var(--danger-color);
+    color: var(--danger-color);  /* Červená barva */
 }
 
+/* Tělo modálního okna (obsahuje formulář) */
 .modal-body {
-    padding: 1.5rem;
+    padding: 1.5rem;  /* Vnitřní odsazení */
 }
 
+/* ===== FORMULÁŘOVÁ POLE ===== */
+/* Skupina formulářového pole (label + input) */
 .form-group {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.2rem;  /* Mezera mezi poli */
 }
 
+/* Popisek formulářového pole */
 .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: var(--text-dark);
+    display: block;              /* Blokový element (na vlastní řádce) */
+    margin-bottom: 0.5rem;       /* Mezera pod popiskem */
+    font-weight: 600;            /* Tučný text */
+    color: var(--text-dark);     /* Tmavá barva */
 }
 
+/* Textové vstupy, textarea, selecty */
 .form-group input,
 .form-group textarea,
 .form-group select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 1rem;
-    font-family: inherit;
-    transition: border-color 0.3s;
+    width: 100%;                                /* Celá šířka */
+    padding: 0.8rem;                            /* Vnitřní odsazení */
+    border: 1px solid var(--border-color);      /* Světle šedý okraj */
+    border-radius: 6px;                         /* Zaoblené rohy */
+    font-size: 1rem;                            /* Velikost textu */
+    font-family: inherit;                       /* Zdědí font z rodiče */
+    transition: border-color 0.3s;              /* Plynulá změna barvy okraje */
 }
 
+/* Efekt při aktivním (zaměřeném) poli */
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-    outline: none;
-    border-color: var(--primary-color);
+    outline: none;                           /* Bez defaultního obrysu prohlížeče */
+    border-color: var(--primary-color);      /* Modrý okraj */
 }
 
+/* Řádek formuláře se dvěma poli vedle sebe */
 .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    display: grid;                      /* Grid layout */
+    grid-template-columns: 1fr 1fr;     /* Dva stejně velké sloupce */
+    gap: 1rem;                          /* Mezera mezi sloupci */
 }
 
+/* Skupina s checkboxem */
 .checkbox-group {
-    display: flex;
-    align-items: center;
+    display: flex;          /* Flexbox */
+    align-items: center;    /* Vertikální zarovnání */
 }
 
+/* Label pro checkbox */
 .checkbox-group label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin: 0;
+    display: flex;          /* Flexbox pro checkbox + text */
+    align-items: center;    /* Vertikální zarovnání */
+    cursor: pointer;        /* Ukazatel ruky */
+    margin: 0;              /* Bez mezery (přebíjí .form-group label) */
 }
 
+/* Samotný checkbox */
 .checkbox-group input[type="checkbox"] {
-    width: auto;
-    margin-right: 0.5rem;
+    width: auto;              /* Automatická šířka (ne 100%) */
+    margin-right: 0.5rem;     /* Mezera mezi checkboxem a textem */
 }
 
+/* ===== TLAČÍTKA VE FORMULÁŘI ===== */
+/* Kontejner pro tlačítka Zrušit/Uložit */
 .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    display: flex;                /* Flexbox */
+    justify-content: flex-end;    /* Zarovnání doprava */
+    gap: 1rem;                    /* Mezera mezi tlačítky */
+    margin-top: 1.5rem;           /* Mezera nad tlačítky */
 }
 
+/* Tlačítko Zrušit (šedé) */
 .btn-cancel {
-    background-color: var(--light-bg);
-    color: var(--text-dark);
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    background-color: var(--light-bg);  /* Světle šedé pozadí */
+    color: var(--text-dark);            /* Tmavý text */
+    border: none;                       /* Bez okraje */
+    padding: 0.8rem 1.5rem;             /* Vnitřní odsazení */
+    border-radius: 6px;                 /* Zaoblené rohy */
+    cursor: pointer;                    /* Ukazatel ruky */
+    font-size: 1rem;                    /* Velikost textu */
+    transition: all 0.3s ease;          /* Plynulá animace */
 }
 
+/* Efekt při najetí myší na tlačítko Zrušit */
 .btn-cancel:hover {
-    background-color: #d5dbdb;
+    background-color: #d5dbdb;  /* Tmavší šedá */
 }
 
+/* Tlačítko Uložit/Potvrdit (modré) */
 .btn-submit {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    background-color: var(--primary-color);  /* Modrá barva */
+    color: var(--white);                     /* Bílý text */
+    border: none;                            /* Bez okraje */
+    padding: 0.8rem 1.5rem;                  /* Vnitřní odsazení */
+    border-radius: 6px;                 /* Zaoblené rohy */
+    cursor: pointer;                    /* Ukazatel ruky */
+    font-size: 1rem;                    /* Velikost textu */
+    transition: all 0.3s ease;          /* Plynulá animace */
 }
 
+/* Efekt při najetí myší na tlačítko Uložit */
 .btn-submit:hover {
-    background-color: #357abd;
+    background-color: #357abd;  /* Tmavší modrá */
 }
 
-/* Responsive Design */
+/* ===== RESPONZIVNÍ DESIGN (mobilní zařízení) ===== */
 @media (max-width: 768px) {
+    /* Hlavní kontejner - změna layoutu na sloupcový */
     .main-container {
-        flex-direction: column;
+        flex-direction: column;  /* Prvky pod sebou místo vedle sebe */
     }
     
+    /* Boční menu - na mobilu celá šířka */
     .side-menu {
-        width: 100%;
-        padding: 1rem 0;
+        width: 100%;         /* Celá šířka obrazovky */
+        padding: 1rem 0;     /* Vnitřní odsazení */
     }
     
+    /* Navigace kategorií - horizontální scrollování na mobilu */
     .category-nav {
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 0 1rem;
+        flex-direction: row;    /* Prvky vedle sebe */
+        overflow-x: auto;       /* Horizontální scrollování */
+        padding: 0 1rem;        /* Vnitřní odsazení */
     }
     
+    /* Tlačítka kategorií - horizontální layout na mobilu */
     .category-btn {
-        padding: 0.8rem 1rem;
-        white-space: nowrap;
-        border-left: none;
-        border-bottom: 3px solid transparent;
+        padding: 0.8rem 1rem;                   /* Menší odsazení */
+        white-space: nowrap;                    /* Text na jednom řádku */
+        border-left: none;                      /* Bez levého okraje */
+        border-bottom: 3px solid transparent;   /* Spodní okraj místo levého */
     }
     
+    /* Aktivní/hover kategorie - spodní okraj místo levého */
     .category-btn.active,
     .category-btn:hover {
-        border-left: none;
-        border-bottom-color: var(--primary-color);
+        border-left: none;                          /* Bez levého okraje */
+        border-bottom-color: var(--primary-color);  /* Modrý spodní okraj */
     }
     
+    /* Oblast obsahu - menší odsazení na mobilu */
     .content-area {
-        padding: 1rem;
+        padding: 1rem;  /* Menší padding */
     }
     
+    /* Záhlaví obsahu - sloupcový layout na mobilu */
     .content-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
+        flex-direction: column;     /* Prvky pod sebou */
+        align-items: flex-start;    /* Zarovnání doleva */
+        gap: 1rem;                  /* Mezera mezi prvky */
     }
     
+    /* Statistiky - jeden sloupec na mobilu */
     .task-stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;  /* Jeden sloupec místo více */
     }
     
+    /* Řádek formuláře - jeden sloupec na mobilu */
     .form-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;  /* Pole pod sebou místo vedle sebe */
     }
 }
 
-/* Login/Register Form Styles */
+/* ===== PŘIHLAŠOVACÍ/REGISTRAČNÍ FORMULÁŘ ===== */
+/* Menší modální okno pro přihlášení */
 #login-modal .modal-content {
-    max-width: 400px;
+    max-width: 400px;  /* Užší než standardní modály */
 }
 
+/* Zápatí formuláře (odkaz "Ještě nemáte účet?") */
 .form-footer {
-    margin-top: 1rem;
-    text-align: center;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;                           /* Mezera nad zápatím */
+    text-align: center;                         /* Zarovnání na střed */
+    padding-top: 1rem;                          /* Vnitřní odsazení nahoře */
+    border-top: 1px solid var(--border-color);  /* Horní oddělovací čára */
 }
 
+/* Text v zápatí formuláře */
 .form-footer p {
-    color: var(--text-light);
-    font-size: 0.9rem;
+    color: var(--text-light);  /* Světle šedá */
+    font-size: 0.9rem;         /* Menší text */
 }
 
+/* Odkazy v zápatí (např. "Registrovat se") */
 .form-footer a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 500;
+    color: var(--primary-color);  /* Modrá barva */
+    text-decoration: none;        /* Bez podtržení */
+    font-weight: 500;             /* Středně tučný text */
 }
 
+/* Efekt při najetí myší na odkaz */
 .form-footer a:hover {
-    text-decoration: underline;
+    text-decoration: underline;  /* Podtržení při hoveru */
 }

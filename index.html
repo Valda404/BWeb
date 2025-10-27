@@ -1,48 +1,93 @@
 <!DOCTYPE html>
+<!-- Deklarace typu dokumentu - říká prohlížeči, že toto je HTML5 stránka -->
 <html lang="en">
+<!-- Začátek HTML dokumentu, lang="en" říká, že jazyk stránky je angličtina -->
 <head>
+    <!-- HEAD sekce obsahuje metadata a odkazy na styly/skripty -->
+    
+    <!-- Nastavení kódování znaků na UTF-8 (podpora češtiny a speciálních znaků) -->
     <meta charset="UTF-8">
+    
+    <!-- Nastavení pro responzivní design (správné zobrazení na mobilech) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Titulek stránky - zobrazí se v záložce prohlížeče -->
     <title>BWeb - Task Manager</title>
+    
+    <!-- Odkaz na náš CSS soubor se styly -->
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Odkaz na Font Awesome - knihovnu ikon (CDN = Content Delivery Network) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDK -->
+    <!-- ===== FIREBASE SDK A KONFIGURACE ===== -->
+    <!-- Script s type="module" umožňuje používat ES6 moduly (import/export) -->
     <script type="module">
+        // Import Firebase aplikace z CDN (online knihovny)
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        
+        // Import funkcí pro autentizaci (přihlašování uživatelů)
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        
+        // Import funkcí pro práci s databází (ukládání a čtení dat)
         import { getDatabase, ref, set, onValue, push, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
         
+        // Konfigurace našeho Firebase projektu (spojení s naší databází)
         const firebaseConfig = {
-            apiKey: "AIzaSyD7eXWQRlvmJpuE3MSjopUtctvZiS9oQZQ",
-            authDomain: "bweb-9f2f1.firebaseapp.com",
-            databaseURL: "https://bweb-9f2f1-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "bweb-9f2f1",
-            storageBucket: "bweb-9f2f1.firebasestorage.app",
-            messagingSenderId: "490498795009",
-            appId: "1:490498795009:web:58dcd0689ce46c60768200",
-            measurementId: "G-2DCRKJV60M"
+            apiKey: "AIzaSyD7eXWQRlvmJpuE3MSjopUtctvZiS9oQZQ",  // Klíč pro přístup k API
+            authDomain: "bweb-9f2f1.firebaseapp.com",  // Doména pro autentizaci
+            databaseURL: "https://bweb-9f2f1-default-rtdb.europe-west1.firebasedatabase.app",  // URL naší databáze
+            projectId: "bweb-9f2f1",  // ID našeho projektu
+            storageBucket: "bweb-9f2f1.firebasestorage.app",  // Úložiště pro soubory
+            messagingSenderId: "490498795009",  // ID pro zasílání zpráv
+            appId: "1:490498795009:web:58dcd0689ce46c60768200",  // ID aplikace
+            measurementId: "G-2DCRKJV60M"  // ID pro Google Analytics
         };
         
+        // Inicializace Firebase aplikace s naší konfigurací
         const app = initializeApp(firebaseConfig);
+        
+        // Získání autentizačního objektu a uložení do window (globálně dostupné)
         window.firebaseAuth = getAuth(app);
+        
+        // Získání databázového objektu a uložení do window
         window.firebaseDB = getDatabase(app);
         
-        // Firebase helper functions
+        // ===== POMOCNÉ FUNKCE PRO FIREBASE =====
+        // Vytvoříme objekt s funkcemi, které budeme používat v aplikaci
         window.firebaseHelpers = {
+            // Funkce pro přihlášení - vezme email a heslo, ověří je přes Firebase
             signIn: (email, password) => signInWithEmailAndPassword(window.firebaseAuth, email, password),
+            
+            // Funkce pro registraci nového uživatele
             signUp: (email, password) => createUserWithEmailAndPassword(window.firebaseAuth, email, password),
+            
+            // Funkce pro odhlášení aktuálního uživatele
             signOut: () => signOut(window.firebaseAuth),
+            
+            // Funkce, která "poslouchá" změny přihlášení (když se uživatel přihlásí/odhlásí)
+            // callback = funkce, která se zavolá při změně
             onAuthChange: (callback) => onAuthStateChanged(window.firebaseAuth, callback),
+            
+            // Funkce pro uložení úkolů do Firebase databáze
             saveTasks: (tasks) => {
+                // Získá aktuálně přihlášeného uživatele
                 const user = window.firebaseAuth.currentUser;
+                // Pokud není nikdo přihlášen, vrátí chybu
                 if (!user) return Promise.reject('Not authenticated');
+                // Uloží úkoly do cesty "tasks/{userId}" v databázi
                 return set(ref(window.firebaseDB, 'tasks/' + user.uid), tasks);
             },
+            
+            // Funkce pro "poslouchání" změn v úkolech (real-time aktualizace)
             listenToTasks: (callback) => {
+                // Získá aktuálního uživatele
                 const user = window.firebaseAuth.currentUser;
+                // Pokud není přihlášen, ukončí funkci
                 if (!user) return;
+                // Naslouchá změnám v "tasks/{userId}" a volá callback funkci s daty
                 onValue(ref(window.firebaseDB, 'tasks/' + user.uid), (snapshot) => {
+                    // snapshot.val() = data z databáze, || [] = pokud žádná data, vrátí prázdné pole
                     callback(snapshot.val() || []);
                 });
             }
@@ -50,49 +95,67 @@
     </script>
 </head>
 <body>
-    <!-- Top Menu -->
+    <!-- ===== HORNÍ MENU ===== -->
+    <!-- Header = hlavička stránky s navigací -->
     <header class="top-menu">
+        <!-- Logo aplikace -->
         <div class="logo">
+            <!-- Ikona úkolů z Font Awesome -->
             <i class="fas fa-tasks"></i>
+            <!-- Název aplikace -->
             <h1>BWeb Task Manager</h1>
         </div>
+        <!-- Navigační tlačítka v horním menu -->
         <nav class="top-nav">
+            <!-- Tlačítko pro synchronizaci s Google Calendar -->
             <button id="sync-calendar" class="btn-sync" title="Sync with Google Calendar">
                 <i class="fab fa-google"></i> Sync Calendar
             </button>
+            <!-- Tlačítko pro odhlášení uživatele -->
             <button id="logout-btn" class="btn-settings" title="Odhlásit se">
                 <i class="fas fa-sign-out-alt"></i> Odhlásit
             </button>
+            <!-- Tlačítko nastavení -->
             <button id="settings-btn" class="btn-settings" title="Settings">
                 <i class="fas fa-cog"></i>
             </button>
         </nav>
     </header>
 
+    <!-- ===== HLAVNÍ KONTEJNER APLIKACE ===== -->
     <div class="main-container">
-        <!-- Side Menu -->
+        <!-- ===== BOČNÍ MENU S KATEGORIEMI ===== -->
+        <!-- aside = boční panel (HTML5 sémantický element) -->
         <aside class="side-menu">
+            <!-- Navigace s tlačítky kategorií -->
             <nav class="category-nav">
+                <!-- Tlačítko "Today" - aktivní (active class) jako výchozí -->
+                <!-- data-category = vlastní atribut pro identifikaci kategorie v JS -->
                 <button class="category-btn active" data-category="today">
-                    <i class="fas fa-calendar-day"></i>
-                    <span>Today</span>
+                    <i class="fas fa-calendar-day"></i> <!-- Ikona dne -->
+                    <span>Today</span> <!-- Text tlačítka -->
                 </button>
+                <!-- Tlačítko pro úkoly tento týden -->
                 <button class="category-btn" data-category="week">
                     <i class="fas fa-calendar-week"></i>
                     <span>This Week</span>
                 </button>
+                <!-- Tlačítko pro úkoly tento měsíc -->
                 <button class="category-btn" data-category="month">
                     <i class="fas fa-calendar-alt"></i>
                     <span>This Month</span>
                 </button>
+                <!-- Tlačítko pro všechny úkoly -->
                 <button class="category-btn" data-category="all">
                     <i class="fas fa-list"></i>
                     <span>All Tasks</span>
                 </button>
+                <!-- Tlačítko pro dokončené úkoly -->
                 <button class="category-btn" data-category="completed">
                     <i class="fas fa-check-circle"></i>
                     <span>Completed</span>
                 </button>
+                <!-- Tlačítko pro prioritní úkoly -->
                 <button class="category-btn" data-category="priority">
                     <i class="fas fa-star"></i>
                     <span>Priority</span>
@@ -100,23 +163,33 @@
             </nav>
         </aside>
 
-        <!-- Main Content Area -->
+        <!-- ===== HLAVNÍ OBSAHOVÁ OBLAST ===== -->
+        <!-- main = hlavní obsah stránky (HTML5 sémantický element) -->
         <main class="content-area">
+            <!-- Hlavička obsahu s názvem kategorie a tlačítkem přidat -->
             <div class="content-header">
+                <!-- Nadpis se změní podle vybrané kategorie -->
                 <h2 id="category-title">Today's Tasks</h2>
+                <!-- Tlačítko pro přidání nového úkolu -->
                 <button id="add-task-btn" class="btn-add-task">
                     <i class="fas fa-plus"></i> Add Task
                 </button>
             </div>
 
+            <!-- ===== STATISTIKY ÚKOLŮ ===== -->
+            <!-- Tři karty se statistikami: Celkem / Čekající / Dokončené -->
             <div class="task-stats">
+                <!-- Karta 1: Celkový počet úkolů -->
                 <div class="stat-card">
-                    <i class="fas fa-clipboard-list"></i>
+                    <i class="fas fa-clipboard-list"></i> <!-- Ikona -->
                     <div>
+                        <!-- Číslo se aktualizuje JavaScriptem -->
                         <span class="stat-number" id="total-tasks">0</span>
+                        <!-- Popisek -->
                         <span class="stat-label">Total</span>
                     </div>
                 </div>
+                <!-- Karta 2: Počet nedokončených úkolů -->
                 <div class="stat-card">
                     <i class="fas fa-hourglass-half"></i>
                     <div>
@@ -124,6 +197,7 @@
                         <span class="stat-label">Pending</span>
                     </div>
                 </div>
+                <!-- Karta 3: Počet dokončených úkolů -->
                 <div class="stat-card">
                     <i class="fas fa-check-double"></i>
                     <div>
@@ -133,56 +207,80 @@
                 </div>
             </div>
 
+            <!-- ===== KONTEJNER PRO ÚKOLY ===== -->
+            <!-- Sem se dynamicky vkládají úkoly pomocí JavaScriptu -->
             <div class="tasks-container" id="tasks-container">
                 <!-- Tasks will be dynamically added here -->
+                <!-- Úkoly se přidávají dynamicky přes JavaScript -->
             </div>
         </main>
     </div>
 
-    <!-- Add/Edit Task Modal -->
+    <!-- ===== MODÁLNÍ OKNO PRO PŘIDÁNÍ/ÚPRAVU ÚKOLU ===== -->
+    <!-- modal = překryvné okno, které se objeví nad stránkou -->
     <div id="task-modal" class="modal">
+        <!-- Obsah modálního okna -->
         <div class="modal-content">
+            <!-- Hlavička modálu -->
             <div class="modal-header">
+                <!-- Nadpis - změní se na "Edit Task" při úpravě -->
                 <h3 id="modal-title">Add New Task</h3>
+                <!-- Tlačítko pro zavření (×) -->
                 <button class="close-modal">&times;</button>
             </div>
+            <!-- Tělo modálu s formulářem -->
             <div class="modal-body">
+                <!-- Formulář pro zadání/úpravu úkolu -->
                 <form id="task-form">
+                    <!-- Pole pro název úkolu -->
                     <div class="form-group">
-                        <label for="task-title">Task Title *</label>
+                        <label for="task-title">Task Title *</label> <!-- * = povinné pole -->
                         <input type="text" id="task-title" required placeholder="Enter task title">
                     </div>
+                    <!-- Pole pro popis úkolu (nepovinné) -->
                     <div class="form-group">
                         <label for="task-description">Description</label>
+                        <!-- textarea = víceřádkové textové pole -->
                         <textarea id="task-description" rows="3" placeholder="Enter task description"></textarea>
                     </div>
+                    <!-- Řádek s dvěma poli vedle sebe (datum a čas) -->
                     <div class="form-row">
+                        <!-- Pole pro datum -->
                         <div class="form-group">
                             <label for="task-date">Due Date *</label>
+                            <!-- type="date" zobrazí kalendář pro výběr data -->
                             <input type="date" id="task-date" required>
                         </div>
+                        <!-- Pole pro čas (nepovinné) -->
                         <div class="form-group">
                             <label for="task-time">Due Time</label>
+                            <!-- type="time" zobrazí výběr času -->
                             <input type="time" id="task-time">
                         </div>
                     </div>
+                    <!-- Výběr priority úkolu -->
                     <div class="form-group">
                         <label for="task-priority">Priority Level</label>
+                        <!-- select = rozbalovací seznam -->
                         <select id="task-priority">
-                            <option value="low">Low</option>
-                            <option value="medium" selected>Medium</option>
-                            <option value="high">High</option>
-                            <option value="urgent">Urgent</option>
+                            <option value="low">Low</option> <!-- Nízká priorita -->
+                            <option value="medium" selected>Medium</option> <!-- Střední (výchozí) -->
+                            <option value="high">High</option> <!-- Vysoká -->
+                            <option value="urgent">Urgent</option> <!-- Urgentní -->
                         </select>
                     </div>
+                    <!-- Checkbox pro synchronizaci s Google Calendar -->
                     <div class="form-group checkbox-group">
                         <label>
                             <input type="checkbox" id="sync-google">
                             <span>Sync with Google Calendar</span>
                         </label>
                     </div>
+                    <!-- Tlačítka formuláře -->
                     <div class="form-actions">
+                        <!-- type="button" = nezpůsobí odeslání formuláře -->
                         <button type="button" class="btn-cancel">Cancel</button>
+                        <!-- type="submit" = odešle formulář -->
                         <button type="submit" class="btn-submit">Save Task</button>
                     </div>
                 </form>
@@ -190,46 +288,63 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
+    <!-- ===== MODÁLNÍ OKNO PRO PŘIHLÁŠENÍ ===== -->
+    <!-- class="active" = okno je zobrazené hned při načtení stránky -->
     <div id="login-modal" class="modal active">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Přihlášení</h3>
             </div>
             <div class="modal-body">
+                <!-- Přihlašovací formulář -->
                 <form id="login-form">
+                    <!-- Pole pro email -->
                     <div class="form-group">
                         <label for="login-email">Email *</label>
+                        <!-- type="email" = validace emailové adresy -->
                         <input type="email" id="login-email" required placeholder="Zadejte email">
                     </div>
+                    <!-- Pole pro heslo -->
                     <div class="form-group">
                         <label for="login-password">Heslo *</label>
+                        <!-- type="password" = skryté znaky hesla (•••) -->
                         <input type="password" id="login-password" required placeholder="Zadejte heslo">
                     </div>
+                    <!-- Tlačítko pro přihlášení -->
                     <div class="form-actions">
                         <button type="submit" class="btn-submit">Přihlásit se</button>
                     </div>
+                    <!-- Odkaz na registraci -->
                     <div class="form-footer">
                         <p>Nemáte účet? <a href="#" id="show-register">Zaregistrujte se</a></p>
                     </div>
                 </form>
                 
+                <!-- ===== REGISTRAČNÍ FORMULÁŘ ===== -->
+                <!-- style="display: none;" = formulář je skrytý, zobrazí se po kliknutí na odkaz -->
                 <form id="register-form" style="display: none;">
+                    <!-- Pole pro email -->
                     <div class="form-group">
                         <label for="register-email">Email *</label>
                         <input type="email" id="register-email" required placeholder="Zadejte email">
                     </div>
+                    <!-- Pole pro heslo -->
                     <div class="form-group">
                         <label for="register-password">Heslo *</label>
+                        <!-- Firebase vyžaduje minimálně 6 znaků -->
                         <input type="password" id="register-password" required placeholder="Zadejte heslo (min. 6 znaků)">
                     </div>
+                    <!-- Pole pro potvrzení hesla -->
                     <div class="form-group">
                         <label for="register-password-confirm">Potvrzení hesla *</label>
+                        <!-- Kontroluje se v JavaScriptu, zda se hesla shodují -->
                         <input type="password" id="register-password-confirm" required placeholder="Zadejte heslo znovu">
                     </div>
+                    <!-- Tlačítko pro registraci -->
                     <div class="form-actions">
                         <button type="submit" class="btn-submit">Zaregistrovat se</button>
                     </div>
+                    <!-- Odkaz zpět na přihlášení -->
                     <div class="form-footer">
                         <p>Už máte účet? <a href="#" id="show-login">Přihlaste se</a></p>
                     </div>
@@ -238,6 +353,8 @@
         </div>
     </div>
 
+    <!-- ===== PŘIPOJENÍ JAVASCRIPTU ===== -->
+    <!-- src="script.js" = odkaz na náš JavaScript soubor s logikou aplikace -->
     <script src="script.js"></script>
 </body>
 </html>

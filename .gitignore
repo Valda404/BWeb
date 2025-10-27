@@ -1,31 +1,40 @@
-# Dependencies
+# ===== GITIGNORE - SOUBORY IGNOROVANÉ GITEM =====
+# Tento soubor říká Gitu, které soubory/složky NEMÁ verzovat
+# Používá se pro vyloučení:
+# - Závislostí (node_modules, vendor)
+# - Konfigurací s hesly (.env)
+# - Build souborů (dist, build)
+# - IDE souborů (.vscode, .idea)
+# - Log souborů a cache
+
+# Závislosti - knihovny stažené přes npm/yarn (jsou velké, stahují se při instalaci)
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+npm-debug.log*      # Log soubory z npm při chybách
+yarn-debug.log*     # Log soubory z yarn při chybách
+yarn-error.log*     # Chybové logy yarn
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# IDE - nastavení editorů (každý vývojář má vlastní)
+.vscode/            # Visual Studio Code - nastavení workspace
+.idea/              # JetBrains IDEs - nastavení projektu
+*.swp               # Vim - dočasné swap soubory
+*.swo               # Vim - další swap soubory
+*~                  # Různé editory - backup soubory
 
-# OS
-.DS_Store
-Thumbs.db
+# OS - systémové soubory operačního systému
+.DS_Store           # macOS - metadata složek
+Thumbs.db           # Windows - náhledy obrázků
 
-# Build artifacts
-dist/
-build/
-*.map
+# Build složky - vygenerované soubory (vytvoří se při buildu)
+dist/               # Distribuční složka (finální build)
+build/              # Build výstupy
+*.map               # Source map soubory (mapování minifikovaného kódu)
 
-# Temporary files
+# Dočasné soubory a složky - jen při vývoji, mažou se
 tmp/
 temp/
 *.tmp
 
-# Environment files
-.env
-.env.local
-.env.*.local
+# Konfigurační soubory s citlivými daty - hesla, API klíče (NESMÍ do Gitu!)
+.env                # Hlavní .env soubor
+.env.local          # Lokální prostředí
+.env.*.local        # Různá prostředí (development, production)
