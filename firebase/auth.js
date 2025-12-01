@@ -2,8 +2,8 @@
 // Tento modul obsahuje wrapper funkce pro Firebase Authentication
 // Zjednodušuje registraci, přihlášení a odhlášení uživatelů
 
-// Import autentizačního objektu z hlavní Firebase konfigurace
-import { auth } from './firebaseConfig';
+// Import autentizačního objektu z hlavní FirebaseData konfigurace
+import { auth } from './firebaseData';
 // Import potřebných funkcí z Firebase Auth SDK
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 

@@ -20,79 +20,6 @@
     <!-- Odkaz na Font Awesome - knihovnu ikon (CDN = Content Delivery Network) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- ===== FIREBASE SDK A KONFIGURACE ===== -->
-    <!-- Script s type="module" umožňuje používat ES6 moduly (import/export) -->
-    <script type="module">
-        // Import Firebase aplikace z CDN (online knihovny)
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        
-        // Import funkcí pro autentizaci (přihlašování uživatelů)
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        
-        // Import funkcí pro práci s databází (ukládání a čtení dat)
-        import { getDatabase, ref, set, onValue, push, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-        
-        // Konfigurace našeho Firebase projektu (spojení s naší databází)
-        const firebaseConfig = {
-            apiKey: "AIzaSyD7eXWQRlvmJpuE3MSjopUtctvZiS9oQZQ",  // Klíč pro přístup k API
-            authDomain: "bweb-9f2f1.firebaseapp.com",  // Doména pro autentizaci
-            databaseURL: "https://bweb-9f2f1-default-rtdb.europe-west1.firebasedatabase.app",  // URL naší databáze
-            projectId: "bweb-9f2f1",  // ID našeho projektu
-            storageBucket: "bweb-9f2f1.firebasestorage.app",  // Úložiště pro soubory
-            messagingSenderId: "490498795009",  // ID pro zasílání zpráv
-            appId: "1:490498795009:web:58dcd0689ce46c60768200",  // ID aplikace
-            measurementId: "G-2DCRKJV60M"  // ID pro Google Analytics
-        };
-        
-        // Inicializace Firebase aplikace s naší konfigurací
-        const app = initializeApp(firebaseConfig);
-        
-        // Získání autentizačního objektu a uložení do window (globálně dostupné)
-        window.firebaseAuth = getAuth(app);
-        
-        // Získání databázového objektu a uložení do window
-        window.firebaseDB = getDatabase(app);
-        
-        // ===== POMOCNÉ FUNKCE PRO FIREBASE =====
-        // Vytvoříme objekt s funkcemi, které budeme používat v aplikaci
-        window.firebaseHelpers = {
-            // Funkce pro přihlášení - vezme email a heslo, ověří je přes Firebase
-            signIn: (email, password) => signInWithEmailAndPassword(window.firebaseAuth, email, password),
-            
-            // Funkce pro registraci nového uživatele
-            signUp: (email, password) => createUserWithEmailAndPassword(window.firebaseAuth, email, password),
-            
-            // Funkce pro odhlášení aktuálního uživatele
-            signOut: () => signOut(window.firebaseAuth),
-            
-            // Funkce, která "poslouchá" změny přihlášení (když se uživatel přihlásí/odhlásí)
-            // callback = funkce, která se zavolá při změně
-            onAuthChange: (callback) => onAuthStateChanged(window.firebaseAuth, callback),
-            
-            // Funkce pro uložení úkolů do Firebase databáze
-            saveTasks: (tasks) => {
-                // Získá aktuálně přihlášeného uživatele
-                const user = window.firebaseAuth.currentUser;
-                // Pokud není nikdo přihlášen, vrátí chybu
-                if (!user) return Promise.reject('Not authenticated');
-                // Uloží úkoly do cesty "tasks/{userId}" v databázi
-                return set(ref(window.firebaseDB, 'tasks/' + user.uid), tasks);
-            },
-            
-            // Funkce pro "poslouchání" změn v úkolech (real-time aktualizace)
-            listenToTasks: (callback) => {
-                // Získá aktuálního uživatele
-                const user = window.firebaseAuth.currentUser;
-                // Pokud není přihlášen, ukončí funkci
-                if (!user) return;
-                // Naslouchá změnám v "tasks/{userId}" a volá callback funkci s daty
-                onValue(ref(window.firebaseDB, 'tasks/' + user.uid), (snapshot) => {
-                    // snapshot.val() = data z databáze, || [] = pokud žádná data, vrátí prázdné pole
-                    callback(snapshot.val() || []);
-                });
-            }
-        };
-    </script>
 </head>
 <body>
     <!-- ===== HORNÍ MENU ===== -->
@@ -355,6 +282,6 @@
 
     <!-- ===== PŘIPOJENÍ JAVASCRIPTU ===== -->
     <!-- src="script.js" = odkaz na náš JavaScript soubor s logikou aplikace -->
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

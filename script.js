@@ -1,3 +1,8 @@
+// ===== IMPORTY Z FIREBASE MODULŮ =====
+import { login, register, logout, onAuthChange } from './firebase/auth.js';
+import { saveTasks, listenToTasks } from './firebase/database.js';
+
+
 // ===== HLAVNÍ APLIKACE - TASK MANAGER =====
 // Třída TaskManager řídí celou aplikaci pro správu úkolů
 // Obsahuje veškerou logiku pro vytváření, úpravu, mazání a filtrování úkolů
@@ -486,8 +491,13 @@ class TaskManager {
     // Uloží všechny úkoly do Firebase Realtime Database
     saveTasks() {
         console.log('💾 Ukládám úkoly do Firebase...', this.tasks);
-        // Zavolá Firebase helper funkci z index.html
-        window.firebaseHelpers.saveTasks(this.tasks)
+        // Kontrola, zda je uživatel přihlášen
+        if (!window.currentUser) {
+            console.error('❌ Uživatel není přihlášen, nelze uložit úkoly');
+            return;
+        }
+        // Zavolá nadefinovanou funkci pro uložení úkolů z firebase/database.js
+        saveTasks(this.tasks)
             .then(() => console.log('✅ Úkoly uloženy do Firebase'))
             .catch(err => console.error('❌ Chyba při ukládání:', err));
     }
@@ -496,7 +506,14 @@ class TaskManager {
     // Nastaví real-time listener pro úkoly v Firebase
     // Callback se volá pokaždé, když se úkoly změní
     loadTasksFromFirebase() {
+        // Kontrola, zda je uživatel přihlášen
+        if (!window.currentUser) {
+            console.error('❌ Uživatel není přihlášen, nelze načíst úkoly');
+            return;
+        }
+
         console.log('📥 Načítám úkoly z Firebase...');
+        
         // Nastaví listener - volá se při každé změně dat
         window.firebaseHelpers.listenToTasks((tasks) => {
             console.log('✅ Úkoly načteny z Firebase:', tasks);
@@ -557,7 +574,7 @@ function initLogout() {
             if (confirm('Opravdu se chcete odhlásit?')) {
                 try {
                     // Zavolá Firebase funkci pro odhlášení
-                    await window.firebaseHelpers.signOut();
+                    await logout();
                     // Reload stránky (vrátí na přihlašovací obrazovku)
                     location.reload();
                 } catch (error) {
@@ -615,7 +632,7 @@ function initAuthForms() {
         
         try {
             // Zavolá Firebase funkci pro přihlášení
-            await window.firebaseHelpers.signIn(email, password);
+            await login(email, password);
             alert('Přihlášení proběhlo úspěšně!');
             // Firebase onAuthChange listener se automaticky postará o zobrazení aplikace
         } catch (error) {
@@ -648,7 +665,7 @@ function initAuthForms() {
         
         try {
             // Zavolá Firebase funkci pro registraci
-            await window.firebaseHelpers.signUp(email, password);
+            await register(email, password);
             alert('Registrace proběhla úspěšně!');
             // Firebase onAuthChange listener se automaticky postará o přihlášení
         } catch (error) {
