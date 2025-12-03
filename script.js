@@ -553,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('❌ Uživatel není přihlášen - pokus o automatické přihlášení');
                     try {
                         // Automatické přihlášení testovacího účtu
-                        await login('test', '1234');
+                        await login('test@test.cz', '123456');
                         console.log('✅ Automatické přihlášení úspěšné');
                     } catch (error) {
                         console.error('❌ Automatické přihlášení selhalo:', error);
