@@ -515,7 +515,7 @@ class TaskManager {
         console.log('📥 Načítám úkoly z Firebase...');
         
         // Nastaví listener - volá se při každé změně dat
-        window.firebaseHelpers.listenToTasks((tasks) => {
+        listenToTasks((tasks) => {
             console.log('✅ Úkoly načteny z Firebase:', tasks);
             // Uloží úkoly (kontrola, zda je to pole)
             this.tasks = Array.isArray(tasks) ? tasks : [];
@@ -540,10 +540,8 @@ class TaskManager {
 document.addEventListener('DOMContentLoaded', () => {
     // Počká 500ms na inicializaci Firebase (asynchronní načítání)
     setTimeout(() => {
-        // Kontrola, zda se Firebase inicializovalo správně
-        if (window.firebaseHelpers) {
-            // Nastaví listener pro změny přihlášení/odhlášení
-            window.firebaseHelpers.onAuthChange((user) => {
+        // Nastaví listener pro změny přihlášení/odhlášení
+            onAuthChange(async (user) => {
                 if (user) {
                     // UŽIVATEL JE PŘIHLÁŠEN
                     console.log('✅ Uživatel přihlášen:', user.email);
@@ -551,16 +549,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     new TaskManager();          // Spustí aplikaci (vytvoří instanci)
                     initLogout();               // Inicializuje odhlašovací tlačítko
                 } else {
-                    // UŽIVATEL NENÍ PŘIHLÁŠEN
-                    console.log('❌ Uživatel není přihlášen');
-                    showLoginModal();           // Zobrazí přihlašovací okno
-                    initAuthForms();            // Inicializuje přihlašovací formuláře
+                    // UŽIVATEL NENÍ PŘIHLÁŠEN - AUTOMATICKÉ PŘIHLÁŠENÍ
+                    console.log('❌ Uživatel není přihlášen - pokus o automatické přihlášení');
+                    try {
+                        // Automatické přihlášení testovacího účtu
+                        await login('test', '1234');
+                        console.log('✅ Automatické přihlášení úspěšné');
+                    } catch (error) {
+                        console.error('❌ Automatické přihlášení selhalo:', error);
+                        showLoginModal();           // Zobrazí přihlašovací okno
+                        initAuthForms();            // Inicializuje přihlašovací formuláře
+                    }
                 }
             });
-        } else {
-            // Chyba - Firebase se nepodařilo načíst
-            console.error('❌ Firebase se nepodařilo inicializovat');
-        }
     }, 500);  // Timeout 500ms
 });
 

@@ -3,10 +3,12 @@
 // Zjednodušuje registraci, přihlášení a odhlášení uživatelů
 
 // Import autentizačního objektu z hlavní FirebaseData konfigurace
-import { auth } from './firebaseData';
+import { auth } from './firebaseData.js';
 // Import potřebných funkcí z Firebase Auth SDK
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
+
+// ===== REGISTRACE =====
 /**
  * Registrace nového uživatele
  * @param {String} email - Email uživatele
@@ -15,6 +17,8 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
  */
 export const register = (email, password) => createUserWithEmailAndPassword(auth, email, password);
 
+
+// ===== PŘIHLÁŠENÍ =====
 /**
  * Přihlášení existujícího uživatele
  * @param {String} email - Email uživatele
@@ -23,8 +27,19 @@ export const register = (email, password) => createUserWithEmailAndPassword(auth
  */
 export const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
 
+
+// ===== ODHLÁŠENÍ =====
 /**
  * Odhlášení aktuálně přihlášeného uživatele
  * @returns {Promise} - Promise, který se vyřeší po odhlášení
  */
 export const logout = () => signOut(auth);
+
+
+// ===== POSLOUCHÁNÍ ZMĚN AUTENTIZACE =====
+/**
+ * Poslouchá změny stavu přihlášení
+ * @param {Function} callback - Funkce volaná při změně (user nebo null)
+ * @returns {Function} - Funkce pro zrušení poslouchání
+ */
+export const onAuthChange = (callback) => onAuthStateChanged(auth, callback);

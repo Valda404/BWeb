@@ -3,9 +3,9 @@
 // Umožňuje ukládat, číst, aktualizovat a mazat úkoly uživatelů
 
 // Import Firebase databáze a autentizace z hlavního konfiguračního souboru
-import { db, auth } from './firebaseData';
+import { db, auth } from './firebaseData.js';
 // Import funkcí pro práci s databází z Firebase SDK
-import { ref, set, onValue, push, remove, update } from "firebase/database";
+import { ref, set, onValue, push, remove, update } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js';
 
 
 // ===== FUNKCE PRO SPRÁVU ÚKOLŮ =====
@@ -23,7 +23,8 @@ export const saveTasks = async (tasks) => {
   // Reference na úkoly daného uživatele: tasks/{userId}
   const tasksRef = ref(db, 'tasks/' + auth.currentUser.uid);
   // Uložení celého pole úkolů (přepíše všechny úkoly)
-  return await set(tasksRef, tasks);
+  await set(tasksRef, tasks);
+  console.log('✅ Úkoly uloženy do Firebase');
 };
 
 // ===== POSLOUCHÁNÍ ZMĚN V ÚKOLECH (REAL-TIME) =====
@@ -44,6 +45,7 @@ export const listenToTasks = (callback) => {
   // Listener - volá callback při každé změně
   return onValue(tasksRef, (snapshot) => {
       const data = snapshot.val();
+      console.log('📡 Real-time data received:', data);
       // Pokud nejsou žádné úkoly, vrátí prázdné pole
       callback(data || []);
   });
@@ -66,7 +68,9 @@ export const addTask = async (task) => {
   // push() vytvoří nový unikátní klíč pro úkol
   const newTaskRef = push(tasksRef);
   // Uložení úkolu pod nově vygenerovaným klíčem
-  return await set(newTaskRef, task);
+  await set(newTaskRef, task);
+  console.log('✅ Úkol přidán s ID:', newTaskRef.key);
+  return newTaskRef.key;
 };
 
 // ===== AKTUALIZACE ÚKOLU =====
@@ -85,7 +89,8 @@ export const updateTask = async (taskId, taskData) => {
   // Reference na konkrétní úkol: tasks/{userId}/{taskId}
   const taskRef = ref(db, 'tasks/' + auth.currentUser.uid + '/' + taskId);
   // update() aktualizuje pouze zadaná pole, ostatní zůstávají beze změny
-  return await update(taskRef, taskData);
+  await update(taskRef, taskData);
+  console.log('✅ Úkol aktualizován:', taskId);
 };
 
 // ===== SMAZÁNÍ ÚKOLU =====
@@ -103,7 +108,8 @@ export const deleteTask = async (taskId) => {
   // Reference na konkrétní úkol
   const taskRef = ref(db, 'tasks/' + auth.currentUser.uid + '/' + taskId);
   // remove() smaže úkol z databáze
-  return await remove(taskRef);
+  await remove(taskRef);
+  console.log('✅ Úkol smazán:', taskId);
 };
 
 
