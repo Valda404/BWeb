@@ -55,6 +55,7 @@ class TaskManager {
         // Prvky pro zobrazení obsahu
         this.tasksContainer = document.getElementById('tasks-container');
         this.categoryTitle = document.getElementById('category-title');
+        this.categoryAddBtn = document.getElementById('add-task-btn');  // Tlačítko pro přidání úkolu
         
         // Prvky pro statistiky
         this.totalTasksEl = document.getElementById('total-tasks');
@@ -126,6 +127,9 @@ class TaskManager {
         
         // Aktualizuje nadpis kategorie
         this.updateCategoryTitle(category);
+
+        // Aktualizuje tlačítko pro přidání úkolu podle kategorie
+        this.updateAddButton(category);
         
         // Skryje všechny sekce obsahu
         document.querySelectorAll('.content-section').forEach(section => {
@@ -159,8 +163,30 @@ class TaskManager {
             account: "Účet",
             settings: "Nastavení"
         };
-        // Nastaví text nadpisu (nebo "Tasks" pokud kategorie není definovaná)
+        // Nastaví text nadpisu (nebo "Chyba" pokud kategorie není definovaná)
         this.categoryTitle.textContent = titles[category] || "Chyba";
+    }
+    // #endregion
+
+    // #region ===== AKTUALIZACE TLAČÍTKA PRO PŘIDÁNÍ =====
+    // Aktualizuje viditelnost a text tlačítka pro přidání úkolu podle kategorie
+    updateAddButton(category) {
+        // Mapa názvů kategorií pro tlačítko
+        const titles = {
+            main: "Přidej úkol",
+            tasks: "Přidej úkol",
+            shortGoals: "Přidej krátkodobý cíl",
+            longGoals: "Přidej dlouhodobý cíl",
+            visions: "Přidej vizi",
+        };
+
+        // Nastaví text a viditelnost tlačítka
+        if (titles[category]) {
+            this.categoryAddBtn.style.display = 'inline-block';
+            this.categoryAddBtn.textContent = titles[category];
+        } else {
+            this.categoryAddBtn.style.display = 'none';
+        }
     }
     // #endregion
 

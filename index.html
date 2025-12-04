@@ -91,7 +91,7 @@
                 </button>
                 <!-- Tlačítko pro nastavení -->
                 <button class="category-btn" data-category="settings">
-                    <i class="fas fa-gear fa-spin fa-3x fa-fw"></i>
+                    <i class="fas fa-gear"></i>
                     <span>Nastavení</span>
                 </button>
             </nav>
@@ -105,10 +105,10 @@
             <!-- Hlavička obsahu s názvem kategorie a tlačítkem přidat -->
             <div class="content-header">
                 <!-- Nadpis se změní podle vybrané kategorie -->
-                <h2 id="category-title">Today's Tasks</h2>
+                <h2 id="category-title">Shrnutí</h2>
                 <!-- Tlačítko pro přidání nového úkolu -->
                 <button id="add-task-btn" class="btn-add-task">
-                    <i class="fas fa-plus"></i> Add Task
+                    <i class="fas fa-plus"></i> Přidej úkol
                 </button>
             </div>
 
@@ -137,38 +137,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="tasks-container">
+                <div class="tasks-content">
                     <h3>Prioritní úkoly</h3>
-                    <div id="priority-tasks-preview"></div>
+                    <div class="tasks-container" id="tasks-container"></div>
                 </div>
             </div>
             <!-- #endregion -->
 
             <!-- #region ===== SEKCE: ÚKOLY ===== -->
             <div id="tasks-content" class="content-section" style="display: none;">
-                <div class="task-stats">
-                    <div class="stat-card">
-                        <i class="fas fa-clipboard-list"></i>
-                        <div>
-                            <span class="stat-number" id="total-tasks-2">0</span>
-                            <span class="stat-label">Celkem</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-hourglass-half"></i>
-                        <div>
-                            <span class="stat-number" id="pending-tasks-2">0</span>
-                            <span class="stat-label">Čekající</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-check-double"></i>
-                        <div>
-                            <span class="stat-number" id="completed-tasks-2">0</span>
-                            <span class="stat-label">Dokončené</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="tasks-container" id="tasks-container">
                     <!-- Úkoly se přidávají dynamicky -->
                 </div>
