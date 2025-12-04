@@ -1,5 +1,5 @@
 /* ===== GLOBÁLNÍ STYLY ===== */
-#region Global Styles
+/* #region Global Styles */
 /* Aplikuje se na všechny elementy (*) na stránce */
 * {
     margin: 0;           /* Odstraní výchozí vnější odsazení */
@@ -33,20 +33,22 @@
     --shadow-md: 0 4px 6px rgba(0,0,0,0.1);    /* Střední stín */
     --shadow-lg: 0 10px 20px rgba(0,0,0,0.15); /* Velký stín */
 }
-#endregion
+/* #endregion */
+
 
 /* ===== ZÁKLADNÍ STYLY BODY ===== */
-#region Body Styles
+/* #region Body Styles */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Font celé stránky */
     background-color: var(--light-bg);   /* Světlé pozadí */
     color: var(--text-dark);             /* Tmavá barva textu */
     line-height: 1.6;                    /* Výška řádku (mezera mezi řádky textu) */
 }
-#endregion
+/* #endregion */
+
 
 /* ===== HORNÍ MENU ===== */
-#region Top Menu Styles
+/* #region Top Menu Styles */
 .top-menu {
     background-color: var(--dark-bg);    /* Tmavé pozadí menu */
     color: var(--white);                 /* Bílý text */
@@ -192,10 +194,11 @@ body {
     background-color: #fce4ec;  /* Světle růžová */
     color: #c2185b;             /* Tmavě růžová */
 }
-#endregion
+/* #endregion */
 
 
 /* ===== HLAVNÍ OBLAST OBSAHU (seznam úkolů) ===== */
+/* #region Content Area */
 .content-area {
     flex: 1;                /* Zabírá veškerý zbývající prostor */
     padding: 2rem;          /* Vnitřní odsazení */
@@ -507,8 +510,11 @@ body {
 .empty-state p {
     font-size: 1.1rem;  /* Větší text */
 }
+/* #endregion */
+
 
 /* ===== MODÁLNÍ OKNA (pro formuláře a potvrzení) ===== */
+/* #region Modal Styles */
 .modal {
     display: none;                              /* Skryté defaultně */
     position: fixed;                            /* Fixní pozice */
@@ -696,8 +702,11 @@ body {
 .btn-submit:hover {
     background-color: #357abd;  /* Tmavší modrá */
 }
+/* #endregion */
+
 
 /* ===== RESPONZIVNÍ DESIGN (mobilní zařízení) ===== */
+/* #region Responsive Design */
 @media (max-width: 768px) {
     /* Hlavní kontejner - změna layoutu na sloupcový */
     .main-container {
@@ -754,8 +763,11 @@ body {
         grid-template-columns: 1fr;  /* Pole pod sebou místo vedle sebe */
     }
 }
+/* #endregion */
+
 
 /* ===== PŘIHLAŠOVACÍ/REGISTRAČNÍ FORMULÁŘ ===== */
+/* #region Login/Register Form Styles */
 /* Menší modální okno pro přihlášení */
 #login-modal .modal-content {
     max-width: 400px;  /* Užší než standardní modály */
@@ -786,3 +798,4 @@ body {
 .form-footer a:hover {
     text-decoration: underline;  /* Podtržení při hoveru */
 }
+/* #endregion */
