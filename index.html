@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Titulek stránky - zobrazí se v záložce prohlížeče -->
-    <title>BWeb - Dreams Manager</title>
+    <title>DISCIPLÍNA</title>
     
     <!-- Odkaz na náš CSS soubor se styly -->
     <link rel="stylesheet" href="styles.css">
@@ -58,24 +58,24 @@
         <aside class="side-menu">
             <!-- Navigace s tlačítky kategorií -->
             <nav class="category-nav">
-                <!-- Tlačítko "Today" - aktivní (active class) jako výchozí -->
+                <!-- Tlačítko "Shrnutí" - aktivní (active class) jako výchozí -->
                 <!-- data-category = vlastní atribut pro identifikaci kategorie v JS -->
                 <button class="category-btn active" data-category="main">
-                    <i class="fas fa-calendar-day"></i> <!-- Ikona dne -->
+                    <i class="fas fa-fire"></i> <!-- Ikona dashboardu -->
                     <span>Shrnutí celku</span> <!-- Text tlačítka -->
                 </button>
                 <!-- Tlačítko pro úkoly -->
                 <button class="category-btn" data-category="tasks">
-                    <i class="fas fa-calendar-week"></i>
+                    <i class="fas fa-clipboard-list"></i>
                     <span>Úkoly</span>
                 </button>
                 <!-- Tlačítko pro krátkodobé cíle -->
-                <button class="category-btn" data-category="short-goals">
+                <button class="category-btn" data-category="shortGoals">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Krátkodobé cíle</span>
                 </button>
                 <!-- Tlačítko pro dlouhodobé cíle -->
-                <button class="category-btn" data-category="long-goals">
+                <button class="category-btn" data-category="longGoals">
                     <i class="fas fa-list"></i>
                     <span>Dlouhodobé cíle</span>
                 </button>
@@ -86,12 +86,12 @@
                 </button>
                 <!-- Tlačítko pro správu účtu -->
                 <button class="category-btn" data-category="account">
-                    <i class="fas fa-star"></i>
+                    <i class="fas fa-user"></i>
                     <span>Účet</span>
                 </button>
                 <!-- Tlačítko pro nastavení -->
                 <button class="category-btn" data-category="settings">
-                    <i class="fas fa-star"></i>
+                    <i class="fas fa-gear fa-spin fa-3x fa-fw"></i>
                     <span>Nastavení</span>
                 </button>
             </nav>
@@ -112,43 +112,113 @@
                 </button>
             </div>
 
-            <!-- ===== STATISTIKY ÚKOLŮ ===== -->
-            <!-- Tři karty se statistikami: Celkem / Čekající / Dokončené -->
-            <div class="task-stats">
-                <!-- Karta 1: Celkový počet úkolů -->
-                <div class="stat-card">
-                    <i class="fas fa-clipboard-list"></i> <!-- Ikona -->
-                    <div>
-                        <!-- Číslo se aktualizuje JavaScriptem -->
-                        <span class="stat-number" id="total-tasks">0</span>
-                        <!-- Popisek -->
-                        <span class="stat-label">Total</span>
+            <!-- #region ===== SEKCE: SHRNUTÍ ===== -->
+            <div id="main-content" class="content-section">
+                <div class="task-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-clipboard-list"></i>
+                        <div>
+                            <span class="stat-number" id="total-tasks">0</span>
+                            <span class="stat-label">Celkem úkolů</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-hourglass-half"></i>
+                        <div>
+                            <span class="stat-number" id="pending-tasks">0</span>
+                            <span class="stat-label">Čekající</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-check-double"></i>
+                        <div>
+                            <span class="stat-number" id="completed-tasks">0</span>
+                            <span class="stat-label">Dokončené</span>
+                        </div>
                     </div>
                 </div>
-                <!-- Karta 2: Počet nedokončených úkolů -->
-                <div class="stat-card">
-                    <i class="fas fa-hourglass-half"></i>
-                    <div>
-                        <span class="stat-number" id="pending-tasks">0</span>
-                        <span class="stat-label">Pending</span>
-                    </div>
-                </div>
-                <!-- Karta 3: Počet dokončených úkolů -->
-                <div class="stat-card">
-                    <i class="fas fa-check-double"></i>
-                    <div>
-                        <span class="stat-number" id="completed-tasks">0</span>
-                        <span class="stat-label">Completed</span>
-                    </div>
+                <div class="tasks-container">
+                    <h3>Prioritní úkoly</h3>
+                    <div id="priority-tasks-preview"></div>
                 </div>
             </div>
+            <!-- #endregion -->
 
-            <!-- ===== KONTEJNER PRO ÚKOLY ===== -->
-            <!-- Sem se dynamicky vkládají úkoly pomocí JavaScriptu -->
-            <div class="tasks-container" id="tasks-container">
-                <!-- Tasks will be dynamically added here -->
-                <!-- Úkoly se přidávají dynamicky přes JavaScript -->
+            <!-- #region ===== SEKCE: ÚKOLY ===== -->
+            <div id="tasks-content" class="content-section" style="display: none;">
+                <div class="task-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-clipboard-list"></i>
+                        <div>
+                            <span class="stat-number" id="total-tasks-2">0</span>
+                            <span class="stat-label">Celkem</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-hourglass-half"></i>
+                        <div>
+                            <span class="stat-number" id="pending-tasks-2">0</span>
+                            <span class="stat-label">Čekající</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-check-double"></i>
+                        <div>
+                            <span class="stat-number" id="completed-tasks-2">0</span>
+                            <span class="stat-label">Dokončené</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tasks-container" id="tasks-container">
+                    <!-- Úkoly se přidávají dynamicky -->
+                </div>
             </div>
+            <!-- #endregion -->
+
+            <!-- #region ===== SEKCE: KRÁTKODOBÉ CÍLE ===== -->
+            <div id="shortGoals-content" class="content-section" style="display: none;">
+                <div class="tasks-container">
+                    <h3>Krátkodobé cíle (1-3 měsíce)</h3>
+                    <p>Zde budou vaše krátkodobé cíle...</p>
+                </div>
+            </div>
+            <!-- #endregion -->
+
+            <!-- #region ===== SEKCE: DLOUHODOBÉ CÍLE ===== -->
+            <div id="longGoals-content" class="content-section" style="display: none;">
+                <div class="tasks-container">
+                    <h3>Dlouhodobé cíle (3+ měsíce)</h3>
+                    <p>Zde budou vaše dlouhodobé cíle...</p>
+                </div>
+            </div>
+            <!-- #endregion -->
+
+            <!-- #region ===== SEKCE: VIZE ===== -->
+            <div id="visions-content" class="content-section" style="display: none;">
+                <div class="tasks-container">
+                    <h3>Vaše vize a sny</h3>
+                    <p>Zde budou vaše vize...</p>
+                </div>
+            </div>
+            <!-- #endregion -->
+
+            <!-- #region ===== SEKCE: ÚČET ===== -->
+            <div id="account-content" class="content-section" style="display: none;">
+                <div class="tasks-container">
+                    <h3>Správa účtu</h3>
+                    <p>Informace o vašem účtu...</p>
+                </div>
+            </div>
+            <!-- #endregion -->
+
+            <!-- #region ===== SEKCE: NASTAVENÍ ===== -->
+            <div id="settings-content" class="content-section" style="display: none;">
+                <div class="tasks-container">
+                    <h3>Nastavení aplikace</h3>
+                    <p>Možnosti nastavení...</p>
+                </div>
+            </div>
+            <!-- #endregion -->
         </main>
     </div>
     <!-- #endregion -->
@@ -293,7 +363,7 @@
         </div>
     </div>
     <!-- #endregion -->
-     
+
 
     <!-- ===== PŘIPOJENÍ JAVASCRIPTU ===== -->
     <!-- src="script.js" = odkaz na náš JavaScript soubor s logikou aplikace -->

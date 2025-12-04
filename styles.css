@@ -159,31 +159,31 @@ body {
 }
 
 /* ===== SPECIFICKÉ BARVY PRO KAŽDOU KATEGORII (když je aktivní) ===== */
-/* Today - modrá */
+/* Main - modrá */
 .category-btn[data-category="main"].active {
     background-color: #e3f2fd;  /* Světle modrá */
     color: #1976d2;             /* Tmavě modrá */
 }
 
-/* Week - fialová */
+/* Tasks - fialová */
 .category-btn[data-category="tasks"].active {
     background-color: #f3e5f5;  /* Světle fialová */
     color: #7b1fa2;             /* Tmavě fialová */
 }
 
-/* Month - zelená */
+/* Short-Goals - zelená */
 .category-btn[data-category="short-goals"].active {
     background-color: #e8f5e9;  /* Světle zelená */
     color: #388e3c;             /* Tmavě zelená */
 }
 
-/* All - oranžová */
+/* Long-Goals - oranžová */
 .category-btn[data-category="long-goals"].active {
     background-color: #fff3e0;  /* Světle oranžová */
     color: #f57c00;             /* Tmavě oranžová */
 }
 
-/* Priority - růžová */
+/* Visions - růžová */
 .category-btn[data-category="visions"].active {
     background-color: #fce4ec;  /* Světle růžová */
     color: #c2185b;             /* Tmavě růžová */

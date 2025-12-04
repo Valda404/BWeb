@@ -11,7 +11,7 @@ class TaskManager {
     // #region ===== KONSTRUKTOR - INICIALIZACE APLIKACE =====
     constructor() {
         this.tasks = [];                    // Pole všech úkolů uživatele
-        this.currentCategory = 'today';     // Aktuálně vybraná kategorie (today/week/month/all/completed/priority)
+        this.currentCategory = 'main';     // Aktuálně vybraná kategorie (main/tasks/short-goals/long-goals/visions/account/settings)
         this.editingTaskId = null;          // ID úkolu, který se právě upravuje (null = vytváříme nový)
         this.init();                        // Spuštění inicializace
     }
@@ -67,7 +67,6 @@ class TaskManager {
     // #endregion
 
 
-
     // #region ===== PŘIPOJENÍ EVENT LISTENERŮ =====
     // Nastaví funkce, které se mají zavolat při různých událostech (kliknutí, submit...)
     attachEventListeners() {
@@ -112,7 +111,7 @@ class TaskManager {
 
 
     // #region ===== PŘEPNUTÍ KATEGORIE =====
-    // Zavolá se při kliknutí na tlačítko kategorie (Dnes, Týden, Měsíc...)
+    // Zavolá se při kliknutí na tlačítko kategorie
     switchCategory(e) {
         const button = e.currentTarget;              // Tlačítko, na které se kliklo
         const category = button.dataset.category;    // Kategorie z data-category atributu
@@ -128,8 +127,21 @@ class TaskManager {
         // Aktualizuje nadpis kategorie
         this.updateCategoryTitle(category);
         
-        // Znovu vykreslí úkoly podle nové kategorie
-        this.renderTasks();
+        // Skryje všechny sekce obsahu
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        
+        // Zobrazí vybranou sekci
+        const selectedSection = document.getElementById(category + '-content');
+        if (selectedSection) {
+            selectedSection.style.display = 'block';
+        }
+        
+        // Znovu vykreslí úkoly podle nové kategorie (pouze pro sekci úkolů)
+        if (category === 'tasks') {
+            this.renderTasks();
+        }
     }
     // #endregion
 
@@ -139,15 +151,16 @@ class TaskManager {
     updateCategoryTitle(category) {
         // Mapa názvů kategorií
         const titles = {
-            today: "Today's Tasks",
-            week: "This Week's Tasks",
-            month: "This Month's Tasks",
-            all: "All Tasks",
-            completed: "Completed Tasks",
-            priority: "Priority Tasks"
+            main: "Shrnutí",
+            tasks: "Úkoly",
+            shortGoals: "Krátkodobé cíle",
+            longGoals: "Dlouhodobé cíle",
+            visions: "Vize",
+            account: "Účet",
+            settings: "Nastavení"
         };
         // Nastaví text nadpisu (nebo "Tasks" pokud kategorie není definovaná)
-        this.categoryTitle.textContent = titles[category] || "Tasks";
+        this.categoryTitle.textContent = titles[category] || "Chyba";
     }
     // #endregion
 
@@ -588,31 +601,28 @@ class TaskManager {
 // #region ===== INICIALIZACE APLIKACE PŘI NAČTENÍ STRÁNKY =====
 // Event listener - čeká, až se načte celý DOM (HTML), pak spustí aplikaci
 document.addEventListener('DOMContentLoaded', () => {
-    // Počká 500ms na inicializaci Firebase (asynchronní načítání)
-    setTimeout(() => {
-        // Nastaví listener pro změny přihlášení/odhlášení
-            onAuthChange(async (user) => {
-                if (user) {
-                    // UŽIVATEL JE PŘIHLÁŠEN
-                    console.log('✅ Uživatel přihlášen:', user.email);
-                    hideLoginModal();           // Skryje přihlašovací okno
-                    new TaskManager();          // Spustí aplikaci (vytvoří instanci)
-                    initLogout();               // Inicializuje odhlašovací tlačítko
-                } else {
-                    // UŽIVATEL NENÍ PŘIHLÁŠEN - AUTOMATICKÉ PŘIHLÁŠENÍ
-                    console.log('❌ Uživatel není přihlášen - pokus o automatické přihlášení');
-                    try {
-                        // Automatické přihlášení testovacího účtu
-                        await login('test@test.cz', '123456');
-                        console.log('✅ Automatické přihlášení úspěšné');
-                    } catch (error) {
-                        console.error('❌ Automatické přihlášení selhalo:', error);
-                        showLoginModal();           // Zobrazí přihlašovací okno
-                        initAuthForms();            // Inicializuje přihlašovací formuláře
-                    }
-                }
-            });
-    }, 500);  // Timeout 500ms
+    // Nastaví listener pro změny přihlášení/odhlášení
+    onAuthChange(async (user) => {
+        if (user) {
+            // UŽIVATEL JE PŘIHLÁŠEN
+            console.log('✅ Uživatel přihlášen:', user.email);
+            hideLoginModal();           // Skryje přihlašovací okno
+            new TaskManager();          // Spustí aplikaci (vytvoří instanci)
+            initLogout();               // Inicializuje odhlašovací tlačítko
+        } else {
+            // UŽIVATEL NENÍ PŘIHLÁŠEN - AUTOMATICKÉ PŘIHLÁŠENÍ
+            console.log('❌ Uživatel není přihlášen - pokus o automatické přihlášení');
+            try {
+                // Automatické přihlášení testovacího účtu
+                await login('test@test.cz', '123456');
+                console.log('✅ Automatické přihlášení úspěšné');
+            } catch (error) {
+                console.error('❌ Automatické přihlášení selhalo:', error);
+                showLoginModal();           // Zobrazí přihlašovací okno
+                initAuthForms();            // Inicializuje přihlašovací formuláře
+            }
+        }
+    });
 });
 // #endregion
 
