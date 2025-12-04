@@ -22,7 +22,7 @@
     
 </head>
 <body>
-    <!-- ===== HORNÍ MENU ===== -->
+    <!-- #region ===== HORNÍ MENU ===== -->
     <!-- Header = hlavička stránky s navigací -->
     <header class="top-menu">
         <!-- Logo aplikace -->
@@ -48,8 +48,10 @@
             </button>
         </nav>
     </header>
+    <!-- #endregion -->
 
-    <!-- ===== HLAVNÍ KONTEJNER APLIKACE ===== -->
+
+    <!-- #region ===== HLAVNÍ KONTEJNER APLIKACE ===== -->
     <div class="main-container">
         <!-- ===== BOČNÍ MENU S KATEGORIEMI ===== -->
         <!-- aside = boční panel (HTML5 sémantický element) -->
@@ -94,8 +96,10 @@
                 </button>
             </nav>
         </aside>
+        <!-- #endregion -->
 
-        <!-- ===== HLAVNÍ OBSAHOVÁ OBLAST ===== -->
+
+        <!-- #region ===== HLAVNÍ OBSAHOVÁ OBLAST ===== -->
         <!-- main = hlavní obsah stránky (HTML5 sémantický element) -->
         <main class="content-area">
             <!-- Hlavička obsahu s názvem kategorie a tlačítkem přidat -->
@@ -147,8 +151,10 @@
             </div>
         </main>
     </div>
+    <!-- #endregion -->
 
-    <!-- ===== MODÁLNÍ OKNO PRO PŘIDÁNÍ/ÚPRAVU ÚKOLU ===== -->
+
+    <!-- #region ===== MODÁLNÍ OKNO PRO PŘIDÁNÍ/ÚPRAVU ÚKOLU ===== -->
     <!-- modal = překryvné okno, které se objeví nad stránkou -->
     <div id="task-modal" class="modal">
         <!-- Obsah modálního okna -->
@@ -219,8 +225,10 @@
             </div>
         </div>
     </div>
+    <!-- #endregion -->
 
-    <!-- ===== MODÁLNÍ OKNO PRO PŘIHLÁŠENÍ ===== -->
+
+    <!-- #region ===== MODÁLNÍ OKNO PRO PŘIHLÁŠENÍ ===== -->
     <!-- class="active" = okno je zobrazené hned při načtení stránky -->
     <div id="login-modal" class="modal active">
         <div class="modal-content">
@@ -284,6 +292,8 @@
             </div>
         </div>
     </div>
+    <!-- #endregion -->
+     
 
     <!-- ===== PŘIPOJENÍ JAVASCRIPTU ===== -->
     <!-- src="script.js" = odkaz na náš JavaScript soubor s logikou aplikace -->

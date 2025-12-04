@@ -3,20 +3,22 @@ import { login, register, logout, onAuthChange } from './firebase/auth.js';
 import { saveTasks, listenToTasks } from './firebase/database.js';
 
 
-// ===== HLAVNÍ APLIKACE - TASK MANAGER =====
+// #region ===== HLAVNÍ APLIKACE - TASK MANAGER =====
 // Třída TaskManager řídí celou aplikaci pro správu úkolů
 // Obsahuje veškerou logiku pro vytváření, úpravu, mazání a filtrování úkolů
 
 class TaskManager {
-    // ===== KONSTRUKTOR - INICIALIZACE APLIKACE =====
+    // #region ===== KONSTRUKTOR - INICIALIZACE APLIKACE =====
     constructor() {
         this.tasks = [];                    // Pole všech úkolů uživatele
         this.currentCategory = 'today';     // Aktuálně vybraná kategorie (today/week/month/all/completed/priority)
         this.editingTaskId = null;          // ID úkolu, který se právě upravuje (null = vytváříme nový)
         this.init();                        // Spuštění inicializace
     }
+    // #endregion
 
-    // ===== INICIALIZAČNÍ METODA =====
+
+    // #region ===== INICIALIZAČNÍ METODA =====
     // Volá se při vytvoření instance TaskManageru
     init() {
         this.cacheDOMElements();            // Najde a uloží všechny HTML elementy
@@ -24,8 +26,10 @@ class TaskManager {
         this.setDefaultDate();              // Nastaví dnešní datum do formuláře
         this.loadTasksFromFirebase();       // Načte úkoly z Firebase databáze
     }
+    // #endregion
 
-    // ===== CACHOVÁNÍ DOM ELEMENTŮ =====
+
+    // #region ===== CACHOVÁNÍ DOM ELEMENTŮ =====
     // Najde všechny potřebné HTML elementy a uloží je do proměnných
     // Díky tomu nemusíme pořád používat document.querySelector
     cacheDOMElements() {
@@ -60,8 +64,11 @@ class TaskManager {
         // Tlačítko synchronizace s Google Kalendářem
         this.syncCalendarBtn = document.getElementById('sync-calendar');
     }
+    // #endregion
 
-    // ===== PŘIPOJENÍ EVENT LISTENERŮ =====
+
+
+    // #region ===== PŘIPOJENÍ EVENT LISTENERŮ =====
     // Nastaví funkce, které se mají zavolat při různých událostech (kliknutí, submit...)
     attachEventListeners() {
         // Přepínání kategorií - při kliknutí na tlačítko kategorie
@@ -92,15 +99,19 @@ class TaskManager {
             }
         });
     }
+    // #endregion
 
-    // ===== NASTAVENÍ VÝCHOZÍHO DATA =====
+
+    // #region ===== NASTAVENÍ VÝCHOZÍHO DATA =====
     // Nastaví dnešní datum do formuláře jako výchozí hodnotu
     setDefaultDate() {
         const today = new Date().toISOString().split('T')[0];  // Formát: YYYY-MM-DD
         this.taskDateInput.value = today;
     }
+    // #endregion
 
-    // ===== PŘEPNUTÍ KATEGORIE =====
+
+    // #region ===== PŘEPNUTÍ KATEGORIE =====
     // Zavolá se při kliknutí na tlačítko kategorie (Dnes, Týden, Měsíc...)
     switchCategory(e) {
         const button = e.currentTarget;              // Tlačítko, na které se kliklo
@@ -120,8 +131,10 @@ class TaskManager {
         // Znovu vykreslí úkoly podle nové kategorie
         this.renderTasks();
     }
+    // #endregion
 
-    // ===== AKTUALIZACE NADPISU KATEGORIE =====
+
+    // #region ===== AKTUALIZACE NADPISU KATEGORIE =====
     // Změní text nadpisu podle vybrané kategorie
     updateCategoryTitle(category) {
         // Mapa názvů kategorií
@@ -136,8 +149,10 @@ class TaskManager {
         // Nastaví text nadpisu (nebo "Tasks" pokud kategorie není definovaná)
         this.categoryTitle.textContent = titles[category] || "Tasks";
     }
+    // #endregion
 
-    // ===== OTEVŘENÍ MODÁLNÍHO OKNA =====
+
+    // #region ===== OTEVŘENÍ MODÁLNÍHO OKNA =====
     // Otevře modální okno pro přidání nového úkolu nebo úpravu existujícího
     // @param {String|null} taskId - ID úkolu k úpravě (null = nový úkol)
     openModal(taskId = null) {
@@ -160,8 +175,10 @@ class TaskManager {
         // Zobrazí modální okno (přidá třídu 'active')
         this.modal.classList.add('active');
     }
+    // #endregion
 
-    // ===== ZAVŘENÍ MODÁLNÍHO OKNA =====
+
+    // #region ===== ZAVŘENÍ MODÁLNÍHO OKNA =====
     // Skryje modální okno a vyčistí formulář
     closeModal() {
         this.modal.classList.remove('active');  // Skryje modální okno
@@ -169,8 +186,10 @@ class TaskManager {
         this.editingTaskId = null;              // Resetuje ID upravovaného úkolu
         this.setDefaultDate();                  // Nastaví znovu dnešní datum
     }
+    // #endregion
 
-    // ===== VYPLNĚNÍ FORMULÁŘE =====
+
+    // #region ===== VYPLNĚNÍ FORMULÁŘE =====
     // Vyplní formulářová pole daty úkolu (při úpravě)
     // @param {Object} task - Objekt úkolu s daty
     populateForm(task) {
@@ -181,8 +200,10 @@ class TaskManager {
         this.taskPriorityInput.value = task.priority;                   // Priorita
         this.syncGoogleCheckbox.checked = task.syncGoogle || false;     // Checkbox Google sync
     }
+    // #endregion
 
-    // ===== ZPRACOVÁNÍ ODESLÁNÍ FORMULÁŘE =====
+
+    // #region ===== ZPRACOVÁNÍ ODESLÁNÍ FORMULÁŘE =====
     // Zavolá se při odeslání formuláře (tlačítko Uložit)
     // Vytvoří nový úkol nebo aktualizuje existující
     handleFormSubmit(e) {
@@ -222,8 +243,10 @@ class TaskManager {
         // Zavře modální okno
         this.closeModal();
     }
+    // #endregion
 
-    // ===== SMAZÁNÍ ÚKOLU =====
+
+    // #region ===== SMAZÁNÍ ÚKOLU =====
     // Smaže úkol po potvrzení uživatelem
     // @param {String} id - ID úkolu ke smazání
     deleteTask(id) {
@@ -239,8 +262,10 @@ class TaskManager {
             this.updateStats();
         }
     }
+    // #endregion
 
-    // ===== PŘEPNUTÍ DOKONČENÍ ÚKOLU =====
+
+    // #region ===== PŘEPNUTÍ DOKONČENÍ ÚKOLU =====
     // Označí úkol jako dokončený nebo nedokončený (toggle)
     // @param {String} id - ID úkolu
     toggleComplete(id) {
@@ -259,8 +284,10 @@ class TaskManager {
             this.updateStats();
         }
     }
+    // #endregion
+    
 
-    // ===== FILTROVÁNÍ ÚKOLŮ PODLE KATEGORIE =====
+    // #region ===== FILTROVÁNÍ ÚKOLŮ PODLE KATEGORIE =====
     // Vrátí pole úkolů podle aktuálně vybrané kategorie
     // @returns {Array} - Filtrované úkoly
     filterTasks() {
@@ -313,8 +340,10 @@ class TaskManager {
                 return this.tasks;
         }
     }
+    // #endregion
 
-    // ===== VYKRESLENÍ SEZNAMU ÚKOLŮ =====
+
+    // #region ===== VYKRESLENÍ SEZNAMU ÚKOLŮ =====
     // Vykreslí úkoly na stránku podle aktuální kategorie
     renderTasks() {
         // Získá filtrované úkoly
@@ -358,8 +387,10 @@ class TaskManager {
         // Připojí event listenery k tlačítkům úkolů (dokončit, upravit, smazat)
         this.attachTaskEventListeners();
     }
+    // #endregion
 
-    // ===== VYTVOŘENÍ HTML PRO JEDEN ÚKOL =====
+
+    // #region ===== VYTVOŘENÍ HTML PRO JEDEN ÚKOL =====
     // Vygeneruje HTML kód pro zobrazení jednoho úkolu
     // @param {Object} task - Objekt úkolu
     // @returns {String} - HTML řetězec
@@ -407,8 +438,10 @@ class TaskManager {
             </div>
         `;
     }
+    // #endregion
 
-    // ===== PŘIPOJENÍ LISTENERŮ K TLAČÍTKŮM ÚKOLŮ =====
+
+    // #region ===== PŘIPOJENÍ LISTENERŮ K TLAČÍTKŮM ÚKOLŮ =====
     // Přidá event listenery k tlačítkům dokončit/upravit/smazat u každého úkolu
     attachTaskEventListeners() {
         // Najde všechna tlačítka s atributem data-action
@@ -433,8 +466,10 @@ class TaskManager {
             });
         });
     }
+    // #endregion
 
-    // ===== AKTUALIZACE STATISTIK =====
+
+    // #region ===== AKTUALIZACE STATISTIK =====
     // Vypočítá a zobrazí počty úkolů (celkem, dokončené, čekající)
     updateStats() {
         const total = this.tasks.length;                             // Celkový počet úkolů
@@ -446,8 +481,10 @@ class TaskManager {
         this.completedTasksEl.textContent = completed;
         this.pendingTasksEl.textContent = pending;
     }
+    // #endregion
 
-    // ===== SYNCHRONIZACE S GOOGLE KALENDÁŘEM =====
+
+    // #region ===== SYNCHRONIZACE S GOOGLE KALENDÁŘEM =====
     // Placeholder pro budoucí implementaci Google Calendar API
     syncWithGoogleCalendar() {
         // Najde úkoly označené pro synchronizaci, které nejsou dokončené
@@ -468,16 +505,20 @@ class TaskManager {
               '3. Create calendar events for each task\n\n' +
               'For now, this is a placeholder.');
     }
+    // #endregion
 
-    // ===== GENEROVÁNÍ UNIKÁTNÍHO ID =====
+
+    // #region ===== GENEROVÁNÍ UNIKÁTNÍHO ID =====
     // Vytvoří unikátní ID pro nový úkol
     // @returns {String} - Unikátní ID (kombinace času a náhodného čísla)
     generateId() {
         // Kombinace aktuálního času (v base36) a náhodného čísla
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     }
+    // #endregion
 
-    // ===== ESCAPE HTML =====
+
+    // #region ===== ESCAPE HTML =====
     // Ochrana před XSS útoky - převede speciální znaky na HTML entity
     // @param {String} text - Text k escapování
     // @returns {String} - Bezpečný HTML text
@@ -486,8 +527,10 @@ class TaskManager {
         div.textContent = text;  // textContent automaticky escapuje HTML
         return div.innerHTML;     // Vrátí escapovaný text
     }
+    // #endregion
 
-    // ===== ULOŽENÍ ÚKOLŮ DO FIREBASE =====
+
+    // #region ===== ULOŽENÍ ÚKOLŮ DO FIREBASE =====
     // Uloží všechny úkoly do Firebase Realtime Database
     saveTasks() {
         console.log('💾 Ukládám úkoly do Firebase...', this.tasks);
@@ -501,8 +544,10 @@ class TaskManager {
             .then(() => console.log('✅ Úkoly uloženy do Firebase'))
             .catch(err => console.error('❌ Chyba při ukládání:', err));
     }
+    // #endregion
 
-    // ===== NAČTENÍ ÚKOLŮ Z FIREBASE =====
+
+    // #region ===== NAČTENÍ ÚKOLŮ Z FIREBASE =====
     // Nastaví real-time listener pro úkoly v Firebase
     // Callback se volá pokaždé, když se úkoly změní
     loadTasksFromFirebase() {
@@ -525,17 +570,22 @@ class TaskManager {
             this.updateStats();
         });
     }
+    // #endregion
 
-    // ===== NAČTENÍ ÚKOLŮ Z LOCALSTORAGE (DEPRECATED) =====
+
+    // #region ===== NAČTENÍ ÚKOLŮ Z LOCALSTORAGE (DEPRECATED) =====
     // Tato metoda je zastaralá - nyní používáme Firebase
     // Ponechána pro zpětnou kompatibilitu
     loadTasks() {
         const saved = localStorage.getItem('bweb-tasks');
         return saved ? JSON.parse(saved) : [];
     }
+    // #endregion
 }
+// #endregion
 
-// ===== INICIALIZACE APLIKACE PŘI NAČTENÍ STRÁNKY =====
+
+// #region ===== INICIALIZACE APLIKACE PŘI NAČTENÍ STRÁNKY =====
 // Event listener - čeká, až se načte celý DOM (HTML), pak spustí aplikaci
 document.addEventListener('DOMContentLoaded', () => {
     // Počká 500ms na inicializaci Firebase (asynchronní načítání)
@@ -564,8 +614,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }, 500);  // Timeout 500ms
 });
+// #endregion
 
-// ===== INICIALIZACE ODHLAŠOVACÍHO TLAČÍTKA =====
+
+// #region ===== INICIALIZACE ODHLAŠOVACÍHO TLAČÍTKA =====
 // Přidá funkčnost tlačítku pro odhlášení
 function initLogout() {
     const logoutBtn = document.getElementById('logout-btn');
@@ -586,8 +638,10 @@ function initLogout() {
         });
     }
 }
+// #endregion
 
-// ===== POMOCNÉ FUNKCE PRO AUTENTIZAČNÍ MODÁL =====
+
+// #region ===== POMOCNÉ FUNKCE PRO AUTENTIZAČNÍ MODÁL =====
 // Zobrazí přihlašovací modální okno
 function showLoginModal() {
     const loginModal = document.getElementById('login-modal');
@@ -599,8 +653,10 @@ function hideLoginModal() {
     const loginModal = document.getElementById('login-modal');
     loginModal.classList.remove('active');
 }
+// #endregion
 
-// ===== INICIALIZACE PŘIHLAŠOVACÍCH FORMULÁŘŮ =====
+
+// #region ===== INICIALIZACE PŘIHLAŠOVACÍCH FORMULÁŘŮ =====
 // Přidá funkčnost přihlašovacímu a registračnímu formuláři
 function initAuthForms() {
     const loginForm = document.getElementById('login-form');
@@ -675,4 +731,4 @@ function initAuthForms() {
         }
     });
 }
-
+// #endregion
