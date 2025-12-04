@@ -8,7 +8,7 @@ import { db, auth } from './firebaseData.js';
 import { ref, set, onValue, push, remove, update } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js';
 
 
-// ===== FUNKCE PRO SPRÁVU ÚKOLŮ =====
+// #region ===== FUNKCE PRO SPRÁVU ÚKOLŮ =====
 /**
  * Uloží celý seznam úkolů do Firebase
  * @param {Array} tasks - Pole všech úkolů uživatele
@@ -26,8 +26,10 @@ export const saveTasks = async (tasks) => {
   await set(tasksRef, tasks);
   console.log('✅ Úkoly uloženy do Firebase');
 };
+// #endregion
 
-// ===== POSLOUCHÁNÍ ZMĚN V ÚKOLECH (REAL-TIME) =====
+
+// #region ===== POSLOUCHÁNÍ ZMĚN V ÚKOLECH (REAL-TIME) =====
 /**
  * Naslouchá změnám v úkolech (real-time synchronizace)
  * Callback se zavolá pokaždé, když se úkoly změní (přidání, úprava, smazání)
@@ -50,8 +52,10 @@ export const listenToTasks = (callback) => {
       callback(data || []);
   });
 };
+// #endregion
 
-// ===== PŘIDÁNÍ NOVÉHO ÚKOLU =====
+
+// #region ===== PŘIDÁNÍ NOVÉHO ÚKOLU =====
 /**
  * Přidá nový úkol do Firebase
  * @param {Object} task - Objekt s daty úkolu (title, description, date, priority...)
@@ -72,8 +76,10 @@ export const addTask = async (task) => {
   console.log('✅ Úkol přidán s ID:', newTaskRef.key);
   return newTaskRef.key;
 };
+// #endregion
 
-// ===== AKTUALIZACE ÚKOLU =====
+
+// #region ===== AKTUALIZACE ÚKOLU =====
 /**
  * Aktualizuje existující úkol
  * @param {String} taskId - ID úkolu k aktualizaci
@@ -92,8 +98,10 @@ export const updateTask = async (taskId, taskData) => {
   await update(taskRef, taskData);
   console.log('✅ Úkol aktualizován:', taskId);
 };
+// #endregion
 
-// ===== SMAZÁNÍ ÚKOLU =====
+
+// #region ===== SMAZÁNÍ ÚKOLU =====
 /**
  * Smaže úkol z Firebase
  * @param {String} taskId - ID úkolu ke smazání
@@ -111,9 +119,10 @@ export const deleteTask = async (taskId) => {
   await remove(taskRef);
   console.log('✅ Úkol smazán:', taskId);
 };
+// #endregion
 
 
-// ===== FUNKCE PRO UŽIVATELSKÁ DATA =====
+// #region ===== FUNKCE PRO UŽIVATELSKÁ DATA =====
 /**
  * Zapíše data uživatele do Firebase databáze
  * @param {Object} data - Data k uložení (např. {name: 'Jan', email: 'jan@email.cz'})
@@ -124,7 +133,10 @@ export const writeUserData = (data) => {
   // Uložení dat do cesty: users/{userId}
   set(ref(db, 'users/' + auth.currentUser.uid), data);
 };
+// #endregion
 
+
+// #region ===== NASLOUCHÁNÍ UŽIVATELSKÝCH DAT =====
 /**
  * Naslouchá změnám v uživatelských datech (real-time listener)
  * @param {Function} callback - Funkce, která se zavolá při každé změně dat
@@ -137,3 +149,4 @@ export const listenToUserData = (callback) => {
   // Nastavení listeneru - callback se volá pokaždé, když se data změní
   onValue(userRef, (snapshot) => callback(snapshot.val()));
 };
+// #endregion

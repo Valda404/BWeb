@@ -112,7 +112,7 @@ body {
 
 /* Side Menu */
 .side-menu {
-    width: 250px;
+    width: 220px;
     background-color: var(--white);
     padding: 1.5rem 0;
     box-shadow: var(--shadow-sm);
@@ -160,39 +160,45 @@ body {
 
 /* ===== SPECIFICKÉ BARVY PRO KAŽDOU KATEGORII (když je aktivní) ===== */
 /* Today - modrá */
-.category-btn[data-category="today"].active {
+.category-btn[data-category="main"].active {
     background-color: #e3f2fd;  /* Světle modrá */
     color: #1976d2;             /* Tmavě modrá */
 }
 
 /* Week - fialová */
-.category-btn[data-category="week"].active {
+.category-btn[data-category="tasks"].active {
     background-color: #f3e5f5;  /* Světle fialová */
     color: #7b1fa2;             /* Tmavě fialová */
 }
 
 /* Month - zelená */
-.category-btn[data-category="month"].active {
+.category-btn[data-category="short-goals"].active {
     background-color: #e8f5e9;  /* Světle zelená */
     color: #388e3c;             /* Tmavě zelená */
 }
 
 /* All - oranžová */
-.category-btn[data-category="all"].active {
+.category-btn[data-category="long-goals"].active {
     background-color: #fff3e0;  /* Světle oranžová */
     color: #f57c00;             /* Tmavě oranžová */
 }
 
-/* Completed - tyrkysová */
-.category-btn[data-category="completed"].active {
-    background-color: #e0f2f1;  /* Světle tyrkysová */
-    color: #00796b;             /* Tmavě tyrkysová */
-}
-
 /* Priority - růžová */
-.category-btn[data-category="priority"].active {
+.category-btn[data-category="visions"].active {
     background-color: #fce4ec;  /* Světle růžová */
     color: #c2185b;             /* Tmavě růžová */
+}
+
+/* Account - tyrkysová */
+.category-btn[data-category="account"].active {
+    background-color: #e0f2f1;  /* Světle tyrkysová */
+    color: #08b2be;             /* Tmavě tyrkysová */
+}
+
+/* Settings - hnědá */
+.category-btn[data-category="settings"].active {
+    background-color: #eeccbb;  /* Světle hnědá */
+    color: #5d4037;             /* Tmavě hnědá */
 }
 /* #endregion */
 

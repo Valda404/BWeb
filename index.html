@@ -30,7 +30,7 @@
             <!-- Ikona úkolů z Font Awesome -->
             <i class="fas fa-tasks"></i>
             <!-- Název aplikace -->
-            <h1>BWeb Task Manager</h1>
+            <h1>BWeb Dreams Manager</h1>
         </div>
         <!-- Navigační tlačítka v horním menu -->
         <nav class="top-nav">
@@ -58,34 +58,39 @@
             <nav class="category-nav">
                 <!-- Tlačítko "Today" - aktivní (active class) jako výchozí -->
                 <!-- data-category = vlastní atribut pro identifikaci kategorie v JS -->
-                <button class="category-btn active" data-category="today">
+                <button class="category-btn active" data-category="main">
                     <i class="fas fa-calendar-day"></i> <!-- Ikona dne -->
-                    <span>Today</span> <!-- Text tlačítka -->
+                    <span>Shrnutí celku</span> <!-- Text tlačítka -->
                 </button>
-                <!-- Tlačítko pro úkoly tento týden -->
-                <button class="category-btn" data-category="week">
+                <!-- Tlačítko pro úkoly -->
+                <button class="category-btn" data-category="tasks">
                     <i class="fas fa-calendar-week"></i>
-                    <span>This Week</span>
+                    <span>Úkoly</span>
                 </button>
-                <!-- Tlačítko pro úkoly tento měsíc -->
-                <button class="category-btn" data-category="month">
+                <!-- Tlačítko pro krátkodobé cíle -->
+                <button class="category-btn" data-category="short-goals">
                     <i class="fas fa-calendar-alt"></i>
-                    <span>This Month</span>
+                    <span>Krátkodobé cíle</span>
                 </button>
-                <!-- Tlačítko pro všechny úkoly -->
-                <button class="category-btn" data-category="all">
+                <!-- Tlačítko pro dlouhodobé cíle -->
+                <button class="category-btn" data-category="long-goals">
                     <i class="fas fa-list"></i>
-                    <span>All Tasks</span>
+                    <span>Dlouhodobé cíle</span>
                 </button>
-                <!-- Tlačítko pro dokončené úkoly -->
-                <button class="category-btn" data-category="completed">
+                <!-- Tlačítko pro vize -->
+                <button class="category-btn" data-category="visions">
                     <i class="fas fa-check-circle"></i>
-                    <span>Completed</span>
+                    <span>Vize</span>
                 </button>
-                <!-- Tlačítko pro prioritní úkoly -->
-                <button class="category-btn" data-category="priority">
+                <!-- Tlačítko pro správu účtu -->
+                <button class="category-btn" data-category="account">
                     <i class="fas fa-star"></i>
-                    <span>Priority</span>
+                    <span>Účet</span>
+                </button>
+                <!-- Tlačítko pro nastavení -->
+                <button class="category-btn" data-category="settings">
+                    <i class="fas fa-star"></i>
+                    <span>Nastavení</span>
                 </button>
             </nav>
         </aside>
