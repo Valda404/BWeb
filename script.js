@@ -168,6 +168,7 @@ class TaskManager {
     }
     // #endregion
 
+
     // #region ===== AKTUALIZACE TLAČÍTKA PRO PŘIDÁNÍ =====
     // Aktualizuje viditelnost a text tlačítka pro přidání úkolu podle kategorie
     updateAddButton(category) {
@@ -178,6 +179,8 @@ class TaskManager {
             shortGoals: "Přidej krátkodobý cíl",
             longGoals: "Přidej dlouhodobý cíl",
             visions: "Přidej vizi",
+            account: "Odhlásit",
+            settings: "Uložit změny"
         };
 
         // Nastaví text a viditelnost tlačítka
@@ -608,16 +611,6 @@ class TaskManager {
             // Aktualizuje statistiky
             this.updateStats();
         });
-    }
-    // #endregion
-
-
-    // #region ===== NAČTENÍ ÚKOLŮ Z LOCALSTORAGE (DEPRECATED) =====
-    // Tato metoda je zastaralá - nyní používáme Firebase
-    // Ponechána pro zpětnou kompatibilitu
-    loadTasks() {
-        const saved = localStorage.getItem('bweb-tasks');
-        return saved ? JSON.parse(saved) : [];
     }
     // #endregion
 }

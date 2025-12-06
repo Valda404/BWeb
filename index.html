@@ -35,16 +35,8 @@
         <!-- Navigační tlačítka v horním menu -->
         <nav class="top-nav">
             <!-- Tlačítko pro synchronizaci s Google Calendar -->
-            <button id="sync-calendar" class="btn-sync" title="Sync with Google Calendar">
+            <butto id="sync-calendar" class="btn-sync" title="Sync with Google Calendar">
                 <i class="fab fa-google"></i> Sync Calendar
-            </button>
-            <!-- Tlačítko pro odhlášení uživatele -->
-            <button id="logout-btn" class="btn-settings" title="Odhlásit se">
-                <i class="fas fa-sign-out-alt"></i> Odhlásit
-            </button>
-            <!-- Tlačítko nastavení -->
-            <button id="settings-btn" class="btn-settings" title="Settings">
-                <i class="fas fa-cog"></i>
             </button>
         </nav>
     </header>
@@ -209,7 +201,7 @@
             <!-- Hlavička modálu -->
             <div class="modal-header">
                 <!-- Nadpis - změní se na "Edit Task" při úpravě -->
-                <h3 id="modal-title">Add New Task</h3>
+                <h3 id="modal-title">Přidej úkol</h3>
                 <!-- Tlačítko pro zavření (×) -->
                 <button class="close-modal">&times;</button>
             </div>
@@ -219,12 +211,12 @@
                 <form id="task-form">
                     <!-- Pole pro název úkolu -->
                     <div class="form-group">
-                        <label for="task-title">Task Title *</label> <!-- * = povinné pole -->
+                        <label for="task-title">Název úkolu *</label> <!-- * = povinné pole -->
                         <input type="text" id="task-title" required placeholder="Enter task title">
                     </div>
                     <!-- Pole pro popis úkolu (nepovinné) -->
                     <div class="form-group">
-                        <label for="task-description">Description</label>
+                        <label for="task-description">Popis</label>
                         <!-- textarea = víceřádkové textové pole -->
                         <textarea id="task-description" rows="3" placeholder="Enter task description"></textarea>
                     </div>
@@ -232,25 +224,25 @@
                     <div class="form-row">
                         <!-- Pole pro datum -->
                         <div class="form-group">
-                            <label for="task-date">Due Date *</label>
+                            <label for="task-date">Datum dokončení *</label>
                             <!-- type="date" zobrazí kalendář pro výběr data -->
                             <input type="date" id="task-date" required>
                         </div>
                         <!-- Pole pro čas (nepovinné) -->
                         <div class="form-group">
-                            <label for="task-time">Due Time</label>
+                            <label for="task-time">Čas dokončení</label>
                             <!-- type="time" zobrazí výběr času -->
                             <input type="time" id="task-time">
                         </div>
                     </div>
                     <!-- Výběr priority úkolu -->
                     <div class="form-group">
-                        <label for="task-priority">Priority Level</label>
+                        <label for="task-priority">Úroveň priority</label>
                         <!-- select = rozbalovací seznam -->
                         <select id="task-priority">
-                            <option value="low">Low</option> <!-- Nízká priorita -->
-                            <option value="medium" selected>Medium</option> <!-- Střední (výchozí) -->
-                            <option value="high">High</option> <!-- Vysoká -->
+                            <option value="low">Nízká</option> <!-- Nízká priorita -->
+                            <option value="medium" selected>Střední</option> <!-- Střední (výchozí) -->
+                            <option value="high">Vysoká</option> <!-- Vysoká -->
                             <option value="urgent">Urgent</option> <!-- Urgentní -->
                         </select>
                     </div>
@@ -258,15 +250,15 @@
                     <div class="form-group checkbox-group">
                         <label>
                             <input type="checkbox" id="sync-google">
-                            <span>Sync with Google Calendar</span>
+                            <span>Synchronizovat s Google Kalendářem</span>
                         </label>
                     </div>
                     <!-- Tlačítka formuláře -->
                     <div class="form-actions">
                         <!-- type="button" = nezpůsobí odeslání formuláře -->
-                        <button type="button" class="btn-cancel">Cancel</button>
+                        <button type="button" class="btn-cancel">Zrušit</button>
                         <!-- type="submit" = odešle formulář -->
-                        <button type="submit" class="btn-submit">Save Task</button>
+                        <button type="submit" class="btn-submit">Uložit úkol</button>
                     </div>
                 </form>
             </div>
@@ -334,6 +326,66 @@
                     <!-- Odkaz zpět na přihlášení -->
                     <div class="form-footer">
                         <p>Už máte účet? <a href="#" id="show-login">Přihlaste se</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+
+
+    <!-- #region ===== MODÁLNÍ OKNO PRO KRÁTKODOBÉ CÍLE ===== -->
+    <div id="shortGoal-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="shortGoal-modal-title">Přidej krátkodobý cíl</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="shortGoal-form">
+                    <div class="form-group">
+                        <label for="shortGoal-title">Název cíle *</label>
+                        <input type="text" id="shortGoal-title" required placeholder="Zadejte název cíle">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+
+
+    <!-- #region ===== MODÁLNÍ OKNO PRO DLOUHODOBÉ CÍLE ===== -->
+    <div id="longGoal-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="longGoal-modal-title">Přidej dlouhodobý cíl</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="longGoal-form">
+                    <div class="form-group">
+                        <label for="longGoal-title">Název cíle *</label>
+                        <input type="text" id="longGoal-title" required placeholder="Zadejte název cíle">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+
+
+    <!-- #region ===== MODÁLNÍ OKNO PRO VIZE ===== -->
+    <div id="vision-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="vision-modal-title">Přidej vizi</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="vision-form">
+                    <div class="form-group">
+                        <label for="vision-title">Název vize *</label>
+                        <input type="text" id="vision-title" required placeholder="Zadejte název vize">
                     </div>
                 </form>
             </div>
