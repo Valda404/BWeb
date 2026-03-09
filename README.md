@@ -1,53 +1,16 @@
-# BWeb - Task Manager
-Webová aplikace pro správu úkolů vytvořená v rámci bakalářské práce
+# React + Vite
 
-## Popis projektu
-BWeb je moderní task manager (správce úkolů) s real-time synchronizací dat pomocí Firebase. Aplikace umožňuje uživatelům vytvářet, upravovat a mazat úkoly s různými prioritami a deadliny.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Hlavní funkce
-- ✅ **Registrace a přihlášení** - Autentizace pomocí Firebase Auth
-- ✅ **Správa úkolů** - Vytváření, úprava, mazání a označování úkolů jako dokončených
-- ✅ **Kategorie úkolů** - Filtrování podle času (Dnes, Týden, Měsíc, Vše)
-- ✅ **Priority** - 4 úrovně priority (Nízká, Střední, Vysoká, Urgentní)
-- ✅ **Real-time synchronizace** - Okamžitá synchronizace dat přes Firebase Realtime Database
-- ✅ **Responzivní design** - Funkční na PC i mobilních zařízeních
+Currently, two official plugins are available:
 
-## Použité technologie
-- **HTML5** - Struktura stránky
-- **CSS3** - Styling (Flexbox, Grid, CSS proměnné, animace)
-- **JavaScript (ES6+)** - Aplikační logika (async/await, moduly, třídy)
-- **Firebase** - Backend služby (Authentication, Realtime Database)
-- **Font Awesome** - Ikony
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Struktura projektu
-```
-BWeb/
-├── index.html          # Hlavní HTML soubor
-├── styles.css          # Všechny CSS styly
-├── script.js           # Hlavní aplikační logika (TaskManager třída)
-├── components/         # React komponenty (experimentální)
-│   ├── Dashboard.js    # Dashboard komponenta
-│   └── Loginform.js    # Login formulář komponenta
-└── firebase/           # Firebase konfigurace a helpery
-    ├── firebase.js     # Inicializace Firebase
-    ├── auth.js         # Autentizační funkce
-    └── database.js     # Databázové operace
-```
+## React Compiler
 
-## Jak spustit aplikaci
-1. Otevřete `index.html` v moderním prohlížeči (Chrome, Firefox, Edge)
-2. Registrujte se pomocí emailu a hesla
-3. Po přihlášení můžete začít přidávat úkoly
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Firebase konfigurace
-Aplikace používá tyto Firebase služby:
-- **Firebase Authentication** - Pro správu uživatelů
-- **Firebase Realtime Database** - Pro ukládání úkolů (region: Europe West)
+## Expanding the ESLint configuration
 
-## Autor
-Tomáš - Bakalářská práce 2024
-
-## Poznámky
-- Všechny soubory obsahují podrobné komentáře v češtině pro lepší pochopení kódu
-- Projekt slouží jako praktická ukázka moderních webových technologií
-- Kód je připraven pro další rozšíření (např. sdílení úkolů, notifikace)
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

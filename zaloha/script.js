@@ -204,12 +204,12 @@ class TaskManager {
             // REŽIM ÚPRAVY - najde úkol podle ID
             const task = this.tasks.find(t => t.id === taskId);
             if (task) {
-                this.modalTitle.textContent = 'Edit Task';  // Nadpis "Upravit úkol"
+                this.modalTitle.textContent = 'Úprava';  // Nadpis "Upravit úkol"
                 this.populateForm(task);                     // Vyplní formulář daty úkolu
             }
         } else {
             // REŽIM PŘIDÁNÍ - nový úkol
-            this.modalTitle.textContent = 'Add New Task';    // Nadpis "Přidat úkol"
+            this.modalTitle.textContent = 'Přidání';    // Nadpis "Přidat úkol"
             this.taskForm.reset();                           // Vyčistí formulář
             this.setDefaultDate();                           // Nastaví dnešní datum
         }
