@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import { onAuthChange, logout } from './firebase/auth.js'
 import { listenToTasks, addTask, updateTask } from './firebase/database.js'
 import Login from './components/Login.jsx'
-import TaskList from './components/TaskList.jsx'
-import Sidebar from './components/Sidebar.jsx'
-import QuickAdd from './components/QuickAdd.jsx'
-import GoalCard from './components/GoalCard.jsx'
+import { TaskList } from './components/TaskList'
+import { Sidebar } from './components/Sidebar'
+import { QuickAdd } from './components/QuickAdd'
+import { GoalCard } from './components/GoalCard'
 
 function App() {
   const [user, setUser] = useState(null)
