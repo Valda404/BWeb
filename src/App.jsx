@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
 import { onAuthChange, logout } from './firebase/auth.js'
-import { listenToTasks } from './firebase/database.js'
+import { listenToTasks, addTask, updateTask } from './firebase/database.js'
 import Login from './components/Login.jsx'
+import TaskList from './components/TaskList.jsx'
+import Sidebar from './components/Sidebar.jsx'
+import QuickAdd from './components/QuickAdd.jsx'
+import GoalCard from './components/GoalCard.jsx'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -20,7 +24,15 @@ function App() {
     if (!user) return
 
     const unsubscribe = listenToTasks((data) => {
-      setTasks(data)
+      if (!data) {
+        setTasks([])
+      } else if (Array.isArray(data)) {
+        //saveTasks() ukládá array - zachovat
+        setTasks(data.map((task, index) => ({ id: String(index), ...task })))
+      } else {
+        //addTask() používá push - Firebase vrací objekt s klíčem
+        setTasks(Object.entries(data).map(([id, task]) => ({ id, ...task })))
+      }
     })
 
     return () => {
@@ -28,14 +40,54 @@ function App() {
     }
   }, [user])
 
+  const handleAddTask = async (title) => {
+    await addTask({ title, completed: false })
+  }
+
+  const handleToggleComplete = async (taskId, currentStatus) => {
+    await updateTask(taskId, { completed: !currentStatus })
+  }
+
   if (!user) {
     return <Login />
   }
 
   return (
-    <div>
-      <p>Vítej, {user.displayName}!</p>
-      <button onClick={logout}>Odhlásit se</button>
+    <div style={{ display: 'flex', height: '100vh', background: '#f9fafb', overflow: 'hidden' }}>
+      <Sidebar />
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* Header */}
+        <header style={{
+          display: 'flex', justifyContent: 'flex-end', alignItems: 'center',
+          padding: '0.875rem 2rem', borderBottom: '1px solid #f3f4f6', background: '#fff'
+        }}>
+          <span style={{ fontSize: '0.875rem', color: '#6b7280', marginRight: '1rem' }}>
+            {user.email}
+          </span>
+          <button
+            onClick={logout}
+            style={{
+              fontSize: '0.875rem', color: '#6366f1', background: 'none',
+              border: '1px solid #e0e7ff', borderRadius: '8px', padding: '0.4em 1em', cursor: 'pointer'
+            }}
+          >
+            Odhlásit se
+          </button>
+        </header>
+
+        {/* Hlavní obsah */}
+        <main style={{ flex: 1, overflowY: 'auto', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {/* GoalCard + QuickAdd vedle sebe */}
+          <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.5rem', alignItems: 'start' }}>
+            <GoalCard />
+            <QuickAdd onAdd={handleAddTask} />
+          </div>
+
+          {/* TaskList pod nimi */}
+          <TaskList tasks={tasks} onToggleComplete={handleToggleComplete} />
+        </main>
+      </div>
     </div>
   )
 }
