@@ -1,20 +1,7 @@
 import { Circle, CheckCircle, Clock, Calendar, MoveRight } from "lucide-react";
 
-export interface Task {
-  id: string;
-  title: string;
-  deadline?: string;
-  completed: boolean;
-  tagColor?: string;
-  isPriority?: boolean;
-}
 
-interface TaskListProps {
-  tasks: Task[];
-  onToggleComplete: (id: string, current: boolean) => void;
-}
-
-export function TaskList({ tasks, onToggleComplete }: TaskListProps) {
+export function TaskList({ tasks, onToggleComplete }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">

@@ -1,11 +1,7 @@
 import { Plus, Command } from "lucide-react";
 import { useState } from "react";
 
-interface QuickAddProps {
-  onAdd: (title: string) => void;
-}
-
-export function QuickAdd({ onAdd }: QuickAddProps) {
+export function QuickAdd({ onAdd }) {
   const [value, setValue] = useState("");
 
   const handleSubmit = () => {
