@@ -5,7 +5,7 @@
 // Import autentizačního objektu z hlavní FirebaseData konfigurace
 import { auth } from './firebaseData.js';
 // Import potřebných funkcí z Firebase Auth SDK
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 
 
 // ===== REGISTRACE =====

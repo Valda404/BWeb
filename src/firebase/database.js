@@ -5,7 +5,7 @@
 // Import Firebase databáze a autentizace z hlavního konfiguračního souboru
 import { db, auth } from './firebaseData.js';
 // Import funkcí pro práci s databází z Firebase SDK
-import { ref, set, onValue, push, remove, update } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js';
+import { ref, set, onValue, push, remove, update } from 'firebase/database';
 
 
 // #region ===== FUNKCE PRO SPRÁVU ÚKOLŮ =====

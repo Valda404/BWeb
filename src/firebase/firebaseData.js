@@ -7,11 +7,11 @@
 
 // ===== IMPORTY Z FIREBASE SDK =====
 // Import funkce pro inicializaci Firebase aplikace
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+import { initializeApp } from 'firebase/app';
 // Import funkce pro získání autentizačního objektu
-import { getAuth } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+import { getAuth } from 'firebase/auth';
 // Import funkce pro získání databázového objektu
-import { getDatabase } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js';
+import { getDatabase } from 'firebase/database';
 
 // ===== KONFIGURACE FIREBASE PROJEKTU =====
 // Objekt s přístupovými údaji k Firebase projektu "bweb-9f2f1"

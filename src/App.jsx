@@ -1,34 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react'
+import { onAuthChange, logout } from './firebase/auth.js'
+import { listenToTasks } from './firebase/database.js'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null)
+  const [tasks, setTasks] = useState([])
+
+  //Sledování stavu přihlášení
+  useEffect(() => {
+    const unsubscribe = onAuthChange((currentUser) => {
+      setUser(currentUser)
+    })
+    return () => unsubscribe()
+  }, [])
+
+  //Načtní úkolů při přihlášení
+  useEffect(() => {
+    if (!user) return
+
+    const unsubscribe = listenToTasks((data) => {
+      setTasks(data)
+    })
+
+    return () => {
+      if (unsubscribe) unsubscribe()
+    }
+  }, [user])
+
+  if (!user) {
+    return <p>Tady bude Login</p>
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <p>Vítej, {user.displayName}!</p>
+      <button onClick={logout}>Odhlásit se</button>
+    </div>
   )
 }
 
