@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { onAuthChange, logout } from './firebase/auth.js'
 import { listenToTasks } from './firebase/database.js'
+import Login from './components/Login.jsx'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -28,7 +29,7 @@ function App() {
   }, [user])
 
   if (!user) {
-    return <p>Tady bude Login</p>
+    return <Login />
   }
 
   return (
