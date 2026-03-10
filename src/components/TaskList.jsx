@@ -1,9 +1,9 @@
-import { Circle, CheckCircle, Clock, Calendar, MoveRight } from "lucide-react";
+import { Circle, CheckCircle, Clock, Calendar, MoveRight, Trash, Sun } from "lucide-react";
 
 
 export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday }) {
   const isInbox = (task) => {
-    task.category === 'inbox' || task.category === undefined
+    return (task.category === 'inbox' || !task.category)
   }
 
   return (
@@ -82,18 +82,18 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday }) {
                 {isInbox(task) && (
                   <button
                     onClick={() => onMoveToToday(task.id)}
-                    title="Přesunout do dnešních úkolů"
+                    title="Přesunout do Today"
                     className="p-1.5 rounded-lg text-gray-400 hover:text-amber-500 hover:bg-amber-50 transition-colors"
                   >
                     <Sun className="w-4 h-4" />
                   </button>
-                  )}
+                )}
                 <button
                   onClick={() => onDelete(task.id)}
                   title="Smazat úkol"
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash className="w-4 h-4" />
                 </button>
               </div>
             </div>
