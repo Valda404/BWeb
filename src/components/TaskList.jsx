@@ -1,7 +1,11 @@
 import { Circle, CheckCircle, Clock, Calendar, MoveRight } from "lucide-react";
 
 
-export function TaskList({ tasks, onToggleComplete }) {
+export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday }) {
+  const isInbox = (task) => {
+    task.category === 'inbox' || task.category === undefined
+  }
+
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">
@@ -34,7 +38,7 @@ export function TaskList({ tasks, onToggleComplete }) {
             }`}
           >
 
-            <button
+            <button //Zaškrtnutí dokončení
               onClick={() => onToggleComplete(task.id, task.completed)}
               className={`shrink-0 transition-colors ${
                 task.completed ? "text-indigo-600" : "text-gray-300 group-hover:text-indigo-400"}`}
@@ -72,6 +76,25 @@ export function TaskList({ tasks, onToggleComplete }) {
                     </div>
                   )}
                 </div>
+              </div>
+
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                {isInbox(task) && (
+                  <button
+                    onClick={() => onMoveToToday(task.id)}
+                    title="Přesunout do dnešních úkolů"
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-amber-500 hover:bg-amber-50 transition-colors"
+                  >
+                    <Sun className="w-4 h-4" />
+                  </button>
+                  )}
+                <button
+                  onClick={() => onDelete(task.id)}
+                  title="Smazat úkol"
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                >
+                  <Trash className="w-4 h-4" />
+                </button>
               </div>
             </div>
         ))}

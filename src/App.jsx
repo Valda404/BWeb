@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { onAuthChange, logout } from './firebase/auth.js'
-import { listenToTasks, addTask, updateTask } from './firebase/database.js'
+import { listenToTasks, addTask, updateTask, deleteTask } from './firebase/database.js'
 import Login from './components/Login.jsx'
 import { TaskList } from './components/TaskList'
 import { Sidebar } from './components/Sidebar'
@@ -48,6 +48,16 @@ function App() {
   const handleToggleComplete = async (taskId, currentStatus) => {
     await updateTask(taskId, { completed: !currentStatus })
   }
+
+  const handleDeleteTask = async (taskId) => {
+    await deleteTask(taskId)
+  }
+
+  const handleMoveToToday = async (taskId) => {
+    await updateTask(taskId, { category: 'today' })
+  }
+
+  // Filtrování úkolů podle aktuálně zvolené kategorie
 
   const filteredTasks = tasks.filter((task) => {
     if (currentView === 'inbox') {
@@ -103,7 +113,11 @@ function App() {
           </div>
 
           {/* TaskList pod nimi */}
-          <TaskList tasks={filteredTasks} onToggleComplete={handleToggleComplete} />
+          <TaskList tasks={filteredTasks}
+          onToggleComplete={handleToggleComplete}
+          onDelete={handleDeleteTask}
+          onMoveToToday={handleMoveToToday}
+          />
         </main>
       </div>
     </div>
