@@ -57,6 +57,10 @@ function App() {
     return task.category === currentView
   })
 
+  const totalTasks = tasks.length
+  const completedTasks = tasks.filter(t => t.completed).length
+  const progressPercentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100)
+
   if (!user) {
     return <Login />
   }
@@ -89,7 +93,12 @@ function App() {
         <main style={{ flex: 1, overflowY: 'auto', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {/* GoalCard + QuickAdd vedle sebe */}
           <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.5rem', alignItems: 'start' }}>
-            <GoalCard />
+            <GoalCard 
+            goalTitle="Dokončit bakalářku"
+            totalTasks={totalTasks}
+            completedTasks={completedTasks}
+            progressPercentage={progressPercentage}
+            />
             <QuickAdd onAdd={handleAddTask} />
           </div>
 
