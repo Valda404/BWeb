@@ -42,14 +42,20 @@ function App() {
   }, [user])
 
   const handleAddTask = async (title) => {
-    await addTask({ title, completed: false })
+    await addTask({ title, completed: false, category: currentView })
   }
 
   const handleToggleComplete = async (taskId, currentStatus) => {
     await updateTask(taskId, { completed: !currentStatus })
   }
 
-  const filteredTasks = tasks.filter(task => task.category === currentView)
+  const filteredTasks = tasks.filter((task) => {
+    if (currentView === 'inbox') {
+      //zobrazí inbox úúkoly + stará data bez kategorie
+      return task.category === 'inbox' || task.category === undefined
+    }
+    return task.category === currentView
+  })
 
   if (!user) {
     return <Login />
