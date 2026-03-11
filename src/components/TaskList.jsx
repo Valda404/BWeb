@@ -1,7 +1,7 @@
-import { Circle, CheckCircle, Clock, Calendar, MoveRight, Trash, Sun } from "lucide-react";
+import { Circle, CheckCircle, Clock, Calendar, MoveRight, Trash, Sun, ListTodo } from "lucide-react";
 
 
-export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday }) {
+export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions }) {
   const isInbox = (task) => {
     return (task.category === 'inbox' || !task.category)
   }
@@ -79,13 +79,24 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday }) {
               </div>
 
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                {isInbox(task) && (
+                {/* Přesun do Today z Inbox/Next Actions */}
+                {(isInbox(task) || task.category === 'next') && (
                   <button
                     onClick={() => onMoveToToday(task.id)}
                     title="Přesunout do Today"
                     className="p-1.5 rounded-lg text-gray-400 hover:text-amber-500 hover:bg-amber-50 transition-colors"
                   >
                     <Sun className="w-4 h-4" />
+                  </button>
+                )}
+                {/* Přesun do Next Actions z Inbox */}
+                {isInbox(task) && (
+                  <button
+                    onClick={() => onMoveToNextActions(task.id)}
+                    title="Přesunout do Next Actions"
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors"
+                  >
+                    <ListTodo className="w-4 h-4" />
                   </button>
                 )}
                 <button

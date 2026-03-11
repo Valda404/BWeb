@@ -57,8 +57,11 @@ function App() {
     await updateTask(taskId, { category: 'today' })
   }
 
-  // Filtrování úkolů podle aktuálně zvolené kategorie
+  const handleMoveToNextActions = async (taskId) => {
+    await updateTask(taskId, { category: 'next' })
+  }
 
+  // Filtrování úkolů podle aktuálně zvolené kategorie
   const filteredTasks = tasks.filter((task) => {
     if (currentView === 'inbox') {
       //zobrazí inbox úúkoly + stará data bez kategorie
@@ -113,10 +116,12 @@ function App() {
           </div>
 
           {/* TaskList pod nimi */}
-          <TaskList tasks={filteredTasks}
+          <TaskList
+          tasks={filteredTasks}
           onToggleComplete={handleToggleComplete}
           onDelete={handleDeleteTask}
           onMoveToToday={handleMoveToToday}
+          onMoveToNextActions={handleMoveToNextActions}
           />
         </main>
       </div>
