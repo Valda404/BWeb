@@ -1,10 +1,22 @@
-import { Circle, CheckCircle, Clock, Calendar, MoveRight, Trash, Sun, ListTodo } from "lucide-react";
+import { useState } from "react";
+import { Circle, CheckCircle, Clock, Calendar, MoveRight, Trash, Sun, ListTodo, Pencil } from "lucide-react";
 
 
-export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions }) {
-  const isInbox = (task) => {
-    return (task.category === 'inbox' || !task.category)
-  }
+export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask }) {
+  const isInbox = (task) => task.category === 'inbox' || !task.category
+    const [editingTaskId, setEditingTaskId] = useState(null)
+    const [editTitle, setEditTitle] = useState("")
+
+    const startEditing = (task) => {
+      setEditingTaskId(task.id)
+      setEditTitle(task.title)
+    }
+
+    const saveEdit = (taskId) => {
+      onEditTask(taskId, editTitle)
+      setEditingTaskId(null)
+    }
+
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
@@ -21,7 +33,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
         </button>
       </div>
 
-{tasks.length === 0 ? (
+      {tasks.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
           <Circle className="w-10 h-10 mx-auto mb-4" />
           Žádné úkoly - čím začneme?
@@ -51,6 +63,24 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
             </button>
             
             <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
+              {editingTaskId === task.id ? (
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      saveEdit(task.id)
+                    }
+                    if (e.key === "Escape") {
+                      setEditingTaskId(null)
+                    }
+                  }}
+                  onBlur={() => saveEdit(task.id)}
+                  autoFocus
+                  className="w-full text-[15px] font-medium border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                  />
+              ) : (
               <span
                 className={`text-[15px] truncate font-medium ${
                   task.completed ? "text-gray-500 line-through decoration-gray-300" : "text-gray-800"
@@ -58,7 +88,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
               >
                 {task.title}
               </span>
-              
+              )}
               <div className="flex items-center gap-2 shrink-0">
                 {task.isPriority && (
                   <span className="px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-rose-50 text-rose-600 rounded-md">
@@ -89,6 +119,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
                     <Sun className="w-4 h-4" />
                   </button>
                 )}
+                
                 {/* Přesun do Next Actions z Inbox */}
                 {isInbox(task) && (
                   <button
@@ -99,6 +130,17 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
                     <ListTodo className="w-4 h-4" />
                   </button>
                 )}
+
+                {/* Editace úkolu */}
+                <button
+                  onClick={() => startEditing(task)}
+                  title="Upravit úkol"
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-green-500 hover:bg-green-50 transition-colors"
+                >
+                  <Pencil className="w-4 h-4" />
+                </button>
+
+                {/* Smazání úkolu */}
                 <button
                   onClick={() => onDelete(task.id)}
                   title="Smazat úkol"

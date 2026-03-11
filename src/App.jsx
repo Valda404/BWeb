@@ -61,6 +61,11 @@ function App() {
     await updateTask(taskId, { category: 'next' })
   }
 
+  const handleEditTask = async (taskId, newTitle) => {
+    if (!newTitle.trim()) return
+    await updateTask(taskId, { title: newTitle })
+  }
+
   // Filtrování úkolů podle aktuálně zvolené kategorie
   const filteredTasks = tasks.filter((task) => {
     if (currentView === 'inbox') {
@@ -122,6 +127,7 @@ function App() {
           onDelete={handleDeleteTask}
           onMoveToToday={handleMoveToToday}
           onMoveToNextActions={handleMoveToNextActions}
+          onEditTask={handleEditTask}
           />
         </main>
       </div>
