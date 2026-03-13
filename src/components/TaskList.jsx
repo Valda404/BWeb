@@ -1,11 +1,50 @@
 import { useState } from "react";
-import { Circle, CheckCircle, Clock, Calendar, MoveRight, Trash, Sun, ListTodo, Pencil } from "lucide-react";
+import { Circle, CheckCircle, Clock, Calendar, MoveRight, Trash, Sun, ListTodo, Pencil, Inbox, CalendarDays } from "lucide-react";
+
+const VIEW_CONFIG = {
+  inbox: {
+    label: "Inbox",
+    Icon: Inbox,
+    color: 'text-blue-600',
+    badge: 'bg-blue-50 text-blue-700',
+    emptyText: 'Sběrná schránka je prázdná.',
+  },
+  today: {
+    label: 'Dnešní úkoly',
+    Icon: CalendarDays,
+    color: 'text-amber-500',
+    badge: 'bg-amber-50 text-amber-700',
+    emptyText: 'Máš hotovo! Užij si volný čas.',
+  },
+  next_action: {
+    label: 'Další kroky',
+    Icon: ListTodo,
+    color: 'text-indigo-600',
+    badge: 'bg-indigo-50 text-indigo-700',
+    emptyText: 'Žádné další akce. Skvěle!',
+  },
+  goals : {
+    label: 'Cíle',
+    Icon: Circle,
+    color: 'text-green-600',
+    badge: 'bg-green-50 text-green-700',
+    emptyText: 'Žádné cíle. Skvěle!',
+  }
+}
+const DEFAULT_VIEW = {
+  label: 'Úkoly',
+  Icon: Circle,
+  color: 'text-gray-500',
+  badge: 'bg-gray-100 text-gray-600',
+  emptyText: 'Žádné úkoly — čím začneme?',
+}
 
 
-export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask }) {
-  const isInbox = (task) => task.category === 'inbox' || !task.category
-    const [editingTaskId, setEditingTaskId] = useState(null)
-    const [editTitle, setEditTitle] = useState("")
+export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, currentView }) {
+  const [editingTaskId, setEditingTaskId] = useState(null)
+  const [editTitle, setEditTitle] = useState("")
+  
+    const isInbox = (task) => task.category === 'inbox' || !task.category
 
     const startEditing = (task) => {
       setEditingTaskId(task.id)
@@ -17,15 +56,18 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
       setEditingTaskId(null)
     }
 
+  const config = VIEW_CONFIG[currentView] ?? DEFAULT_VIEW
+  const { label, Icon, color, badge, emptyText } = config
+
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-          Dnešní úkoly
-          <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-medium">
-            {tasks.length}
-          </span>
+          {label}
+        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge}`}>
+          {tasks.length}
+        </span>
         </h2>
         <button className="text-sm font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1 transition-colors">
           Zobrazit vše
@@ -35,8 +77,8 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
 
       {tasks.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
-          <Circle className="w-10 h-10 mx-auto mb-4" />
-          Žádné úkoly - čím začneme?
+          <Icon className={`w-10 h-10 mx-auto mb-4 ${color} opacity-30`} />
+          {emptyText}
         </div>
       ) : (
         <div className="space-y-3">
@@ -89,6 +131,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
                 {task.title}
               </span>
               )}
+
               <div className="flex items-center gap-2 shrink-0">
                 {task.isPriority && (
                   <span className="px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-rose-50 text-rose-600 rounded-md">
@@ -110,7 +153,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
 
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                 {/* Přesun do Today z Inbox/Next Actions */}
-                {(isInbox(task) || task.category === 'next') && (
+                {(isInbox(task) || task.category === 'next_action') && (
                   <button
                     onClick={() => onMoveToToday(task.id)}
                     title="Přesunout do Today"

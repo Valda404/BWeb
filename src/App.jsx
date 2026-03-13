@@ -128,6 +128,7 @@ function App() {
           onMoveToToday={handleMoveToToday}
           onMoveToNextActions={handleMoveToNextActions}
           onEditTask={handleEditTask}
+          currentView={currentView}
           />
         </main>
       </div>
