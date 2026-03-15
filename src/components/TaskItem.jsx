@@ -11,16 +11,18 @@ const CATEGORY_BADGE = {
 export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory }) {
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(task.title)
+  const [editDeadline, setEditDeadline] = useState(task.deadline || '')
 
   const isInbox = task.category === 'inbox' || !task.category
 
     const startEditing = () => {
         setIsEditing(true)
         setEditTitle(task.title)
+        setEditDeadline(task.deadline || '')
     }
 
     const saveEdit = () => {
-        onEditTask(task.id, editTitle)
+        onEditTask(task.id, editTitle, editDeadline)
         setIsEditing(false)
     }
 
@@ -48,9 +50,10 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
           )}
         </button>
 
-        {/*Název úkolu*/}
+        {/*Název úkolu + deadline*/}
         <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
         {isEditing ? (
+         <div className="flex flex-1 items-center gap-2 min-w-0">
           <input
             type="text"
             value={editTitle}
@@ -59,10 +62,23 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
               if (e.key === "Enter") saveEdit()
               if (e.key === "Escape") setIsEditing(false)
             }}
-            onBlur={saveEdit}
             autoFocus
             className="w-full text-[15px] font-medium border-b border-gray-300 focus:outline-none focus:border-indigo-500 bg-transparent"
           />
+          <input
+            type="datetime-local"
+            value={editDeadline}
+            onChange={(e) => setEditDeadline(e.target.value)}
+            max="9999-12-31T23:59"
+              className="text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-400 bg-white shrink-0"
+            />
+            <button
+                onClick={saveEdit}
+                className="text-sm text-indigo-600 hover:text-indigo-800 transition-colors"
+            >
+                Uložit
+            </button>
+        </div>
         ) : (
             <span
               className={`text-[15px] truncate font-medium ${
@@ -73,32 +89,35 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
             </span>
         )}
 
-        {/*Akce pro úkol*/}
-        <div className="flex items-center gap-2 shrink-0">
-            {categoryInfo && showCategory && (
-              <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md ${categoryInfo.style}`}>
+        {/* Štítky — skryté při editaci */}
+        {!isEditing && (
+          <div className="flex items-center gap-2 shrink-0">
+            {showCategory && categoryInfo && (
+              <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md border ${categoryInfo.style}`}>
                 {categoryInfo.label}
               </span>
             )}
-          {task.isPriority && (
-            <span className="px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-rose-50 text-rose-600 rounded-md">
-              Priorita
-            </span>
-          )}
-          {task.deadline && (
-            <div className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-yellow-50 text-yellow-600 rounded-md">
-              {task.deadline.includes(":") ? (
-                <Clock className="w-3 h-3" />
-              ) : (
-                <Calendar className="w-3 h-3" />
-              )}
-              {task.deadline}
-            </div>
-          )}
-        </div>
-    </div>
+            {task.isPriority && (
+              <span className="px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-rose-50 text-rose-600 rounded-md">
+                Priorita
+              </span>
+            )}
+            {task.deadline && (
+              <div className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-yellow-50 text-yellow-600 rounded-md">
+                {task.deadline.includes("T") ? (
+                  <Clock className="w-3 h-3" />
+                ) : (
+                  <Calendar className="w-3 h-3" />
+                )}
+                {new Date(task.deadline).toLocaleString('cs-CZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
     {/* Akční tlačítka */}
+    {!isEditing && (
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
         {(isInbox || task.category === 'next') && (
           <button
@@ -133,6 +152,7 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
           <Trash className="w-4 h-4" />
         </button>
       </div>
+    )}
     </div>
   )
 }

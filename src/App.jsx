@@ -61,15 +61,28 @@ function App() {
     await updateTask(taskId, { category: 'next' })
   }
 
-  const handleEditTask = async (taskId, newTitle) => {
+  const handleEditTask = async (taskId, newTitle, newDeadline) => {
     if (!newTitle.trim()) return
-    await updateTask(taskId, { title: newTitle })
+    await updateTask(taskId, { 
+      title: newTitle.trim(),
+      deadline: newDeadline || null,
+    })
   }
 
   // Filtrování úkolů podle aktuálně zvolené kategorie
-  const filteredTasks = currentView === 'dash'
+  const filtered = currentView === 'dash'
     ? tasks // Zobrazit všechny úkoly v dashboardu
     : tasks.filter(task => (task.category) === currentView)
+
+  const filteredTasks = [...filtered].sort((a, b) => {
+    const aHas = !!a.deadline
+    const bHas = !!b.deadline
+    
+    if (aHas && !bHas) return -1
+    if (!aHas && bHas) return 1
+    if (aHas && bHas) return new Date(a.deadline) - new Date(b.deadline)
+    return 0
+  })
 
   const totalTasks = tasks.length
   const completedTasks = tasks.filter(t => t.completed).length
