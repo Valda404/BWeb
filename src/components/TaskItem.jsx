@@ -1,20 +1,21 @@
 import { useState } from "react";
-import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox, Target } from "lucide-react";
+import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox } from "lucide-react";
 
 const CATEGORY_BADGE = {
   inbox:       { label: 'Inbox',        style: 'bg-blue-50 text-blue-600 border-blue-200' },
   today:       { label: 'Dnes',         style: 'bg-amber-50 text-amber-600 border-amber-200' },
   next:        { label: 'Další kroky',  style: 'bg-indigo-50 text-indigo-600 border-indigo-200' },
-  goals:       { label: 'Cíle',         style: 'bg-green-50 text-green-600 border-green-200' },
 }
 
-export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory, onMoveToInbox, onMoveToGoals }) {
+export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory, onMoveToInbox, goals = [] }) {
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(task.title)
   const [editDeadline, setEditDeadline] = useState(task.deadline || '')
   const [editGoalId, setEditGoalId] = useState(task.goalId || '')
 
   const isInbox = task.category === 'inbox' || !task.category
+  const categoryInfo = CATEGORY_BADGE[task.category] ?? CATEGORY_BADGE['inbox']
+  const linkedGoal = goals.find(g => g.id === task.goalId)
 
     const startEditing = () => {
         setIsEditing(true)
@@ -28,7 +29,6 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
         setIsEditing(false)
     }
 
-    const categoryInfo = CATEGORY_BADGE[task.category] ?? CATEGORY_BADGE['inbox']
 
     return (
         <div
@@ -74,6 +74,18 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
             max="9999-12-31T23:59"
               className="text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-400 bg-white shrink-0"
             />
+          <select
+            value={editGoalId}
+            onChange={(e) => setEditGoalId(e.target.value)}
+            className="text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-400 bg-white shrink-0"
+          >
+            <option value="">Žádný cíl</option>
+            {goals.map((goal) => (
+              <option key={goal.id} value={goal.id}>
+                {goal.title}
+              </option>
+            ))}
+          </select>
             <button
                 onClick={saveEdit}
                 className="text-sm text-indigo-600 hover:text-indigo-800 transition-colors"
@@ -97,6 +109,11 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
             {showCategory && categoryInfo && (
               <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md border ${categoryInfo.style}`}>
                 {categoryInfo.label}
+              </span>
+            )}
+            {linkedGoal && (
+              <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-emerald-50 text-emerald-600 border-emerald-200 rounded-md border ${categoryInfo.style}`}>
+                Cíl: {linkedGoal.title}
               </span>
             )}
             {task.isPriority && (
@@ -146,15 +163,6 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
             className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors"
           >
             <ListTodo className="w-4 h-4" />
-          </button>
-        )}
-        {isInbox && (
-          <button
-            onClick={() => onMoveToGoals(task.id)}
-            title="Přesunout do Cílů"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 transition-colors"
-  >
-            <Target className="w-4 h-4" />
           </button>
         )}
         <button

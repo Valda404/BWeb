@@ -7,6 +7,12 @@ import { db, auth } from './firebaseData.js';
 // Import funkcí pro práci s databází z Firebase SDK
 import { ref, set, onValue, push, remove, update } from 'firebase/database';
 
+// Převede Firebase snapshot data (null / array / objekt) na normalizované pole s 'id'
+export const normalizeData = (data) => {
+  if (!data) return []
+  if (Array.isArray(data)) return data.map((item, index) => ({ id: String(index), ...item }))
+  return Object.entries(data).map(([id, item]) => ({ id, ...item }))
+}
 
 // #region ===== FUNKCE PRO SPRÁVU ÚKOLŮ =====
 /**
@@ -54,6 +60,31 @@ export const listenToTasks = (callback) => {
 };
 // #endregion
 
+// #region ===== POSLOUCHÁNÍ ZMĚN V CÍLECH (REAL-TIME) =====
+/**
+ * Naslouchá změnám v cílech (real-time synchronizace)
+ * Callback se zavolá pokaždé, když se cíle změní (přidání, úprava, smazání)
+ * @param {Function} callback - Funkce, která dostane aktuální seznam cílů
+ * @param {Function} - Funkce pro zrušení naslouchání
+ */
+export const listenToGoals = (callback) => {
+  // Kontrola přihlášení
+  if (!auth.currentUser) {
+    console.error('❌ Uživatel není přihlášen');
+    return;
+  }
+  // Reference na cíle uživatele
+  const goalsRef = ref(db, 'goals/' + auth.currentUser.uid);
+  // Listener - volá callback při každé změně
+  return onValue(goalsRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log('📡 Real-time data received:', data);
+      // Pokud nejsou žádné cíle, vrátí prázdné pole
+      callback(data || []);
+  });
+};
+// #endregion
+
 
 // #region ===== PŘIDÁNÍ NOVÉHO ÚKOLU =====
 /**
@@ -75,6 +106,29 @@ export const addTask = async (task) => {
   await set(newTaskRef, task);
   console.log('✅ Úkol přidán s ID:', newTaskRef.key);
   return newTaskRef.key;
+};
+// #endregion
+
+// #region ===== PŘIDÁNÍ NOVÉHO CÍLE =====
+/**
+ * Přidá nový cíl do Firebase
+ * @param {Object} goal - Objekt s daty cíle (title, description, date, priority...)
+ * @returns {Promise} - Promise, který se vyřeší po přidání
+ */
+export const addGoal = async (goal) => {
+  // Kontrola autentizace
+  if (!auth.currentUser) {
+    console.error('❌ Uživatel není přihlášen');
+    return Promise.reject('Not authenticated');
+  }
+  // Reference na seznam cílů
+  const goalsRef = ref(db, 'goals/' + auth.currentUser.uid);
+  // push() vytvoří nový unikátní klíč pro cíl
+  const newGoalRef = push(goalsRef);
+  // Uložení cíle pod nově vygenerovaným klíčem
+  await set(newGoalRef, goal);
+  console.log('✅ Cíl přidán s ID:', newGoalRef.key);
+  return newGoalRef.key;
 };
 // #endregion
 
@@ -118,6 +172,26 @@ export const deleteTask = async (taskId) => {
   // remove() smaže úkol z databáze
   await remove(taskRef);
   console.log('✅ Úkol smazán:', taskId);
+};
+// #endregion
+
+// #region ===== SMAZÁNÍ CÍLE =====
+/**
+ * Smaže cíl z Firebase
+ * @param {String} goalId - ID cíle ke smazání
+ * @returns {Promise} - Promise, který se vyřeší po smazání
+ */
+export const deleteGoal = async (goalId) => {
+  // Kontrola autentizace
+  if (!auth.currentUser) {
+    console.error('❌ Uživatel není přihlášen');
+    return Promise.reject('Not authenticated');
+  }
+  // Reference na konkrétní cíl
+  const goalRef = ref(db, 'goals/' + auth.currentUser.uid + '/' + goalId);
+  // remove() smaže cíl z databáze
+  await remove(goalRef);
+  console.log('✅ Cíl smazán:', goalId);
 };
 // #endregion
 

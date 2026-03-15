@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { onAuthChange, logout } from './firebase/auth.js'
-import { listenToTasks, addTask, updateTask, deleteTask } from './firebase/database.js'
+import { listenToTasks, addTask, updateTask, deleteTask, listenToGoals, normalizeData, addGoal } from './firebase/database.js'
 import Login from './components/Login.jsx'
 import { TaskList } from './components/TaskList'
 import { Sidebar } from './components/Sidebar'
@@ -11,6 +11,7 @@ function App() {
   const [user, setUser] = useState(null)
   const [tasks, setTasks] = useState([])
   const [currentView, setCurrentView] = useState('inbox')
+  const [goals, setGoals] = useState([])
 
   //Sledování stavu přihlášení
   useEffect(() => {
@@ -25,15 +26,7 @@ function App() {
     if (!user) return
 
     const unsubscribe = listenToTasks((data) => {
-      if (!data) {
-        setTasks([])
-      } else if (Array.isArray(data)) {
-        //saveTasks() ukládá array - zachovat
-        setTasks(data.map((task, index) => ({ id: String(index), ...task })))
-      } else {
-        //addTask() používá push - Firebase vrací objekt s klíčem
-        setTasks(Object.entries(data).map(([id, task]) => ({ id, ...task })))
-      }
+      setTasks(normalizeData(data))
     })
 
     return () => {
@@ -41,9 +34,27 @@ function App() {
     }
   }, [user])
 
+  //Načítání cílů při přihlášení
+  useEffect(() => {
+    if (!user) return
+
+    const unsubscribe = listenToGoals((data) => {
+      setGoals(normalizeData(data))
+    })
+
+    return () => {
+      if (unsubscribe) unsubscribe()
+    }
+  }, [user])
+
+
   const handleAddTask = async (title) => {
     const category = currentView === 'dash' ? 'inbox' : currentView
     await addTask({ title, completed: false, category })
+  }
+
+  const handleAddGoal = async (title) => {
+    await addGoal({ title })
   }
 
   const handleToggleComplete = async (taskId, currentStatus) => {
@@ -66,15 +77,12 @@ function App() {
     await updateTask(taskId, { category: 'next' })
   }
 
-  const handleMoveToGoals = async (taskId) => {
-    await updateTask(taskId, { category: 'goals' })
-  }
-
-  const handleEditTask = async (taskId, newTitle, newDeadline) => {
+  const handleEditTask = async (taskId, newTitle, newDeadline, newGoalId) => {
     if (!newTitle.trim()) return
     await updateTask(taskId, { 
       title: newTitle.trim(),
       deadline: newDeadline || null,
+      goalId: newGoalId || null,
     })
   }
 
@@ -93,9 +101,7 @@ function App() {
     return 0
   })
 
-  const totalTasks = tasks.length
-  const completedTasks = tasks.filter(t => t.completed).length
-  const progressPercentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100)
+  
 
   if (!user) {
     return <Login />
@@ -125,31 +131,55 @@ function App() {
           </button>
         </header>
 
-        {/* Hlavní obsah */}
-        <main style={{ flex: 1, overflowY: 'auto', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {/* GoalCard + QuickAdd vedle sebe */}
-          <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.5rem', alignItems: 'start' }}>
-            <GoalCard 
-            goalTitle="Dokončit bakalářku"
-            totalTasks={totalTasks}
-            completedTasks={completedTasks}
-            progressPercentage={progressPercentage}
-            />
-            <QuickAdd onAdd={handleAddTask} />
-          </div>
-
-          {/* TaskList pod nimi */}
-          <TaskList
-          tasks={filteredTasks}
-          onToggleComplete={handleToggleComplete}
-          onDelete={handleDeleteTask}
-          onMoveToToday={handleMoveToToday}
-          onMoveToNextActions={handleMoveToNextActions}
-          onMoveToInbox={handleMoveToInbox}
-          onMoveToGoals={handleMoveToGoals}
-          onEditTask={handleEditTask}
-          currentView={currentView}
-          />
+        {/* Hlavní obsah - TADY JE OPRAVA SCROLLOVÁNÍ (overflowY: 'auto') */}
+        <main style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
+          
+          {currentView === 'goals' ? (
+            // ===== GOALS VIEW =====
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <QuickAdd onAdd={handleAddGoal} placeholder="Přidej nový cíl" />
+              {goals.length === 0 ? (
+                <div className="bg-white rounded-2xl border border-gray-100 p-12 shadow-sm text-center text-gray-400">
+                  Žádné cíle. Přidej první cíl!
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                  {goals.map(goal => (
+                    <GoalCard key={goal.id} goal={goal} tasks={tasks} />
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            // ===== NORMÁLNÍ VIEW =====
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.5rem', alignItems: 'start' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {goals.length === 0 ? (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm text-center text-gray-400 text-sm">
+                      Žádné cíle
+                    </div>
+                  ) : (
+                    // Ukáže se prostě jen první cíl, aby to nerozbíjelo grafiku
+                    <GoalCard goal={goals[0]} tasks={tasks} />
+                  )}
+                </div>
+                <QuickAdd onAdd={handleAddTask} />
+              </div>
+              
+              <TaskList
+                tasks={filteredTasks}
+                onToggleComplete={handleToggleComplete}
+                onDelete={handleDeleteTask}
+                onMoveToToday={handleMoveToToday}
+                onMoveToNextActions={handleMoveToNextActions}
+                onMoveToInbox={handleMoveToInbox}
+                onEditTask={handleEditTask}
+                currentView={currentView}
+                goals={goals}
+              />
+            </div>
+          )}
         </main>
       </div>
     </div>

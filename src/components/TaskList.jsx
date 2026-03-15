@@ -23,13 +23,6 @@ const VIEW_CONFIG = {
     badge: 'bg-indigo-50 text-indigo-700',
     emptyText: 'Žádné další akce. Skvěle!',
   },
-  goals : {
-    label: 'Cíle',
-    Icon: Circle,
-    color: 'text-green-600',
-    badge: 'bg-green-50 text-green-700',
-    emptyText: 'Žádné cíle. Co chceš ze všeho nejvíc?',
-  },
   dash : {
     label: 'Přehled',
     Icon: Circle,
@@ -41,7 +34,7 @@ const VIEW_CONFIG = {
 const DEFAULT_VIEW = VIEW_CONFIG['dash']
 
 
-export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, currentView, onMoveToInbox, onMoveToGoals }) {
+export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, currentView, onMoveToInbox, goals }) {
   const config = VIEW_CONFIG[currentView] ?? DEFAULT_VIEW
   const { label, Icon, color, badge, emptyText } = config
 
@@ -75,7 +68,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
               onEditTask={onEditTask}
               showCategory={currentView === 'dash'}
               onMoveToInbox={onMoveToInbox}
-              onMoveToGoals={onMoveToGoals}
+              goals={goals}
             />
         ))}
       </div>

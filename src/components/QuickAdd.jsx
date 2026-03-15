@@ -1,7 +1,7 @@
 import { Plus, Command } from "lucide-react";
 import { useState } from "react";
 
-export function QuickAdd({ onAdd }) {
+export function QuickAdd({ onAdd, placeholder = "Nad čím přemýšlíš? (Rychlé přidání)" }) {
   const [value, setValue] = useState("");
 
   const handleSubmit = () => {
@@ -19,7 +19,7 @@ export function QuickAdd({ onAdd }) {
 
       <input
         type="text"
-        placeholder="Nad čím přemýšlíš? (Rychlé přidání)"
+        placeholder={placeholder}
         className="flex-1 bg-transparent border-none outline-none text-gray-800 placeholder:text-gray-400 text-lg py-3 w-full font-medium"
         autoFocus
         value={value}
