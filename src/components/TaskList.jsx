@@ -1,4 +1,4 @@
-import { TaskItem } from "../TaskItem";
+import { TaskItem } from "./TaskItem";
 import { Circle, MoveRight, CalendarDays, ListTodo, Inbox } from "lucide-react";
 
 const VIEW_CONFIG = {
