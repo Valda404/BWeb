@@ -10,7 +10,7 @@ import { GoalCard } from './components/GoalCard'
 function App() {
   const [user, setUser] = useState(null)
   const [tasks, setTasks] = useState([])
-  const [currentView, setCurrentView] = useState('inbox') 
+  const [currentView, setCurrentView] = useState('inbox')
 
   //Sledování stavu přihlášení
   useEffect(() => {
@@ -64,6 +64,10 @@ function App() {
 
   const handleMoveToNextActions = async (taskId) => {
     await updateTask(taskId, { category: 'next' })
+  }
+
+  const handleMoveToGoals = async (taskId) => {
+    await updateTask(taskId, { category: 'goals' })
   }
 
   const handleEditTask = async (taskId, newTitle, newDeadline) => {
@@ -141,9 +145,10 @@ function App() {
           onDelete={handleDeleteTask}
           onMoveToToday={handleMoveToToday}
           onMoveToNextActions={handleMoveToNextActions}
+          onMoveToInbox={handleMoveToInbox}
+          onMoveToGoals={handleMoveToGoals}
           onEditTask={handleEditTask}
           currentView={currentView}
-          onMoveToInbox={handleMoveToInbox}
           />
         </main>
       </div>

@@ -10,7 +10,7 @@ export function Sidebar( { currentView, onViewChange }) {
   ];
 
   return (
-    <aside className="w-64 h-full bg-white border-r border-gray-100 flex flex-col justify-between hidden md:flex">
+    <aside className="w-64 h-full bg-white border-r border-gray-100 flex flex-col justify-between md:flex">
       <div className="p-6">
         <div className="flex items-center gap-2 mb-10 text-indigo-600 font-semibold text-lg tracking-tight">
           <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center">

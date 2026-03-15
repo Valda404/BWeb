@@ -41,7 +41,7 @@ const VIEW_CONFIG = {
 const DEFAULT_VIEW = VIEW_CONFIG['dash']
 
 
-export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, currentView, onMoveToInbox }) {
+export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, currentView, onMoveToInbox, onMoveToGoals }) {
   const config = VIEW_CONFIG[currentView] ?? DEFAULT_VIEW
   const { label, Icon, color, badge, emptyText } = config
 
@@ -75,6 +75,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
               onEditTask={onEditTask}
               showCategory={currentView === 'dash'}
               onMoveToInbox={onMoveToInbox}
+              onMoveToGoals={onMoveToGoals}
             />
         ))}
       </div>

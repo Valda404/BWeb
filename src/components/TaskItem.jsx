@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox } from "lucide-react";
+import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox, Target } from "lucide-react";
 
 const CATEGORY_BADGE = {
   inbox:       { label: 'Inbox',        style: 'bg-blue-50 text-blue-600 border-blue-200' },
   today:       { label: 'Dnes',         style: 'bg-amber-50 text-amber-600 border-amber-200' },
-  next: { label: 'Další kroky',  style: 'bg-indigo-50 text-indigo-600 border-indigo-200' },
+  next:        { label: 'Další kroky',  style: 'bg-indigo-50 text-indigo-600 border-indigo-200' },
   goals:       { label: 'Cíle',         style: 'bg-green-50 text-green-600 border-green-200' },
 }
 
-export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory, onMoveToInbox }) {
+export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory, onMoveToInbox, onMoveToGoals }) {
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(task.title)
   const [editDeadline, setEditDeadline] = useState(task.deadline || '')
+  const [editGoalId, setEditGoalId] = useState(task.goalId || '')
 
   const isInbox = task.category === 'inbox' || !task.category
 
@@ -19,10 +20,11 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
         setIsEditing(true)
         setEditTitle(task.title)
         setEditDeadline(task.deadline || '')
+        setEditGoalId(task.goalId || '')
     }
 
     const saveEdit = () => {
-        onEditTask(task.id, editTitle, editDeadline)
+        onEditTask(task.id, editTitle, editDeadline, editGoalId)
         setIsEditing(false)
     }
 
@@ -144,6 +146,15 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
             className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors"
           >
             <ListTodo className="w-4 h-4" />
+          </button>
+        )}
+        {isInbox && (
+          <button
+            onClick={() => onMoveToGoals(task.id)}
+            title="Přesunout do Cílů"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 transition-colors"
+  >
+            <Target className="w-4 h-4" />
           </button>
         )}
         <button
