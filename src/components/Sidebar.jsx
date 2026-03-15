@@ -2,6 +2,7 @@ import { Inbox, Calendar, ListTodo, Target, MoreVertical, LogOut, Settings } fro
 
 export function Sidebar( { currentView, onViewChange }) {
   const navItems = [
+    { name: "Dashboard", icon: Target, view: "dash" },
     { name: "Inbox", icon: Inbox, view : "inbox" },
     { name: "Today", icon: Calendar, view: "today" },
     { name: "Next Actions", icon: ListTodo, view: "next" },

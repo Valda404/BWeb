@@ -67,13 +67,9 @@ function App() {
   }
 
   // Filtrování úkolů podle aktuálně zvolené kategorie
-  const filteredTasks = tasks.filter((task) => {
-    if (currentView === 'inbox') {
-      //zobrazí inbox úúkoly + stará data bez kategorie
-      return task.category === 'inbox' || task.category === undefined
-    }
-    return task.category === currentView
-  })
+  const filteredTasks = currentView === 'dash'
+    ? tasks // Zobrazit všechny úkoly v dashboardu
+    : tasks.filter(task => (task.category) === currentView)
 
   const totalTasks = tasks.length
   const completedTasks = tasks.filter(t => t.completed).length

@@ -16,7 +16,7 @@ const VIEW_CONFIG = {
     badge: 'bg-amber-50 text-amber-700',
     emptyText: 'Máš hotovo! Užij si volný čas.',
   },
-  next_action: {
+  next: {
     label: 'Další kroky',
     Icon: ListTodo,
     color: 'text-indigo-600',
@@ -29,15 +29,16 @@ const VIEW_CONFIG = {
     color: 'text-green-600',
     badge: 'bg-green-50 text-green-700',
     emptyText: 'Žádné cíle. Co chceš ze všeho nejvíc?',
-  }
+  },
+  dash : {
+    label: 'Přehled',
+    Icon: Circle,
+    color: 'text-gray-500',
+    badge: 'bg-gray-100 text-gray-600',
+    emptyText: 'Žádné úkoly — čím začneme?',
+  },
 }
-const DEFAULT_VIEW = {
-  label: 'Úkoly',
-  Icon: Circle,
-  color: 'text-gray-500',
-  badge: 'bg-gray-100 text-gray-600',
-  emptyText: 'Žádné úkoly — čím začneme?',
-}
+const DEFAULT_VIEW = VIEW_CONFIG['dash']
 
 
 export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, currentView }) {
@@ -54,10 +55,6 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
           {tasks.length}
         </span>
         </h2>
-        <button className="text-sm font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1 transition-colors">
-          Zobrazit vše
-          <MoveRight className="w-4 h-4" />
-        </button>
       </div>
 
       {tasks.length === 0 ? (
@@ -76,6 +73,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
               onMoveToToday={onMoveToToday}
               onMoveToNextActions={onMoveToNextActions}
               onEditTask={onEditTask}
+              showCategory={currentView === 'dash'}
             />
         ))}
       </div>

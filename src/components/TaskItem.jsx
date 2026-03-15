@@ -1,7 +1,14 @@
 import { useState } from "react";
-import { Circle, CheckCircle, Clock, Calendar, MoveRight, Trash, Sun, ListTodo, Pencil } from "lucide-react";
+import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil } from "lucide-react";
 
-export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask }) {
+const CATEGORY_BADGE = {
+  inbox:       { label: 'Inbox',        style: 'bg-blue-50 text-blue-600 border-blue-200' },
+  today:       { label: 'Dnes',         style: 'bg-amber-50 text-amber-600 border-amber-200' },
+  next: { label: 'Další kroky',  style: 'bg-indigo-50 text-indigo-600 border-indigo-200' },
+  goals:       { label: 'Cíle',         style: 'bg-green-50 text-green-600 border-green-200' },
+}
+
+export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory }) {
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(task.title)
 
@@ -16,6 +23,8 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
         onEditTask(task.id, editTitle)
         setIsEditing(false)
     }
+
+    const categoryInfo = CATEGORY_BADGE[task.category] ?? CATEGORY_BADGE['inbox']
 
     return (
         <div
@@ -66,6 +75,11 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
 
         {/*Akce pro úkol*/}
         <div className="flex items-center gap-2 shrink-0">
+            {categoryInfo && showCategory && (
+              <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md ${categoryInfo.style}`}>
+                {categoryInfo.label}
+              </span>
+            )}
           {task.isPriority && (
             <span className="px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-rose-50 text-rose-600 rounded-md">
               Priorita
@@ -86,7 +100,7 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
 
     {/* Akční tlačítka */}
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-        {(isInbox || task.category === 'next_action') && (
+        {(isInbox || task.category === 'next') && (
           <button
             onClick={() => onMoveToToday(task.id)}
             title="Přesunout do Today"
