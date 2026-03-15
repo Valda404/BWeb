@@ -1,5 +1,5 @@
 import { TaskItem } from "./TaskItem";
-import { Circle, MoveRight, CalendarDays, ListTodo, Inbox } from "lucide-react";
+import { Circle, CalendarDays, ListTodo, Inbox } from "lucide-react";
 
 const VIEW_CONFIG = {
   inbox: {
@@ -41,7 +41,7 @@ const VIEW_CONFIG = {
 const DEFAULT_VIEW = VIEW_CONFIG['dash']
 
 
-export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, currentView }) {
+export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, currentView, onMoveToInbox }) {
   const config = VIEW_CONFIG[currentView] ?? DEFAULT_VIEW
   const { label, Icon, color, badge, emptyText } = config
 
@@ -74,6 +74,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onMoveToToday, onM
               onMoveToNextActions={onMoveToNextActions}
               onEditTask={onEditTask}
               showCategory={currentView === 'dash'}
+              onMoveToInbox={onMoveToInbox}
             />
         ))}
       </div>

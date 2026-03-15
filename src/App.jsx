@@ -42,7 +42,8 @@ function App() {
   }, [user])
 
   const handleAddTask = async (title) => {
-    await addTask({ title, completed: false, category: currentView })
+    const category = currentView === 'dash' ? 'inbox' : currentView
+    await addTask({ title, completed: false, category })
   }
 
   const handleToggleComplete = async (taskId, currentStatus) => {
@@ -51,6 +52,10 @@ function App() {
 
   const handleDeleteTask = async (taskId) => {
     await deleteTask(taskId)
+  }
+
+  const handleMoveToInbox = async (taskId) => {
+    await updateTask(taskId, { category: 'inbox' })
   }
 
   const handleMoveToToday = async (taskId) => {
@@ -138,6 +143,7 @@ function App() {
           onMoveToNextActions={handleMoveToNextActions}
           onEditTask={handleEditTask}
           currentView={currentView}
+          onMoveToInbox={handleMoveToInbox}
           />
         </main>
       </div>

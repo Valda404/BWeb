@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil } from "lucide-react";
+import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox } from "lucide-react";
 
 const CATEGORY_BADGE = {
   inbox:       { label: 'Inbox',        style: 'bg-blue-50 text-blue-600 border-blue-200' },
@@ -8,7 +8,7 @@ const CATEGORY_BADGE = {
   goals:       { label: 'Cíle',         style: 'bg-green-50 text-green-600 border-green-200' },
 }
 
-export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory }) {
+export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory, onMoveToInbox }) {
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(task.title)
   const [editDeadline, setEditDeadline] = useState(task.deadline || '')
@@ -119,6 +119,15 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
     {/* Akční tlačítka */}
     {!isEditing && (
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+        {!isInbox && (
+          <button
+            onClick={() => onMoveToInbox(task.id)}
+            title="Přesunout do Inboxu"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-colors"
+  >
+            <Inbox className="w-4 h-4" />
+          </button>
+        )}
         {(isInbox || task.category === 'next') && (
           <button
             onClick={() => onMoveToToday(task.id)}
