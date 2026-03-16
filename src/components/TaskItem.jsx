@@ -5,6 +5,8 @@ const CATEGORY_BADGE = {
   inbox:       { label: 'Inbox',        style: 'bg-blue-50 text-blue-600 border-blue-200' },
   today:       { label: 'Dnes',         style: 'bg-amber-50 text-amber-600 border-amber-200' },
   next:        { label: 'Další kroky',  style: 'bg-indigo-50 text-indigo-600 border-indigo-200' },
+  someday:     { label: 'Někdy/Možná', style: 'bg-teal-50 text-teal-600 border-teal-200' },
+  completed:   { label: 'Dokončené',    style: 'bg-green-50 text-green-600 border-green-200' },
 }
 
 export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory, onMoveToInbox, goals = [] }) {
