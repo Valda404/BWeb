@@ -73,6 +73,10 @@ function App() {
     await updateTask(taskId, { category: 'next' })
   }
 
+  const handleMoveToSomeday = async (taskId) => {
+    await updateTask(taskId, { category: 'someday' })
+  }
+
   const handleEditTask = async (taskId, newTitle, newDeadline, newGoalId) => {
     if (!newTitle.trim()) return
     await updateTask(taskId, { 
@@ -207,6 +211,7 @@ function App() {
                 onMoveToToday={handleMoveToToday}
                 onMoveToNextActions={handleMoveToNextActions}
                 onMoveToInbox={handleMoveToInbox}
+                onMoveToSomeday={handleMoveToSomeday}
                 onEditTask={handleEditTask}
                 currentView={currentView}
                 goals={goals}

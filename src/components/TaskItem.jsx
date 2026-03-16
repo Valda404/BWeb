@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox } from "lucide-react";
+import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox, Archive } from "lucide-react";
 
 const CATEGORY_BADGE = {
   inbox:       { label: 'Inbox',        style: 'bg-blue-50 text-blue-600 border-blue-200' },
@@ -9,7 +9,7 @@ const CATEGORY_BADGE = {
   completed:   { label: 'Dokončené',    style: 'bg-green-50 text-green-600 border-green-200' },
 }
 
-export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onEditTask, showCategory, onMoveToInbox, goals = [] }) {
+export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onMoveToSomeday, onEditTask, showCategory, onMoveToInbox, goals = [] }) {
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(task.title)
   const [editDeadline, setEditDeadline] = useState(task.deadline || '')
@@ -160,6 +160,15 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
             className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors"
           >
             <ListTodo className="w-4 h-4" />
+          </button>
+        )}
+        {isInbox && (
+          <button
+            onClick={() => onMoveToSomeday(task.id)}
+            title="Přesunout do Někdy / Možná"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-teal-500 hover:bg-teal-50 transition-colors"
+          >
+            <Archive className="w-4 h-4" />
           </button>
         )}
         <button
