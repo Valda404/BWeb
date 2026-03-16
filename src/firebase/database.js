@@ -14,7 +14,7 @@ export const normalizeData = (data) => {
   return Object.entries(data).map(([id, item]) => ({ id, ...item }))
 }
 
-// #region ===== FUNKCE PRO SPRÁVU ÚKOLŮ =====
+// #region ===== FUNKCE PRO SPRÁVU ÚKOLŮ A CÍLŮ =====
 /**
  * Uloží celý seznam úkolů do Firebase
  * @param {Array} tasks - Pole všech úkolů uživatele
@@ -151,6 +151,27 @@ export const updateTask = async (taskId, taskData) => {
   // update() aktualizuje pouze zadaná pole, ostatní zůstávají beze změny
   await update(taskRef, taskData);
   console.log('✅ Úkol aktualizován:', taskId);
+};
+// #endregion
+
+// #region ===== AKTUALIZACE CÍLE =====
+/**
+ * Aktualizuje existující cíl
+ * @param {String} goalId - ID cíle k aktualizaci
+ * @param {Object} goalData - Nová data cíle (pouze pole, která se mají změnit)
+ * @returns {Promise} - Promise, který se vyřeší po aktualizaci
+ */
+export const updateGoal = async (goalId, goalData) => {
+  // Kontrola autentizace
+  if (!auth.currentUser) {
+    console.error('❌ Uživatel není přihlášen');
+    return Promise.reject('Not authenticated');
+  }
+  // Reference na konkrétní cíl: goals/{userId}/{goalId}
+  const goalRef = ref(db, 'goals/' + auth.currentUser.uid + '/' + goalId);
+  // update() aktualizuje pouze zadaná pole, ostatní zůstávají beze změny
+  await update(goalRef, goalData);
+  console.log('✅ Cíl aktualizován:', goalId);
 };
 // #endregion
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { onAuthChange, logout } from './firebase/auth.js'
-import { listenToTasks, addTask, updateTask, deleteTask, listenToGoals, normalizeData, addGoal } from './firebase/database.js'
+import { listenToTasks, addTask, updateTask, deleteTask, normalizeData, listenToGoals, addGoal, updateGoal, deleteGoal } from './firebase/database.js'
 import Login from './components/Login.jsx'
 import { TaskList } from './components/TaskList'
 import { Sidebar } from './components/Sidebar'
@@ -53,10 +53,6 @@ function App() {
     await addTask({ title, completed: false, category })
   }
 
-  const handleAddGoal = async (title) => {
-    await addGoal({ title })
-  }
-
   const handleToggleComplete = async (taskId, currentStatus) => {
     await updateTask(taskId, { completed: !currentStatus })
   }
@@ -84,6 +80,19 @@ function App() {
       deadline: newDeadline || null,
       goalId: newGoalId || null,
     })
+  }
+
+  const handleAddGoal = async (title) => {
+    await addGoal({ title })
+  }
+
+  const handleEditGoal = async (goalId, newTitle) => {
+    if (!newTitle.trim()) return
+    await updateGoal(goalId, { title: newTitle.trim() })
+  }
+
+  const handleDeleteGoal = async (goalId) => {
+    await deleteGoal(goalId)
   }
 
   // Filtrování úkolů podle aktuálně zvolené kategorie
@@ -145,7 +154,7 @@ function App() {
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
                   {goals.map(goal => (
-                    <GoalCard key={goal.id} goal={goal} tasks={tasks} />
+                    <GoalCard key={goal.id} goal={goal} tasks={tasks} onDelete={handleDeleteGoal} onEdit={handleEditGoal} />
                   ))}
                 </div>
               )}
@@ -161,7 +170,7 @@ function App() {
                     </div>
                   ) : (
                     // Ukáže se prostě jen první cíl, aby to nerozbíjelo grafiku
-                    <GoalCard goal={goals[0]} tasks={tasks} />
+                    <GoalCard goal={goals[0]} tasks={tasks} readOnly />
                   )}
                 </div>
                 <QuickAdd onAdd={handleAddTask} />
