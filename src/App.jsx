@@ -13,6 +13,18 @@ function App() {
   const [currentView, setCurrentView] = useState('inbox')
   const [goals, setGoals] = useState([])
 
+  //Přepínání cílů šipkami
+  const [activeGoalIndex, setActiveGoalIndex] = useState(0)
+
+  const handlePrevGoal = () => {
+    setActiveGoalIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : goals.length - 1));
+  };
+  
+  const handleNextGoal = () => {
+    setActiveGoalIndex((prevIndex) => (prevIndex < goals.length - 1 ? prevIndex + 1 : 0));
+  };
+
+
   //Sledování stavu přihlášení
   useEffect(() => {
     const unsubscribe = onAuthChange((currentUser) => {
@@ -190,20 +202,35 @@ function App() {
           ) : (
             // ===== NORMÁLNÍ VIEW =====
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.5rem', alignItems: 'start' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+              {currentView === 'dash' ? (
+                // Dashboard: kolotoč cílů + QuickAdd vedle sebe
+                <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.5rem', alignItems: 'start' }}>
+                  {/* Kolotoč cílů */}
                   {goals.length === 0 ? (
                     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm text-center text-gray-400 text-sm">
                       Žádné cíle
                     </div>
                   ) : (
-                    // Ukáže se prostě jen první cíl, aby to nerozbíjelo grafiku
-                    <GoalCard goal={goals[0]} tasks={tasks} readOnly />
+                    <GoalCard
+                      goal={goals[activeGoalIndex]}
+                      tasks={tasks}
+                      readOnly
+                      onPrev={handlePrevGoal}
+                      onNext={handleNextGoal}
+                      goalIndex={activeGoalIndex}
+                      goalCount={goals.length}
+                    />
                   )}
+                  <QuickAdd onAdd={handleAddTask} />
                 </div>
-                <QuickAdd onAdd={handleAddTask} />
-              </div>
-              
+              ) : (
+                // Ostatní záložky: jen QuickAdd, bez cílů
+                <div style={{ marginBottom: '0' }}>
+                  <QuickAdd onAdd={handleAddTask} />
+                </div>
+              )}
+
               <TaskList
                 tasks={filteredTasks}
                 onToggleComplete={handleToggleComplete}

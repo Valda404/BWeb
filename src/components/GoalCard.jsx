@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Target, Pencil, Trophy, Trash } from "lucide-react";
+import { Target, Pencil, Trophy, Trash, ChevronLeft, ChevronRight } from "lucide-react";
 
-export function GoalCard({ goal, tasks, onDelete, onEdit, readOnly=false }) {
+export function GoalCard({ goal, tasks, onDelete, onEdit, readOnly=false, onPrev, onNext, goalCount, goalIndex }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(goal.title);
   
@@ -19,18 +19,22 @@ const saveEdit = () => {
     setIsEditing(false);
   }
 
+  const isCarousel = onPrev && onNext && goalCount > 1;
+
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col h-full relative overflow-hidden group hover:shadow-md transition-shadow">
       <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
         <Trophy className="w-32 h-32 text-indigo-600" />
       </div>
 
+      {/* Header */}
       <div className="flex items-center gap-3 mb-6 relative">
         <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
           <Target className="w-5 h-5" strokeWidth={2.5} />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-indigo-600 tracking-wide uppercase">Aktivní cíl</h3>
+          <h3 className="text-sm font-semibold text-indigo-600 tracking-wide uppercase">
+            Aktivní cíl</h3>
           {isEditing ? (
             <input
               type="text"
@@ -77,7 +81,8 @@ const saveEdit = () => {
         </div>
       )}
       </div>
-
+      
+      {/* Progress */}
       <div className="space-y-4 flex-grow flex flex-col justify-end relative">
         <div className="flex justify-between items-end mb-2">
           <span className="text-4xl font-extrabold text-gray-900 tracking-tighter">
@@ -95,6 +100,23 @@ const saveEdit = () => {
           {completedTasks} z {totalTasks} úkolů dokončeno
         </p>
       </div>
+
+      {/* Kolotoč cílů - poze pokud je jich více než 0 */}
+      {isCarousel && (
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+          <button onClick={onPrev}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <span className="text-xs text-gray-400 font-medium">
+            {goalIndex + 1} / {goalCount}
+          </span>
+          <button onClick={onNext}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
