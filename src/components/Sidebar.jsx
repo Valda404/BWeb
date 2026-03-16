@@ -1,4 +1,4 @@
-import { Inbox, Calendar, ListTodo, Target, MoreVertical, LogOut, Settings } from "lucide-react";
+import { Inbox, Calendar, ListTodo, Target, MoreVertical, Archive, CheckSquare } from "lucide-react";
 
 export function Sidebar( { currentView, onViewChange }) {
   const navItems = [
@@ -7,6 +7,8 @@ export function Sidebar( { currentView, onViewChange }) {
     { name: "Today", icon: Calendar, view: "today" },
     { name: "Next Actions", icon: ListTodo, view: "next" },
     { name: "Goals & OKRs", icon: Target, view: "goals" },
+    { name: "Někdy/Možná", icon: Archive, view: "archive" },
+    { name: "Dokončené", icon: CheckSquare, view: "completed" },
   ];
 
   return (

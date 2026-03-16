@@ -112,13 +112,8 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
               </span>
             )}
             {linkedGoal && (
-              <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-emerald-50 text-emerald-600 border-emerald-200 rounded-md border ${categoryInfo.style}`}>
+              <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-emerald-50 text-emerald-600 border-emerald-200 rounded-md border`}>
                 Cíl: {linkedGoal.title}
-              </span>
-            )}
-            {task.isPriority && (
-              <span className="px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-rose-50 text-rose-600 rounded-md">
-                Priorita
               </span>
             )}
             {task.deadline && (

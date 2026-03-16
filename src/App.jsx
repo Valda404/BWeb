@@ -95,10 +95,12 @@ function App() {
     await deleteGoal(goalId)
   }
 
-  // Filtrování úkolů podle aktuálně zvolené kategorie
-  const filtered = currentView === 'dash'
-    ? tasks // Zobrazit všechny úkoly v dashboardu
-    : tasks.filter(task => (task.category) === currentView)
+  // Filtrování úkolů podle aktuálně zvolené kategorie a stavu dokončení
+  const filtered = (() => {
+  if (currentView === 'completed') return tasks.filter(t => t.completed)
+  if (currentView === 'dash') return tasks.filter(t => !t.completed)
+  return tasks.filter(t => t.category === currentView && !t.completed)
+})()
 
   const filteredTasks = [...filtered].sort((a, b) => {
     const aHas = !!a.deadline

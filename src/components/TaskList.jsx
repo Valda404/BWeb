@@ -1,5 +1,5 @@
 import { TaskItem } from "./TaskItem";
-import { Circle, CalendarDays, ListTodo, Inbox } from "lucide-react";
+import { Circle, CalendarDays, ListTodo, Inbox, Archive, CheckSquare } from "lucide-react";
 
 const VIEW_CONFIG = {
   inbox: {
@@ -29,6 +29,20 @@ const VIEW_CONFIG = {
     color: 'text-gray-500',
     badge: 'bg-gray-100 text-gray-600',
     emptyText: 'Žádné úkoly — čím začneme?',
+  },
+  someday: {
+  label: 'Někdy / Možná',
+  Icon: Archive,
+  color: 'text-teal-500',
+  badge: 'bg-teal-50 text-teal-700',
+  emptyText: 'Žádné odložené nápady.',
+  },
+  completed: {
+    label: 'Dokončené',
+    Icon: CheckSquare,
+    color: 'text-green-500',
+    badge: 'bg-green-50 text-green-700',
+    emptyText: 'Zatím nic dokončeno.',
   },
 }
 const DEFAULT_VIEW = VIEW_CONFIG['dash']
