@@ -125,27 +125,49 @@ function App() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Header */}
         <header style={{
-          display: 'flex', justifyContent: 'flex-end', alignItems: 'center',
+          display: 'flex', alignItems: 'center',
           padding: '0.875rem 2rem', borderBottom: '1px solid #f3f4f6', background: '#fff'
         }}>
-          <span style={{ fontSize: '0.875rem', color: '#6b7280', marginRight: '1rem' }}>
-            {user.email}
+          <span style={{ frontSize: '0.875rem', color: '#6b7280' }}>
+            Přihlášen jako <strong style={{ color: '#111827' }}>{user.email}</strong>
           </span>
-          <button
-            onClick={logout}
-            style={{
-              fontSize: '0.875rem', color: '#6366f1', background: 'none',
-              border: '1px solid #e0e7ff', borderRadius: '8px', padding: '0.4em 1em', cursor: 'pointer'
-            }}
-          >
-            Odhlásit se
-          </button>
         </header>
 
         {/* Hlavní obsah - TADY JE OPRAVA SCROLLOVÁNÍ (overflowY: 'auto') */}
         <main style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
-          
-          {currentView === 'goals' ? (
+          {currentView === 'settings' ? (
+            // ===== SETTINGS VIEW =====
+            <div style={{ maxWidth: '600px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <h1 className="text-2xl font-bold text-gray-900">Nastavení</h1>
+
+              {/* Profil */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Můj profil</h2>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-lg">
+                    {user.email[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-base font-semibold text-gray-900">{user.email}</p>
+                    <p className="text-sm text-gray-500">Přihlášený uživatel</p>
+                  </div>
+                </div>
+                <button
+                  onClick={logout}
+                  className="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold py-2.5 rounded-xl transition-colors border border-rose-200"
+                >
+                  Odhlásit se
+                </button>
+              </div>
+
+              {/* Předvolby */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Předvolby aplikace</h2>
+                <p className="text-sm text-gray-400">Zde bude možnost přepnout na temný režim (Dark Mode) a další nastavení.</p>
+              </div>
+            </div>
+
+          ) : currentView === 'goals' ? (
             // ===== GOALS VIEW =====
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <QuickAdd onAdd={handleAddGoal} placeholder="Přidej nový cíl" />
