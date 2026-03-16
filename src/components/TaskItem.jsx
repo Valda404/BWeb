@@ -27,7 +27,12 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
     }
 
     const saveEdit = () => {
-        onEditTask(task.id, editTitle, editDeadline, editGoalId)
+        let finalDeadline = editDeadline
+        if (task.category === 'today' && !editDeadline) {
+            const todayDate = new Date().toISOString().split('T')[0]
+            finalDeadline = `${todayDate}T${editDeadline}`
+        }
+        onEditTask(task.id, editTitle, finalDeadline, editGoalId)
         setIsEditing(false)
     }
 
@@ -69,13 +74,22 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
             autoFocus
             className="w-full text-[15px] font-medium border-b border-gray-300 focus:outline-none focus:border-indigo-500 bg-transparent"
           />
-          <input
-            type="datetime-local"
-            value={editDeadline}
-            onChange={(e) => setEditDeadline(e.target.value)}
-            max="9999-12-31T23:59"
+          {task.category === 'today' ? (
+            <input
+              type="time"
+              value={editDeadline.includes("T") ? editDeadline.split("T")[1].slice(0,5) : editDeadline}
+              onChange={(e) => setEditDeadline(e.target.value)}
               className="text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-400 bg-white shrink-0"
             />
+          ) : (
+            <input
+              type="datetime-local"
+              value={editDeadline}
+              onChange={(e) => setEditDeadline(e.target.value)}
+              max="9999-12-31T23:59"
+              className="text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-400 bg-white shrink-0"
+            />
+          )}
           <select
             value={editGoalId}
             onChange={(e) => setEditGoalId(e.target.value)}
@@ -121,11 +135,16 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
             {task.deadline && (
               <div className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-yellow-50 text-yellow-600 rounded-md">
                 {task.deadline.includes("T") ? (
-                  <Clock className="w-3 h-3" />
+                  <>
+                    <Clock className="w-3 h-3" />
+                    {new Date(task.deadline).toLocaleString('cs-CZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                  </>
                 ) : (
-                  <Calendar className="w-3 h-3" />
+                  <>
+                    <Calendar className="w-3 h-3" />
+                    {task.deadline}
+                  </>
                 )}
-                {new Date(task.deadline).toLocaleString('cs-CZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
               </div>
             )}
           </div>
