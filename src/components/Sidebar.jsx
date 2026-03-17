@@ -1,13 +1,18 @@
 import { Inbox, Calendar, ListTodo, Target, Settings, Archive, CheckSquare } from "lucide-react";
 
-export function Sidebar( { currentView, onViewChange }) {
+export function Sidebar( { currentView, onViewChange, tasks =[] }) {
+  const inboxCount   = tasks.filter(t => (t.category === 'inbox' || !t.category) && !t.completed).length
+  const todayCount   = tasks.filter(t => t.category === 'today'   && !t.completed).length
+  const nextCount    = tasks.filter(t => t.category === 'next'    && !t.completed).length
+  const somedayCount = tasks.filter(t => t.category === 'someday' && !t.completed).length
+  
   const navItems = [
     { name: "Dashboard", icon: Target, view: "dash" },
-    { name: "Inbox", icon: Inbox, view : "inbox" },
-    { name: "Today", icon: Calendar, view: "today" },
-    { name: "Next Actions", icon: ListTodo, view: "next" },
+    { name: "Inbox", icon: Inbox, view : "inbox", count: inboxCount },
+    { name: "Today", icon: Calendar, view: "today", count: todayCount },
+    { name: "Next Actions", icon: ListTodo, view: "next", count: nextCount },
     { name: "Goals & OKRs", icon: Target, view: "goals" },
-    { name: "Někdy/Možná", icon: Archive, view: "someday" },
+    { name: "Někdy/Možná", icon: Archive, view: "someday", count: somedayCount },
     { name: "Dokončené", icon: CheckSquare, view: "completed" },
   ];
 
@@ -39,6 +44,11 @@ export function Sidebar( { currentView, onViewChange }) {
                   <Icon className={`w-4 h-4 ${isActive ? "text-indigo-600" : "text-gray-400"}`} />
                   {item.name}
                 </div>
+                {item.count > 0 && (
+                  <div className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-gray-400 rounded-full">
+                    {item.count}
+                  </div>
+                )}
               </button>
             );
           })}

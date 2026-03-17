@@ -13,6 +13,9 @@ function App() {
   const [currentView, setCurrentView] = useState('inbox')
   const [goals, setGoals] = useState([])
 
+  //Stav řazení
+  const [sortBy, setSortBy] = useState('newest')
+
   //Přepínání cílů šipkami
   const [activeGoalIndex, setActiveGoalIndex] = useState(0)
 
@@ -69,7 +72,7 @@ function App() {
 
   const handleAddTask = async (title) => {
     const category = currentView === 'dash' ? 'inbox' : currentView
-    await addTask({ title, completed: false, category })
+    await addTask({ title, completed: false, category, createdAt: new Date() })
   }
 
   const handleToggleComplete = async (taskId, currentStatus) => {
@@ -145,7 +148,7 @@ function App() {
 
   return (
     <div style={{ display: 'flex', height: '100vh', background: '#f9fafb', overflow: 'hidden' }}>
-      <Sidebar currentView={currentView} onViewChange={setCurrentView} />
+      <Sidebar currentView={currentView} onViewChange={setCurrentView} tasks={tasks} />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Header */}
