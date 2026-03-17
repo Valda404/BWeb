@@ -27,11 +27,13 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
     }
 
     const saveEdit = () => {
-        let finalDeadline = editDeadline
-        if (task.category === 'today' && !editDeadline) {
+        let finalDeadline = editDeadline || null
+
+        if (task.category === 'today' && editDeadline) {
             const todayDate = new Date().toISOString().split('T')[0]
             finalDeadline = `${todayDate}T${editDeadline}`
         }
+
         onEditTask(task.id, editTitle, finalDeadline, editGoalId)
         setIsEditing(false)
     }

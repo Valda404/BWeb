@@ -24,11 +24,18 @@ function App() {
     setActiveGoalIndex((prevIndex) => (prevIndex < goals.length - 1 ? prevIndex + 1 : 0));
   };
 
+ const safeGoalIndex = goals.length === 0 ? 0 : Math.min(activeGoalIndex, goals.length - 1)
+
 
   //Sledování stavu přihlášení
   useEffect(() => {
     const unsubscribe = onAuthChange((currentUser) => {
       setUser(currentUser)
+      if (!currentUser) {
+        setTasks([])
+        setGoals([])
+        setActiveGoalIndex(0)
+      }
     })
     return () => unsubscribe()
   }, [])
@@ -108,6 +115,8 @@ function App() {
   }
 
   const handleDeleteGoal = async (goalId) => {
+    const linkedTasks = tasks.filter(t => t.goalId === goalId)
+    await Promise.all(linkedTasks.map(t => updateTask(t.id, { goalId: null })))
     await deleteGoal(goalId)
   }
 
@@ -144,7 +153,7 @@ function App() {
           display: 'flex', alignItems: 'center',
           padding: '0.875rem 2rem', borderBottom: '1px solid #f3f4f6', background: '#fff'
         }}>
-          <span style={{ frontSize: '0.875rem', color: '#6b7280' }}>
+          <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
             Přihlášen jako <strong style={{ color: '#111827' }}>{user.email}</strong>
           </span>
         </header>
@@ -213,12 +222,14 @@ function App() {
                     </div>
                   ) : (
                     <GoalCard
-                      goal={goals[activeGoalIndex]}
+                      goal={goals[safeGoalIndex]}
                       tasks={tasks}
                       readOnly
+                      onDelete={handleDeleteGoal}
+                      onEdit={handleEditGoal}
                       onPrev={handlePrevGoal}
                       onNext={handleNextGoal}
-                      goalIndex={activeGoalIndex}
+                      goalIndex={safeGoalIndex}
                       goalCount={goals.length}
                     />
                   )}
