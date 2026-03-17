@@ -72,7 +72,7 @@ function App() {
 
   const handleAddTask = async (title) => {
     const category = currentView === 'dash' ? 'inbox' : currentView
-    await addTask({ title, completed: false, category, createdAt: new Date() })
+    await addTask({ title, completed: false, category, createdAt: Date.now() })
   }
 
   const handleToggleComplete = async (taskId, currentStatus) => {
@@ -131,6 +131,14 @@ function App() {
 })()
 
   const filteredTasks = [...filtered].sort((a, b) => {
+    if (sortBy === 'newest') {
+      return (b.createdAt ?? 0) - (a.createdAt ?? 0)
+    }
+    if (sortBy === 'oldest') {
+      return (a.createdAt ?? 0) - (b.createdAt ?? 0)
+    }
+
+    //deadline sort
     const aHas = !!a.deadline
     const bHas = !!b.deadline
     
@@ -244,6 +252,20 @@ function App() {
                   <QuickAdd onAdd={handleAddTask} />
                 </div>
               )}
+
+              {/* Řazení */}
+              <div className="flex justify-end items-center gap-2">
+                <span className="text-xs text-gray-400">Řadit podle:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-400 bg-white"
+                >
+                  <option value="newest">Nejnovější</option>
+                  <option value="oldest">Nejstarší</option>
+                  <option value="deadline">Deadline</option>
+                </select>
+              </div>
 
               <TaskList
                 tasks={filteredTasks}
