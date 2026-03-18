@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Calendar, ListTodo, Target, AlignLeft } from "lucide-react";
+import { X, Calendar, ListTodo, Target, AlignLeft, CalendarPlus } from "lucide-react";
 
 export function TaskModal({ task, onClose, onSave, goals=[] }) {
     const [title, setTitle] = useState( task.title || '')
@@ -31,6 +31,13 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
             goalId: goalId || null,
             deadline: finalDeadline,
         })
+    }
+
+    const handleExportToCalendar = () => {
+        const baseURL = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+        const text = encodeURIComponent(title)
+        const details = encodeURIComponent(description || '')
+        window.open(`${baseURL}&text=${text}&details=${details}`, '_blank')
     }
 
     return (
@@ -137,6 +144,14 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
 
             {/* Footer */}
             <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50">
+              <button
+                onClick={handleExportToCalendar}
+                className="flex items-center gap-1 px-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                <CalendarPlus className="w-4 h-4" />
+                Přidat do Google kalendáře
+              </button>
+
               <button
                 onClick={onClose}
                 className="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
