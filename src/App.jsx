@@ -6,6 +6,7 @@ import { TaskList } from './components/TaskList'
 import { Sidebar } from './components/Sidebar'
 import { QuickAdd } from './components/QuickAdd'
 import { GoalCard } from './components/GoalCard'
+import { TaskModal } from './components/TaskModal.jsx'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -86,6 +87,12 @@ function App() {
     await deleteTask(taskId)
   }
 
+  const handleSaveTaskFromModal = async (taskId, updatedData) => {
+    if (!updatedData.title.trim()) return
+    await updateTask(taskId, updatedData)
+    setEditingTask(null)
+  }
+
   const handleMoveToInbox = async (taskId) => {
     await updateTask(taskId, { category: 'inbox' })
   }
@@ -100,15 +107,6 @@ function App() {
 
   const handleMoveToSomeday = async (taskId) => {
     await updateTask(taskId, { category: 'someday' })
-  }
-
-  const handleEditTask = async (taskId, newTitle, newDeadline, newGoalId) => {
-    if (!newTitle.trim()) return
-    await updateTask(taskId, { 
-      title: newTitle.trim(),
-      deadline: newDeadline || null,
-      goalId: newGoalId || null,
-    })
   }
 
   const handleAddGoal = async (title) => {
@@ -278,7 +276,6 @@ function App() {
                 onMoveToNextActions={handleMoveToNextActions}
                 onMoveToInbox={handleMoveToInbox}
                 onMoveToSomeday={handleMoveToSomeday}
-                onEditTask={handleEditTask}
                 onOpenEditModal={(task) => setEditingTask(task)}
                 currentView={currentView}
                 goals={goals}
@@ -290,15 +287,12 @@ function App() {
 
       {/* Modální okno pro úpravu úkolu */}
       {editingTask && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Upravit úkol</h2>
-            <button
-              onClick={() => setEditingTask(null)}>
-              Zavřít
-            </button>
-          </div>
-        </div>
+        <TaskModal
+          task={editingTask}
+          onClose={() => setEditingTask(null)}
+          onSave={handleSaveTaskFromModal}
+          goals={goals}
+        />
       )}
     </div>
   )
