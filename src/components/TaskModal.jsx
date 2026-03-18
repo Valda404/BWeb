@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Calendar, ListTodo, Target, AlignLef } from "lucide-react";
+import { X, Calendar, ListTodo, Target, AlignLeft } from "lucide-react";
 
 export function TaskModal({ task, onClose, onSave, goals=[] }) {
     const [title, setTitle] = useState( task.title || '')
@@ -62,7 +62,7 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
 
             {/* Popis */}
             <div className="flex gap-3">
-                <AlignLef className="w-5 h-5 text-gray-400" />
+                <AlignLeft className="w-5 h-5 text-gray-400" />
                 <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
