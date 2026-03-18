@@ -19,6 +19,9 @@ function App() {
   //Přepínání cílů šipkami
   const [activeGoalIndex, setActiveGoalIndex] = useState(0)
 
+  //Stav modálního okna pro úpravu úkolu
+  const [editingTask, setEditingTask] = useState(null)
+
   const handlePrevGoal = () => {
     setActiveGoalIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : goals.length - 1));
   };
@@ -276,6 +279,7 @@ function App() {
                 onMoveToInbox={handleMoveToInbox}
                 onMoveToSomeday={handleMoveToSomeday}
                 onEditTask={handleEditTask}
+                onOpenEditModal={(task) => setEditingTask(task)}
                 currentView={currentView}
                 goals={goals}
               />
@@ -283,6 +287,19 @@ function App() {
           )}
         </main>
       </div>
+
+      {/* Modální okno pro úpravu úkolu */}
+      {editingTask && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Upravit úkol</h2>
+            <button
+              onClick={() => setEditingTask(null)}>
+              Zavřít
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

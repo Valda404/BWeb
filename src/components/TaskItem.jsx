@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox, Archive } from "lucide-react";
 
 const CATEGORY_BADGE = {
@@ -9,34 +8,13 @@ const CATEGORY_BADGE = {
   completed:   { label: 'Dokončené',    style: 'bg-green-50 text-green-600 border-green-200' },
 }
 
-export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMoveToNextActions, onMoveToSomeday, onEditTask, showCategory, onMoveToInbox, goals = [] }) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [editTitle, setEditTitle] = useState(task.title)
-  const [editDeadline, setEditDeadline] = useState(task.deadline || '')
-  const [editGoalId, setEditGoalId] = useState(task.goalId || '')
+export function TaskItem({ task, onToggleComplete, onDelete,
+  onMoveToToday, onMoveToNextActions, onMoveToSomeday,
+  showCategory, onMoveToInbox, goals = [], onOpenEditModal }) {
 
   const isInbox = task.category === 'inbox' || !task.category
   const categoryInfo = CATEGORY_BADGE[task.category] ?? CATEGORY_BADGE['inbox']
   const linkedGoal = goals.find(g => g.id === task.goalId)
-
-    const startEditing = () => {
-        setIsEditing(true)
-        setEditTitle(task.title)
-        setEditDeadline(task.deadline || '')
-        setEditGoalId(task.goalId || '')
-    }
-
-    const saveEdit = () => {
-        let finalDeadline = editDeadline || null
-
-        if (task.category === 'today' && editDeadline) {
-            const todayDate = new Date().toISOString().split('T')[0]
-            finalDeadline = `${todayDate}T${editDeadline}`
-        }
-
-        onEditTask(task.id, editTitle, finalDeadline, editGoalId)
-        setIsEditing(false)
-    }
 
 
     return (
@@ -61,107 +39,53 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
           )}
         </button>
 
-        {/*Název úkolu + deadline*/}
-        <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
-        {isEditing ? (
-         <div className="flex flex-1 items-center gap-2 min-w-0">
-          <input
-            type="text"
-            value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") saveEdit()
-              if (e.key === "Escape") setIsEditing(false)
-            }}
-            autoFocus
-            className="w-full text-[15px] font-medium border-b border-gray-300 focus:outline-none focus:border-indigo-500 bg-transparent"
-          />
-          {task.category === 'today' ? (
-            <input
-              type="time"
-              value={editDeadline.includes("T") ? editDeadline.split("T")[1].slice(0,5) : editDeadline}
-              onChange={(e) => setEditDeadline(e.target.value)}
-              className="text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-400 bg-white shrink-0"
-            />
-          ) : (
-            <input
-              type="datetime-local"
-              value={editDeadline}
-              onChange={(e) => setEditDeadline(e.target.value)}
-              max="9999-12-31T23:59"
-              className="text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-400 bg-white shrink-0"
-            />
-          )}
-          <select
-            value={editGoalId}
-            onChange={(e) => setEditGoalId(e.target.value)}
-            className="text-xs text-gray-600 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-indigo-400 bg-white shrink-0"
-          >
-            <option value="">Žádný cíl</option>
-            {goals.map((goal) => (
-              <option key={goal.id} value={goal.id}>
-                {goal.title}
-              </option>
-            ))}
-          </select>
-            <button
-                onClick={saveEdit}
-                className="text-sm text-indigo-600 hover:text-indigo-800 transition-colors"
-            >
-                Uložit
-            </button>
-        </div>
-        ) : (
-            <span
-              className={`text-[15px] truncate font-medium ${
-                task.completed ? "text-gray-500 line-through decoration-gray-300" : "text-gray-800"
-                }`}
-            >
-                {task.title}
-            </span>
-        )}
+        {/* Název úkolu + štítky */}
+      <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
+        <span
+          className={`text-[15px] truncate font-medium ${
+            task.completed ? "text-gray-500 line-through decoration-gray-300" : "text-gray-800"
+          }`}
+        >
+          {task.title}
+        </span>
 
-        {/* Štítky — skryté při editaci */}
-        {!isEditing && (
-          <div className="flex items-center gap-2 shrink-0">
-            {showCategory && categoryInfo && (
-              <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md border ${categoryInfo.style}`}>
-                {categoryInfo.label}
-              </span>
-            )}
-            {linkedGoal && (
-              <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-emerald-50 text-emerald-600 border-emerald-200 rounded-md border`}>
-                Cíl: {linkedGoal.title}
-              </span>
-            )}
-            {task.deadline && (
-              <div className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-yellow-50 text-yellow-600 rounded-md">
-                {task.deadline.includes("T") ? (
-                  <>
-                    <Clock className="w-3 h-3" />
-                    {new Date(task.deadline).toLocaleString('cs-CZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                  </>
-                ) : (
-                  <>
-                    <Calendar className="w-3 h-3" />
-                    {task.deadline}
-                  </>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+        <div className="flex items-center gap-2 shrink-0">
+          {showCategory && categoryInfo && (
+            <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md border ${categoryInfo.style}`}>
+              {categoryInfo.label}
+            </span>
+          )}
+          {linkedGoal && (
+            <span className="px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-emerald-50 text-emerald-600 border-emerald-200 rounded-md border">
+              Cíl: {linkedGoal.title}
+            </span>
+          )}
+          {task.deadline && (
+            <div className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-yellow-50 text-yellow-600 rounded-md">
+              {task.deadline.includes("T") ? (
+                <>
+                  <Clock className="w-3 h-3" />
+                  {new Date(task.deadline).toLocaleString('cs-CZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                </>
+              ) : (
+                <>
+                  <Calendar className="w-3 h-3" />
+                  {task.deadline}
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
-    {/* Akční tlačítka */}
-    {!isEditing && (
+      {/* Akční tlačítka */}
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
         {!isInbox && (
           <button
             onClick={() => onMoveToInbox(task.id)}
             title="Přesunout do Inboxu"
             className="p-1.5 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-colors"
-  >
+          >
             <Inbox className="w-4 h-4" />
           </button>
         )}
@@ -193,7 +117,7 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
           </button>
         )}
         <button
-          onClick={startEditing}
+          onClick={() => onOpenEditModal(task)}
           title="Upravit úkol"
           className="p-1.5 rounded-lg text-gray-400 hover:text-sky-500 hover:bg-sky-50 transition-colors"
         >
@@ -207,7 +131,6 @@ export function TaskItem({ task, onToggleComplete, onDelete, onMoveToToday, onMo
           <Trash className="w-4 h-4" />
         </button>
       </div>
-    )}
     </div>
   )
 }
