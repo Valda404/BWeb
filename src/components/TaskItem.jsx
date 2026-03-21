@@ -1,11 +1,11 @@
 import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox, Archive } from "lucide-react";
 
 const CATEGORY_BADGE = {
-  inbox:       { label: 'Inbox',        style: 'bg-blue-50 text-blue-600 border-blue-200' },
-  today:       { label: 'Dnes',         style: 'bg-amber-50 text-amber-600 border-amber-200' },
-  next:        { label: 'Další kroky',  style: 'bg-indigo-50 text-indigo-600 border-indigo-200' },
-  someday:     { label: 'Někdy/Možná', style: 'bg-teal-50 text-teal-600 border-teal-200' },
-  completed:   { label: 'Dokončené',    style: 'bg-green-50 text-green-600 border-green-200' },
+  inbox:       { label: 'Inbox',        style: 'bg-gray-50 text-gray-700 border-gray-200' },
+  today:       { label: 'Dnes',         style: 'bg-gray-50 text-gray-700 border-gray-200' },
+  next:        { label: 'Další kroky',  style: 'bg-gray-50 text-gray-700 border-gray-200' },
+  someday:     { label: 'Někdy/Možná', style: 'bg-gray-50 text-gray-700 border-gray-200' },
+  completed:   { label: 'Dokončené',    style: 'bg-gray-50 text-gray-700 border-gray-200' },
 }
 
 export function TaskItem({ task, onToggleComplete, onDelete,
@@ -56,12 +56,12 @@ export function TaskItem({ task, onToggleComplete, onDelete,
             </span>
           )}
           {linkedGoal && (
-            <span className="px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-emerald-50 text-emerald-600 border-emerald-200 rounded-md border">
+            <span className="px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-gray-50 text-gray-700 border-gray-200 rounded-md border">
               Cíl: {linkedGoal.title}
             </span>
           )}
           {task.deadline && (
-            <div className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-yellow-50 text-yellow-600 rounded-md">
+            <div className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold tracking-wider uppercase bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-md">
               {task.deadline.includes("T") ? (
                 <>
                   <Clock className="w-3 h-3" />
@@ -84,7 +84,7 @@ export function TaskItem({ task, onToggleComplete, onDelete,
           <button
             onClick={() => onMoveToInbox(task.id)}
             title="Přesunout do Inboxu"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
           >
             <Inbox className="w-4 h-4" />
           </button>
@@ -93,7 +93,7 @@ export function TaskItem({ task, onToggleComplete, onDelete,
           <button
             onClick={() => onMoveToToday(task.id)}
             title="Přesunout do Today"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-amber-500 hover:bg-amber-50 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
           >
             <Sun className="w-4 h-4" />
           </button>
@@ -102,7 +102,7 @@ export function TaskItem({ task, onToggleComplete, onDelete,
           <button
             onClick={() => onMoveToNextActions(task.id)}
             title="Přesunout do Next Actions"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
           >
             <ListTodo className="w-4 h-4" />
           </button>
@@ -111,7 +111,7 @@ export function TaskItem({ task, onToggleComplete, onDelete,
           <button
             onClick={() => onMoveToSomeday(task.id)}
             title="Přesunout do Někdy / Možná"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-teal-500 hover:bg-teal-50 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
           >
             <Archive className="w-4 h-4" />
           </button>
@@ -119,7 +119,7 @@ export function TaskItem({ task, onToggleComplete, onDelete,
         <button
           onClick={() => onOpenEditModal(task)}
           title="Upravit úkol"
-          className="p-1.5 rounded-lg text-gray-400 hover:text-sky-500 hover:bg-sky-50 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
         >
           <Pencil className="w-4 h-4" />
         </button>

@@ -5,7 +5,7 @@
 // Import autentizačního objektu z hlavní FirebaseData konfigurace
 import { auth } from './firebaseData.js';
 // Import potřebných funkcí z Firebase Auth SDK
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'firebase/auth';
 
 
 // ===== REGISTRACE =====
@@ -26,6 +26,13 @@ export const register = (email, password) => createUserWithEmailAndPassword(auth
  * @returns {Promise} - Promise s daty přihlášeného uživatele
  */
 export const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
+
+
+// ===== AKTUALIZACE JMÉNA =====
+export const updateUserName = async (newName) => {
+  if (!auth.currentUser) return;
+  await updateProfile(auth.currentUser, { displayName: newName });
+}
 
 
 // ===== ODHLÁŠENÍ =====

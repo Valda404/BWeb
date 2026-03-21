@@ -1,27 +1,30 @@
 import { TaskItem } from "./TaskItem";
-import { Circle, CalendarDays, ListTodo, Inbox, Archive, CheckSquare } from "lucide-react";
+import { Circle, CalendarDays, ListTodo, Inbox, Archive, CheckSquare, HelpCircle } from "lucide-react";
 
 const VIEW_CONFIG = {
   inbox: {
     label: "Inbox",
     Icon: Inbox,
-    color: 'text-blue-600',
-    badge: 'bg-blue-50 text-blue-700',
+    color: 'text-gray-900',
+    badge: 'bg-gray-100 text-gray-700',
     emptyText: 'Sběrná schránka je prázdná.',
+    helpText: 'Sem přidávej všechny nové úkoly, nápady a připomínky. Odtud je pak můžeš snadno roztřídit do dalších kategorií.',
   },
   today: {
     label: 'Dnešní úkoly',
     Icon: CalendarDays,
-    color: 'text-amber-500',
-    badge: 'bg-amber-50 text-amber-700',
+    color: 'text-gray-900',
+    badge: 'bg-gray-100 text-gray-700',
     emptyText: 'Máš hotovo! Užij si volný čas.',
+    helpText: 'Zde se zobrazí všechny úkoly, které jsi si z inboxu přesunul na dnešek.',
   },
   next: {
     label: 'Další kroky',
     Icon: ListTodo,
-    color: 'text-indigo-600',
-    badge: 'bg-indigo-50 text-indigo-700',
+    color: 'text-gray-900',
+    badge: 'bg-gray-100 text-gray-700',
     emptyText: 'Žádné další akce. Skvěle!',
+    helpText: 'Tato kategorie slouží pro úkoly, které nejsou urgentní, ale chceš je mít na paměti jako další kroky k dosažení svých cílů. Jde hlavně o krátké úkoly do dvou minut.',
   },
   dash : {
     label: 'Přehled',
@@ -29,20 +32,23 @@ const VIEW_CONFIG = {
     color: 'text-gray-500',
     badge: 'bg-gray-100 text-gray-600',
     emptyText: 'Žádné úkoly — čím začneme?',
+    helpText: 'Toto je přehled všech tvých úkolů. Zde můžeš rychle vidět, co je potřeba udělat a co je již hotovo spolu s tvými cíli a jejich postupem.',
   },
   someday: {
   label: 'Někdy / Možná',
   Icon: Archive,
-  color: 'text-teal-500',
-  badge: 'bg-teal-50 text-teal-700',
+  color: 'text-gray-900',
+  badge: 'bg-gray-100 text-gray-700',
   emptyText: 'Žádné odložené nápady.',
+  helpText: 'Tato kategorie slouží pro úkoly, které nechceš řešit, ale nechceš je ztratit.',
   },
   completed: {
     label: 'Dokončené',
     Icon: CheckSquare,
-    color: 'text-green-500',
-    badge: 'bg-green-50 text-green-700',
+    color: 'text-gray-900',
+    badge: 'bg-gray-100 text-gray-700',
     emptyText: 'Zatím nic dokončeno.',
+    helpText: 'Zde se zobrazí všechny úkoly, které jsi dokončil. Můžeš si zde prohlédnout svůj pokrok a úspěchy.',
   },
 }
 const DEFAULT_VIEW = VIEW_CONFIG['dash']
@@ -52,7 +58,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete,
   onMoveToToday, onMoveToNextActions, onMoveToSomeday, onEditTask,
   currentView, onMoveToInbox, goals, onOpenEditModal }) {
   const config = VIEW_CONFIG[currentView] ?? DEFAULT_VIEW
-  const { label, Icon, color, badge, emptyText } = config
+  const { label, Icon, color, badge, emptyText, helpText } = config
 
 
   return (
@@ -63,6 +69,15 @@ export function TaskList({ tasks, onToggleComplete, onDelete,
         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge}`}>
           {tasks.length}
         </span>
+        <div className="relative group flex items-center">
+          <HelpCircle
+            className="w-4 h-4 text-gray-400 group-hover:text-indigo-600 cursor-help transition-colors"
+          />
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-48 sm:w-64 p-2.5 bg-gray-900 text-white text-[11px] sm:text-xs leading-relaxed rounded-lg shadow-xl z-50 text-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            {helpText}
+            <div className="absolute left-1/2 -translate-x-1/2 top-full border-[5px] border-transparent border-t-gray-900"></div>
+          </div>
+        </div>
         </h2>
       </div>
 

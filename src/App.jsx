@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { onAuthChange, logout } from './firebase/auth.js'
+import { onAuthChange, logout, updateUserName } from './firebase/auth.js'
 import { listenToTasks, addTask, updateTask, deleteTask, normalizeData, listenToGoals, addGoal, updateGoal, deleteGoal } from './firebase/database.js'
 import Login from './components/Login.jsx'
 import { TaskList } from './components/TaskList'
@@ -7,6 +7,7 @@ import { Sidebar } from './components/Sidebar'
 import { QuickAdd } from './components/QuickAdd'
 import { GoalCard } from './components/GoalCard'
 import { TaskModal } from './components/TaskModal.jsx'
+import { WifiOff } from 'lucide-react'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -23,6 +24,10 @@ function App() {
   //Stav modálního okna pro úpravu úkolu
   const [editingTask, setEditingTask] = useState(null)
 
+  //Stav změny jména
+  const [editName, setEditName] = useState('')
+  const [isUpdatingName, setIsUpdatingName] = useState(false)
+
   const handlePrevGoal = () => {
     setActiveGoalIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : goals.length - 1));
   };
@@ -33,6 +38,24 @@ function App() {
 
  const safeGoalIndex = goals.length === 0 ? 0 : Math.min(activeGoalIndex, goals.length - 1)
 
+
+  //Offline detekce
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false)
+    const handleOffline = () => setIsOffline(true)
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
+
+  //Nastavení jména po načtení uživatele
+  useEffect(() => { if (user) setEditName(user.displayName || '') }, [user])
+
+  //Stav offline detekce
+  const [isOffline, setIsOffline] = useState(!navigator.onLine)
 
   //Sledování stavu přihlášení
   useEffect(() => {
@@ -77,6 +100,13 @@ function App() {
   const handleAddTask = async (title) => {
     const category = currentView === 'dash' ? 'inbox' : currentView
     await addTask({ title, completed: false, category, createdAt: Date.now() })
+  }
+
+  const handleUpdateName = async () => {
+    setIsUpdatingName(true)
+    await updateUserName(editName)
+    setUser({ ...user, displayName: editName })
+    setIsUpdatingName(false)
   }
 
   const handleToggleComplete = async (taskId, currentStatus) => {
@@ -166,9 +196,16 @@ function App() {
           padding: '0.875rem 2rem', borderBottom: '1px solid #f3f4f6', background: '#fff'
         }}>
           <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-            Přihlášen jako <strong style={{ color: '#111827' }}>{user.email}</strong>
+            Přihlášen jako <strong style={{ color: '#111827' }}>{user.displayName || user.email}</strong>
           </span>
         </header>
+
+        {isOffline && (
+          <div className="bg-rose-500 text-white px-4 py-2 flex items-center justify-center gap-2 text-sm font-medium shadow-sm z-50">
+            <WifiOff className="w-4 h-4" />
+            Nemáte připojení k internetu. Změny se nemusí uložit.
+          </div>
+        )}
 
         {/* Hlavní obsah - TADY JE OPRAVA SCROLLOVÁNÍ (overflowY: 'auto') */}
         <main style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
@@ -185,8 +222,29 @@ function App() {
                     {user.email[0].toUpperCase()}
                   </div>
                   <div>
-                    <p className="text-base font-semibold text-gray-900">{user.email}</p>
-                    <p className="text-sm text-gray-500">Přihlášený uživatel</p>
+                    <p className="text-base font-semibold text-gray-900">{user.displayName || user.email}</p>
+                    <p className="text-sm text-gray-500">{user.email}</p>
+                  </div>
+                </div>
+
+                {/* Změna jména */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Zobrazené jméno</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      placeholder="Zadej své jméno"
+                      className="flex-1 border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300 transition"
+                    />
+                    <button
+                      onClick={handleUpdateName}
+                      disabled={isUpdatingName}
+                      className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors"
+                    >
+                      {isUpdatingName ? 'Ukládám...' : 'Uložit'}
+                    </button>
                   </div>
                 </div>
                 <button

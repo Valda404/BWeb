@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { login, register } from "../firebase/auth.js";
+import { CheckCircle } from "lucide-react";
 
 function Login() {
     const [isRegistering, setIsRegistering] = useState(false);
@@ -12,7 +13,6 @@ function Login() {
         e.preventDefault();
         setError("");
         setLoading(true);
-
         try {
             if (isRegistering) {
                 await register(email, password);
@@ -27,145 +27,110 @@ function Login() {
     };
 
     return (
-        <div style={styles.wrapper}>
-            <div style={styles.card}>
-                {/*Přepnutí režimu*/}
-                <div style={styles.toggle}>
-                    <button
-                        style={isRegistering ? styles.toggleActive : styles.toggleInactive}
-                        onClick={() => { setIsRegistering(false); setError(""); }}
-                        type="button"
-                    >
-                        Přihlášení
-                    </button>
-                    <button
-                        style={!isRegistering ? styles.toggleActive : styles.toggleInactive}
-                        onClick={() => { setIsRegistering(true); setError(""); }}
-                        type="button"
-                    >
-                        Registrace
-                    </button>
+        <div className="flex min-h-screen bg-gray-50">
+
+            {/* Levý panel — branding */}
+            <div className="hidden lg:flex lg:w-1/2 bg-indigo-600 flex-col justify-between p-12">
+                <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-white" strokeWidth={2.5} />
+                    </div>
+                    <span className="text-white font-semibold text-lg tracking-tight">Soustředění</span>
                 </div>
 
-                <h2 style={styles.heading}>{isRegistering ? "Registrace" : "Přihlášení"}</h2>
+                <div>
+                    <h1 className="text-4xl font-bold text-white leading-tight mb-4">
+                        Vaše úkoly.<br />Vaše cíle.<br />Váš fokus.
+                    </h1>
+                    <p className="text-indigo-200 text-base leading-relaxed max-w-sm">
+                        Jednoduchý GTD nástroj pro lidi, kteří chtějí mít věci pod kontrolou.
+                    </p>
+                </div>
 
-                <form style={styles.form} onSubmit={handleSubmit}>
-                    <label style={styles.label}>Email</label>
-                    <input
-                        type="email"
-                        placeholder="Vas@email.cz"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        style={styles.input}
-                        required
-                    />
-                    <label style={styles.label}>Heslo</label>
-                    <input
-                        type="password"
-                        placeholder="Minimálně 6 znaků"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        style={styles.input}
-                        required
-                    />
+                <p className="text-indigo-300 text-sm">© 2026 Soustředění</p>
+            </div>
 
-                    {error && <p style={styles.error}>{error}</p>}
+            {/* Pravý panel — formulář */}
+            <div className="flex flex-1 flex-col items-center justify-center px-6 py-12">
+                <div className="w-full max-w-sm">
 
-                    <button type="submit" disabled={loading} style={styles.submitBtn}>
-                        {loading ? 'Načítání' : isRegistering ? "Registrace" : "Přihlášení"}
-                    </button>
-                </form>
+                    {/* Logo (mobile) */}
+                    <div className="flex lg:hidden items-center gap-2 mb-8 justify-center">
+                        <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center">
+                            <CheckCircle className="w-5 h-5 text-white" strokeWidth={2.5} />
+                        </div>
+                        <span className="text-gray-900 font-semibold text-lg tracking-tight">Soustředění</span>
+                    </div>
+
+                    {/* Nadpis */}
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                        {isRegistering ? "Vytvořit účet" : "Vítejte zpět"}
+                    </h2>
+                    <p className="text-gray-500 text-sm mb-8">
+                        {isRegistering
+                            ? "Začněte sledovat své úkoly a cíle ještě dnes."
+                            : "Všechny vaše úkoly a cíle na jednom místě."}
+                    </p>
+
+                    {/* Formulář */}
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                E-mailová adresa
+                            </label>
+                            <input
+                                type="email"
+                                placeholder="vas@email.cz"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                Heslo
+                            </label>
+                            <input
+                                type="password"
+                                placeholder="Minimálně 6 znaků"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition"
+                            />
+                        </div>
+
+                        {error && (
+                            <p className="text-sm text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2">
+                                {error}
+                            </p>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold py-2.5 rounded-xl transition-colors text-sm shadow-sm"
+                        >
+                            {loading ? "Načítání…" : isRegistering ? "Vytvořit účet" : "Přihlásit se"}
+                        </button>
+                    </form>
+
+                    {/* Přepínač režimu */}
+                    <p className="mt-6 text-center text-sm text-gray-500">
+                        {isRegistering ? "Již máte účet?" : "Ještě nemáte účet?"}{" "}
+                        <button
+                            type="button"
+                            onClick={() => { setIsRegistering(!isRegistering); setError(""); }}
+                            className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+                        >
+                            {isRegistering ? "Přihlásit se" : "Zaregistrovat se"}
+                        </button>
+                    </p>
+                </div>
             </div>
         </div>
     );
-}
-
-const styles = {
-  wrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh',
-  },
-  card: {
-    background: '#1a1a1a',
-    border: '1px solid #333',
-    borderRadius: '12px',
-    padding: '2rem 2.5rem',
-    width: '100%',
-    maxWidth: '380px',
-    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-  },
-  toggle: {
-    display: 'flex',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    border: '1px solid #333',
-    marginBottom: '1.5rem',
-  },
-  toggleActive: {
-    flex: 1,
-    padding: '0.5em',
-    background: '#646cff',
-    color: '#fff',
-    border: 'none',
-    fontWeight: 600,
-    cursor: 'pointer',
-    transition: 'background 0.2s',
-  },
-  toggleInactive: {
-    flex: 1,
-    padding: '0.5em',
-    background: 'transparent',
-    color: 'rgba(255,255,255,0.5)',
-    border: 'none',
-    fontWeight: 500,
-    cursor: 'pointer',
-    transition: 'background 0.2s',
-  },
-  heading: {
-    margin: '0 0 1.5rem',
-    fontSize: '1.4rem',
-    fontWeight: 600,
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.4rem',
-  },
-  label: {
-    fontSize: '0.85rem',
-    color: 'rgba(255,255,255,0.6)',
-    marginTop: '0.6rem',
-  },
-  input: {
-    padding: '0.6em 0.8em',
-    borderRadius: '6px',
-    border: '1px solid #444',
-    background: '#242424',
-    color: 'rgba(255,255,255,0.87)',
-    fontSize: '1rem',
-    outline: 'none',
-    transition: 'border-color 0.2s',
-  },
-  error: {
-    color: '#ff6b6b',
-    fontSize: '0.85rem',
-    margin: '0.5rem 0 0',
-  },
-  submitBtn: {
-    marginTop: '1.2rem',
-    padding: '0.65em',
-    background: '#646cff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '1rem',
-    fontWeight: 600,
-    cursor: 'pointer',
-    transition: 'opacity 0.2s',
-    opacity: 1,
-  },
 }
 
 export default Login;

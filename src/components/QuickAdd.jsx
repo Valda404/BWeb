@@ -1,4 +1,4 @@
-import { Plus, Command } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export function QuickAdd({ onAdd, placeholder = "Nad čím přemýšlíš? (Rychlé přidání)" }) {
@@ -32,11 +32,6 @@ export function QuickAdd({ onAdd, placeholder = "Nad čím přemýšlíš? (Rych
       />
       
       <div className="flex items-center gap-3 pr-2">
-        <div className="hidden sm:flex items-center gap-1 px-2 py-1 rounded bg-gray-100 text-gray-500 text-xs font-medium tracking-wide">
-          <Command className="w-3 h-3" />
-          <span>K</span>
-        </div>
-
         <button
           onClick={handleSubmit}
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-medium text-sm transition-colors flex items-center gap-2 shadow-sm"

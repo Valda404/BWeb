@@ -45,7 +45,9 @@ export function Sidebar( { currentView, onViewChange, tasks =[] }) {
                   {item.name}
                 </div>
                 {item.count > 0 && (
-                  <div className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-gray-400 rounded-full">
+                  <div className={`inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none rounded-full ${
+                    isActive ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-500'
+                  }`}>
                     {item.count}
                   </div>
                 )}
