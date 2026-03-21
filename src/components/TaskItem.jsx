@@ -1,11 +1,11 @@
 import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox, Archive } from "lucide-react";
 
 const CATEGORY_BADGE = {
-  inbox:       { label: 'Inbox',        style: 'bg-gray-50 text-gray-700 border-gray-200' },
-  today:       { label: 'Dnes',         style: 'bg-gray-50 text-gray-700 border-gray-200' },
-  next:        { label: 'Další kroky',  style: 'bg-gray-50 text-gray-700 border-gray-200' },
-  someday:     { label: 'Někdy/Možná', style: 'bg-gray-50 text-gray-700 border-gray-200' },
-  completed:   { label: 'Dokončené',    style: 'bg-gray-50 text-gray-700 border-gray-200' },
+  inbox:       { label: 'Inbox',        style: 'bg-blue-50/50 text-blue-600 border-blue-100' },
+  today:       { label: 'Dnes',         style: 'bg-amber-50/50 text-amber-600 border-amber-100' },
+  next:        { label: 'Další kroky',  style: 'bg-indigo-50/50 text-indigo-600 border-indigo-100' },
+  someday:     { label: 'Někdy/Možná', style: 'bg-teal-50/50 text-teal-600 border-teal-100' },
+  completed:   { label: 'Dokončené',    style: 'bg-emerald-50/50 text-emerald-600 border-emerald-100' },
 }
 
 export function TaskItem({ task, onToggleComplete, onDelete,
@@ -79,6 +79,7 @@ export function TaskItem({ task, onToggleComplete, onDelete,
       </div>
 
       {/* Akční tlačítka */}
+      {!task.completed && (
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
         {!isInbox && (
           <button
@@ -131,6 +132,7 @@ export function TaskItem({ task, onToggleComplete, onDelete,
           <Trash className="w-4 h-4" />
         </button>
       </div>
+      )}
     </div>
   )
 }

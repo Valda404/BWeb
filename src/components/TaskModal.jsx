@@ -42,7 +42,7 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
 
     return (
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[90vh] overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl flex flex-col min-h-[70vh] max-h-[90vh] overflow-hidden">
         
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
@@ -74,7 +74,8 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Popis úkolu"
-                    className="w-full text-gray-700 border-b-2 border-transparent focus:border-indigo-400 focus:outline-none pb-1 bg-transparent placeholder:text-gray-300 transition-colors resize-none"
+                    rows={10}
+                    className="w-full text-gray-700 border-2 border-gray-200 rounded-xl focus:border-indigo-400 focus:outline-none p-3 bg-transparent placeholder:text-gray-300 transition-colors resize-none"
                 />
             </div>
 

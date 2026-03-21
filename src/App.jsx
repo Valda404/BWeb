@@ -195,8 +195,8 @@ function App() {
           display: 'flex', alignItems: 'center',
           padding: '0.875rem 2rem', borderBottom: '1px solid #f3f4f6', background: '#fff'
         }}>
-          <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-            Přihlášen jako <strong style={{ color: '#111827' }}>{user.displayName || user.email}</strong>
+          <span style={{ fontSize: '1.1rem', fontWeight: 600, color: '#111827' }}>
+            Ahoj{user.displayName ? `, ${user.displayName}` : ''} 👋
           </span>
         </header>
 
@@ -308,7 +308,7 @@ function App() {
               ) : (
                 // Ostatní záložky: jen QuickAdd, bez cílů
                 <div style={{ marginBottom: '0' }}>
-                  <QuickAdd onAdd={handleAddTask} />
+                  {currentView !== 'completed' && <QuickAdd onAdd={handleAddTask} />}
                 </div>
               )}
 
