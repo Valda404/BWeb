@@ -2,16 +2,27 @@ import { useState } from "react";
 import { Target, Pencil, Trophy, Trash, ChevronLeft, ChevronRight } from "lucide-react";
 
 export function GoalCard({ goal, tasks, onDelete, onEdit, readOnly=false, onPrev, onNext, goalCount, goalIndex }) {
+  // === LOKÁLNÍ STAVY KOMPONENTY ===
+  // Tyto stavy držíme pouze lokálně v kartě, protože slouží jen pro UI (přepínání režimu úprav a psaní textu)
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(goal.title);
   
+
+  // === VÝPOČET POSTUPU (PROPOJENÍ OKR A GTD) ===
+  // Ochranná podmínka (Guard clause): Zabrání pádu aplikace, pokud se data z databáze načítají pomaleji
   if (!goal) return null;
   
+
+  // Dynamický výpočet pro progress bar
+  // Filtrujeme z globálního pole jen ty úkoly, které mají ID tohoto cíle, a zjišťujeme procento dokončených
   const goalTasks = tasks.filter(task => task.goalId === goal.id);
   const completedTasks = goalTasks.filter(task => task.completed).length;
   const totalTasks = goalTasks.length;
   const progressPercentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
   
+
+  // === OBSLUHA UŽIVATELSKÝCH AKCÍ ===
+  // Uložení upraveného názvu. Funkce posílá nová data "nahoru" do rodičovské komponenty přes prop 'onEdit'
 const saveEdit = () => {
   if (editTitle.trim()) {
     onEdit(goal.id, editTitle)
@@ -21,13 +32,16 @@ const saveEdit = () => {
 
   const isCarousel = onPrev && onNext && goalCount > 1;
 
+
+  // === VYKRESLENÍ UŽIVATELSKÉHO ROZHRANÍ (JSX) ===
+  // Karta využívá relativní pozicování pro dekorativní ikonu v pozadí a flexbox pro zarovnání prvků
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col h-full relative overflow-hidden group hover:shadow-md transition-shadow">
       <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
         <Trophy className="w-32 h-32 text-indigo-600" />
       </div>
 
-      {/* Header */}
+      {/* Hlavička cíle */}
       <div className="flex items-center gap-3 mb-6 relative">
         <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
           <Target className="w-5 h-5" strokeWidth={2.5} />

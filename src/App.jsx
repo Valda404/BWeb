@@ -10,6 +10,8 @@ import { TaskModal } from './components/TaskModal.jsx'
 import { WifiOff } from 'lucide-react'
 
 function App() {
+  // === GLOBÁLNÍ STAVY APLIKACE ===
+  // Tyto stavy drží klíčová data (uživatel, úkoly, cíle, nastavení), která se propisují do podřízených komponent
   const [user, setUser] = useState(null)
   const [tasks, setTasks] = useState([])
   const [currentView, setCurrentView] = useState('inbox')
@@ -28,6 +30,9 @@ function App() {
   const [editName, setEditName] = useState('')
   const [isUpdatingName, setIsUpdatingName] = useState(false)
 
+  
+  // === LOGIKA KOLOTOČE CÍLŮ ===
+  // Obsluha přepínání zobrazeného cíle na Dashboardu
   const handlePrevGoal = () => {
     setActiveGoalIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : goals.length - 1));
   };
@@ -39,7 +44,9 @@ function App() {
  const safeGoalIndex = goals.length === 0 ? 0 : Math.min(activeGoalIndex, goals.length - 1)
 
 
-  //Offline detekce
+  // === FIREBASE LISTENERY A EFEKTY (SIDE-EFFECTS) ===
+  // Reaktivní napojení na databázi a správu relace uživatele.
+  // Zahrnuje i PWA funkci sledování stavu sítě (online/offline)
   useEffect(() => {
     const handleOnline = () => setIsOffline(false)
     const handleOffline = () => setIsOffline(true)
@@ -50,6 +57,8 @@ function App() {
       window.removeEventListener('offline', handleOffline)
     }
   }, [])
+
+
 
   //Nastavení jména po načtení uživatele
   useEffect(() => { if (user) setEditName(user.displayName || '') }, [user])
@@ -97,6 +106,9 @@ function App() {
   }, [user])
 
 
+  // === DATABASE HANDLERY ===
+  // Funkce obsluhující tvorbu, úpravu a mazání dat ve Firebase
+  // Změny se do UI propíšou automaticky díky listenerům (výše), takže není třeba lokální stavy ručně aktualizovat
   const handleAddTask = async (title) => {
     const category = currentView === 'dash' ? 'inbox' : currentView
     await addTask({ title, completed: false, category, createdAt: Date.now() })
@@ -154,7 +166,10 @@ function App() {
     await deleteGoal(goalId)
   }
 
-  // Filtrování úkolů podle aktuálně zvolené kategorie a stavu dokončení
+
+  // === DERIVED STATE (VÝPOČTY Z EXISTUJÍCÍCH DAT) ===
+  // Filtrování a řazení úkolů podle aktivního zobrazení a zvolené metody řazení (časy/deadline)
+  // Provádí se dynamicky při každém renderu, aby uživatel vždy viděl aktuální pohled
   const filtered = (() => {
   if (currentView === 'completed') return tasks.filter(t => t.completed)
   if (currentView === 'dash') return tasks.filter(t => !t.completed)
@@ -180,11 +195,15 @@ function App() {
   })
 
   
-
+  // === OCHRANA PŘÍSTUPU ===
+  // Zobrazení přihlašovací obrazovky, pokud uživatel není ověřen
   if (!user) {
     return <Login />
   }
 
+
+  // === VYKRESLENÍ HLAVNÍHO ROZVRŽENÍ APLIKACE ===
+  // Rozdělení na Sidebar a dynamickou hlavní část (Main), která se mění podle 'currentView'
   return (
     <div style={{ display: 'flex', height: '100vh', background: '#f9fafb', overflow: 'hidden' }}>
       <Sidebar currentView={currentView} onViewChange={setCurrentView} tasks={tasks} />
@@ -196,7 +215,7 @@ function App() {
           padding: '0.875rem 2rem', borderBottom: '1px solid #f3f4f6', background: '#fff'
         }}>
           <span style={{ fontSize: '1.1rem', fontWeight: 600, color: '#111827' }}>
-            Ahoj{user.displayName ? `, ${user.displayName}` : ''} 👋
+            Ahoj{user.displayName ? `, ${user.displayName}` : ''}👋
           </span>
         </header>
 

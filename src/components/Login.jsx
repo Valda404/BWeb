@@ -2,6 +2,9 @@ import { useState } from "react";
 import { login, register } from "../firebase/auth.js";
 import { CheckCircle } from "lucide-react";
 
+
+// === LOKÁLNÍ STAVY ===
+// Řízení chování formuláře a přepínání uživatelského rozhraní
 function Login() {
     const [isRegistering, setIsRegistering] = useState(false);
     const [email, setEmail] = useState("");
@@ -9,6 +12,9 @@ function Login() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
+
+    // === AUTENTIZACE A FIREBASE ===
+    // Jednotná funkce pro ošetření loginu i registrace s asynchronním chytáním chyb
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -26,6 +32,9 @@ function Login() {
         }
     };
 
+
+    // === VYKRESLENÍ UŽIVATELSKÉHO ROZHRANÍ ===
+    // Rozdělení obrazovky (split-screen) pro moderní vzhled na velkých displejích
     return (
         <div className="flex min-h-screen bg-gray-50">
 

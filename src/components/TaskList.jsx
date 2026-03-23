@@ -1,6 +1,9 @@
 import { TaskItem } from "./TaskItem";
 import { Circle, CalendarDays, ListTodo, Inbox, Archive, CheckSquare, HelpCircle } from "lucide-react";
 
+
+// === CENTRÁLNÍ KONFIGURACE POHLEDŮ ===
+// Všechny texty, ikony a styly pro jednotlivé kategorie GTD
 const VIEW_CONFIG = {
   inbox: {
     label: "Inbox",
@@ -54,6 +57,8 @@ const VIEW_CONFIG = {
 const DEFAULT_VIEW = VIEW_CONFIG['dash']
 
 
+// === HLAVNÍ KOMPONENTA SEZNAMU ===
+// Vykresluje obalovou kartu, dynamickou hlavičku s Tailwind tooltipem a iteruje přes pole úkolů
 export function TaskList({ tasks, onToggleComplete, onDelete, 
   onMoveToToday, onMoveToNextActions, onMoveToSomeday, onEditTask,
   currentView, onMoveToInbox, goals, onOpenEditModal }) {
@@ -64,6 +69,10 @@ export function TaskList({ tasks, onToggleComplete, onDelete,
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">
+
+
+        {/* === HLAVIČKA A NÁPOVĚDA ===
+         Využití Tailwind group-hover pro vytvoření vlastního, plně stylovatelného tooltipu, který nahrazuje pomalý nativní HTML atribut 'title' */}
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
           {label}
         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge}`}>
@@ -81,6 +90,9 @@ export function TaskList({ tasks, onToggleComplete, onDelete,
         </h2>
       </div>
 
+
+      {/* === VYKRESLENÍ OBSAHU ===
+       Fallback (prázdný stav), pokud v dané kategorii nejsou žádné úkoly. Jinak vykreslí seznam TaskItem komponent */}
       {tasks.length === 0 ? (
         <div className="text-center py-12 text-gray-400">
           <Icon className={`w-10 h-10 mx-auto mb-4 ${color} opacity-30`} />

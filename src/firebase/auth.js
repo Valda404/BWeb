@@ -1,52 +1,22 @@
-// ===== AUTENTIZAČNÍ FUNKCE PRO FIREBASE =====
-// Tento modul obsahuje wrapper funkce pro Firebase Authentication
-// Zjednodušuje registraci, přihlášení a odhlášení uživatelů
-
-// Import autentizačního objektu z hlavní FirebaseData konfigurace
 import { auth } from './firebaseData.js';
-// Import potřebných funkcí z Firebase Auth SDK
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'firebase/auth';
 
-
-// ===== REGISTRACE =====
-/**
- * Registrace nového uživatele
- * @param {String} email - Email uživatele
- * @param {String} password - Heslo (minimálně 6 znaků)
- * @returns {Promise} - Promise s daty nově vytvořeného uživatele
- */
+// === FIREBASE AUTH WRAPPER ===
+// Zapouzdření (encapsulation) nativních Firebase funkcí
+// Skrýváme implementační detaily Firebase SDK před zbytkem React komponent
 export const register = (email, password) => createUserWithEmailAndPassword(auth, email, password);
-
-
-// ===== PŘIHLÁŠENÍ =====
-/**
- * Přihlášení existujícího uživatele
- * @param {String} email - Email uživatele
- * @param {String} password - Heslo uživatele
- * @returns {Promise} - Promise s daty přihlášeného uživatele
- */
 export const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
+export const logout = () => signOut(auth);
 
 
-// ===== AKTUALIZACE JMÉNA =====
+// === SPRÁVA UŽIVATELSKÉHO PROFILU ===
+// Aktualizace dodatečných metadat uživatele, která nejsou součástí základní e-mailové registrace
 export const updateUserName = async (newName) => {
   if (!auth.currentUser) return;
   await updateProfile(auth.currentUser, { displayName: newName });
 }
 
 
-// ===== ODHLÁŠENÍ =====
-/**
- * Odhlášení aktuálně přihlášeného uživatele
- * @returns {Promise} - Promise, který se vyřeší po odhlášení
- */
-export const logout = () => signOut(auth);
-
-
-// ===== POSLOUCHÁNÍ ZMĚN AUTENTIZACE =====
-/**
- * Poslouchá změny stavu přihlášení
- * @param {Function} callback - Funkce volaná při změně (user nebo null)
- * @returns {Function} - Funkce pro zrušení poslouchání
- */
+// === LISTENER STAVU RELACE ===
+// Sleduje globální přihlášení uživatele (zajišťuje, že uživatel zůstane přihlášený i po obnovení stránky)
 export const onAuthChange = (callback) => onAuthStateChanged(auth, callback);

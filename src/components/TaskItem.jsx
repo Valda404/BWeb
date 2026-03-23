@@ -1,5 +1,8 @@
 import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox, Archive } from "lucide-react";
 
+
+// === VIZUÁLNÍ KONFIGURACE KATEGORIÍ ===
+// Mapování barev pro GTD složky. Objekt je definován úmyslně mimo komponentu, aby nedocházelo k jeho zbytečnému znovuvytváření při každém renderu
 const CATEGORY_BADGE = {
   inbox:       { label: 'Inbox',        style: 'bg-blue-50/50 text-blue-600 border-blue-100' },
   today:       { label: 'Dnes',         style: 'bg-amber-50/50 text-amber-600 border-amber-100' },
@@ -12,11 +15,16 @@ export function TaskItem({ task, onToggleComplete, onDelete,
   onMoveToToday, onMoveToNextActions, onMoveToSomeday,
   showCategory, onMoveToInbox, goals = [], onOpenEditModal }) {
 
+
+  // === PŘÍPRAVA DAT ===
+  // Zjištění kontextu úkolu a spárování s nadřazeným cílem pro dynamické řízení viditelnosti štítků a akčních tlačítek
   const isInbox = task.category === 'inbox' || !task.category
   const categoryInfo = CATEGORY_BADGE[task.category] ?? CATEGORY_BADGE['inbox']
   const linkedGoal = goals.find(g => g.id === task.goalId)
 
 
+    // === VYKRESLENÍ HLAVNÍHO ROZVRŽENÍ ===
+    // Řádek dynamicky mění styly a průhlednost podle stavu dokončení, čímž vizuálně odsouvá vyřešené úkoly do pozadí
     return (
         <div
       className={`group flex items-center gap-4 p-4 rounded-xl border transition-all cursor-pointer ${
@@ -48,7 +56,10 @@ export function TaskItem({ task, onToggleComplete, onDelete,
         >
           {task.title}
         </span>
+        
 
+        {/* === INFORMAČNÍ ŠTÍTKY ÚKOLU ===
+         Zobrazení metadat (kategorie, cíl, termín) s podmíněným vykreslením a formátováním data do lokálního českého tvaru */}
         <div className="flex items-center gap-2 shrink-0">
           {showCategory && categoryInfo && (
             <span className={`px-2 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md border ${categoryInfo.style}`}>
@@ -77,6 +88,10 @@ export function TaskItem({ task, onToggleComplete, onDelete,
           )}
         </div>
       </div>
+
+
+      {/* === RYCHLÉ AKCE A GTD WORKFLOW ===
+          Tlačítka se zobrazují kontextuálně podle toho, ve které kategorii se úkol právě nachází, u dokončených úkolů jsou zcela skryta */}
 
       {/* Akční tlačítka */}
       {!task.completed && (

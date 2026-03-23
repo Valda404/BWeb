@@ -2,19 +2,24 @@ import { useState } from 'react';
 import { X, Calendar, ListTodo, Target, AlignLeft, CalendarPlus } from "lucide-react";
 
 export function TaskModal({ task, onClose, onSave, goals=[] }) {
+    // === LOKÁLNÍ STAVY FORMULÁŘE ===
+    // Inicializace stavů existujícími daty úkolu. Zahrnuje formátování času pro specifický případ kategorie 'Dnes' (GTD pravidlo)
     const [title, setTitle] = useState( task.title || '')
     const [description, setDescription] = useState( task.description || '')
     const [category, setCategory] = useState( task.category || 'inbox')
     const [goalId, setGoalId] = useState( task.goalId || '')
     const [deadline, setDeadline] = useState(() => {
         if (!task.deadline) return ''
-        //Poduk jde o Today a Deadline je v DateTime, extrahuj pouze časovou část
+        // Pokud jde o Today a Deadline je v DateTime, extrahuj pouze časovou část
         if (task.category === 'today' && task.deadline.includes('T')) {
             return task.deadline.split('T')[1].slice(0,5)
         }
         return task.deadline
     })
 
+
+    // === ULOŽENÍ ZMĚN ===
+    // Pokud uživatel vybral kategorii 'Dnes' a zadal čas, programově k němu přilepíme dnešní datum, aby byl zápis konzistentní pro databázi a řazení
     const handleSave = () => {
         if (!title.trim()) return
 
@@ -33,6 +38,9 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
         })
     }
 
+
+    // === EXPORT DO KALENDÁŘE ===
+    // Vygenerování předvyplněné URL pro Google Calendar. Šetří čas uživatele a nevyžaduje složité napojování přes API
     const handleExportToCalendar = () => {
         const baseURL = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
         const text = encodeURIComponent(title)
@@ -40,11 +48,14 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
         window.open(`${baseURL}&text=${text}&details=${details}`, '_blank')
     }
 
+
+    // === VYKRESLENÍ MODÁLU (JSX) ===
+    // Obal s backdrop-blur efektem a flexibilní kartou, která se přizpůsobí množství textu (overflow-y-auto)
     return (
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl flex flex-col min-h-[70vh] max-h-[90vh] overflow-hidden">
         
-        {/* Header */}
+        {/* Hlavička */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h2 className="text-base font-semibold text-gray-700">Detail úkolu</h2>
           <button
@@ -55,7 +66,7 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
           </button>
         </div>
 
-        {/* Body */}
+        {/* Tělo */}
         <div className="overflow-y-auto p-6 space-y-5 flex-1">
 
             {/* Název */}
@@ -116,7 +127,10 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
                 </select>
               </div>
             </div>
+            
 
+            {/* === VÝBĚR TERMÍNU (DYNAMICKÝ INPUT) ===
+             Změna typu inputu (pouze čas vs. datum a čas) na základě zvolené kategorie pro snížení tření při zadávání */}
             {/* Deadline */}
             <div className="flex flex-col gap-1.5">
               <label className="flex items-center gap-1.5 text-xs font-medium text-gray-500">
@@ -143,7 +157,7 @@ export function TaskModal({ task, onClose, onSave, goals=[] }) {
 
           </div>
 
-            {/* Footer */}
+            {/* Patička */}
             <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50">
               <button
                 onClick={handleExportToCalendar}

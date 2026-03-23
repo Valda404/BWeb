@@ -2,8 +2,13 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export function QuickAdd({ onAdd, placeholder = "Nad čím přemýšlíš? (Rychlé přidání)" }) {
+  // === LOKÁLNÍ STAV ===
+  // Uchovává aktuálně psaný text před jeho finálním odesláním rodičovské komponentě
   const [value, setValue] = useState("");
 
+
+  // === ZPRACOVÁNÍ VSTUPU ===
+  // Očištění textu od mezer a ochrana proti nechtěnému vytvoření prázdného úkolu
   const handleSubmit = () => {
     const trimmed = value.trim();
     if (!trimmed) return;
@@ -11,6 +16,9 @@ export function QuickAdd({ onAdd, placeholder = "Nad čím přemýšlíš? (Rych
     setValue("");
   };
 
+
+  // === VYKRESLENÍ ===
+  // Input obsahuje autoFocus a naslouchá na klávesu Enter pro maximální plynulost používání (UX)
   return (
     <div className="w-full relative shadow-sm hover:shadow-md transition-shadow duration-300 rounded-2xl bg-white border border-gray-100 flex items-center p-2 focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-300">
       <div className="pl-4 pr-3 text-gray-400 flex items-center justify-center">

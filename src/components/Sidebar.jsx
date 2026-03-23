@@ -1,11 +1,16 @@
 import { Inbox, Calendar, ListTodo, Target, Settings, Archive, CheckSquare } from "lucide-react";
 
 export function Sidebar( { currentView, onViewChange, tasks =[] }) {
+  // === VÝPOČET POČTU ÚKOLŮ ===
+  // Dynamické generování čísel pro odznaky. Zahrnuje pouze aktivní položky, aby menu odráželo aktuální kognitivní zátěž (GTD princip)
   const inboxCount   = tasks.filter(t => (t.category === 'inbox' || !t.category) && !t.completed).length
   const todayCount   = tasks.filter(t => t.category === 'today'   && !t.completed).length
   const nextCount    = tasks.filter(t => t.category === 'next'    && !t.completed).length
   const somedayCount = tasks.filter(t => t.category === 'someday' && !t.completed).length
   
+
+  // === KONFIGURACE HLAVNÍ NAVIGACE ===
+  // Centrální pole definující strukturu menu pro snadnou údržbu a budoucí přidávání nových pohledů (škálovatelnost)
   const navItems = [
     { name: "Dashboard", icon: Target, view: "dash" },
     { name: "Inbox", icon: Inbox, view : "inbox", count: inboxCount },
@@ -16,6 +21,9 @@ export function Sidebar( { currentView, onViewChange, tasks =[] }) {
     { name: "Dokončené", icon: CheckSquare, view: "completed" },
   ];
 
+
+  // === VYKRESLENÍ BOČNÍHO ROZHRANÍ ===
+  // Rozvržení využívá flexbox pro udržení hlavních kategorií nahoře a pevné ukotvení Nastavení na spodní hraně obrazovky
   return (
     <aside className="w-64 h-full bg-white border-r border-gray-100 flex flex-col justify-between md:flex">
       <div className="p-6">
