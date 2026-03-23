@@ -30,6 +30,9 @@ function App() {
   const [editName, setEditName] = useState('')
   const [isUpdatingName, setIsUpdatingName] = useState(false)
 
+  //Stav offline detekce
+  const [isOffline, setIsOffline] = useState(!navigator.onLine)
+
   
   // === LOGIKA KOLOTOČE CÍLŮ ===
   // Obsluha přepínání zobrazeného cíle na Dashboardu
@@ -59,17 +62,13 @@ function App() {
   }, [])
 
 
-
-  //Nastavení jména po načtení uživatele
-  useEffect(() => { if (user) setEditName(user.displayName || '') }, [user])
-
-  //Stav offline detekce
-  const [isOffline, setIsOffline] = useState(!navigator.onLine)
-
   //Sledování stavu přihlášení
   useEffect(() => {
     const unsubscribe = onAuthChange((currentUser) => {
       setUser(currentUser)
+      if (currentUser) {
+        setEditName(currentUser.displayName || '')
+      }
       if (!currentUser) {
         setTasks([])
         setGoals([])
