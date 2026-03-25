@@ -1,4 +1,4 @@
-import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inbox, Archive } from "lucide-react";
+import { Circle, CheckCircle, Clock, Calendar, Trash, ListTodo, Pencil, Inbox, Archive } from "lucide-react";
 
 
 // === VIZUÁLNÍ KONFIGURACE KATEGORIÍ ===
@@ -6,9 +6,18 @@ import { Circle, CheckCircle, Clock, Calendar, Trash, Sun, ListTodo, Pencil, Inb
 const CATEGORY_BADGE = {
   inbox:       { label: 'Inbox',        style: 'bg-blue-50/50 text-blue-600 border-blue-100' },
   today:       { label: 'Dnes',         style: 'bg-amber-50/50 text-amber-600 border-amber-100' },
-  next:        { label: 'Další kroky',  style: 'bg-indigo-50/50 text-indigo-600 border-indigo-100' },
+  next:        { label: 'Další kroky',  style: 'bg-purple-50/50 text-purple-600 border-purple-100' },
   someday:     { label: 'Někdy/Možná', style: 'bg-teal-50/50 text-teal-600 border-teal-100' },
   completed:   { label: 'Dokončené',    style: 'bg-emerald-50/50 text-emerald-600 border-emerald-100' },
+}
+
+// === KONFIGURACE PŘESOUVACÍCH TLAČÍTEK ===
+// Každé cílové kategorii přiřazuje ikonu a hover barvy, aby tlačítko vizuálně odpovídalo cíli přesunu
+const CATEGORY_ACTION = {
+  inbox:   { icon: Inbox,    hover: 'hover:text-blue-600   hover:bg-blue-50'   },
+  today:   { icon: Calendar, hover: 'hover:text-amber-600  hover:bg-amber-50'  },
+  next:    { icon: ListTodo, hover: 'hover:text-purple-600 hover:bg-purple-50' },
+  someday: { icon: Archive,  hover: 'hover:text-orange-600 hover:bg-orange-50' },
 }
 
 export function TaskItem({ task, onToggleComplete, onDelete,
@@ -91,7 +100,7 @@ export function TaskItem({ task, onToggleComplete, onDelete,
 
 
       {/* === RYCHLÉ AKCE A GTD WORKFLOW ===
-          Tlačítka se zobrazují kontextuálně podle toho, ve které kategorii se úkol právě nachází, u dokončených úkolů jsou zcela skryta */}
+        Tlačítka se zobrazují kontextuálně podle toho, ve které kategorii se úkol právě nachází, u dokončených úkolů jsou zcela skryta */}
 
       {/* Akční tlačítka */}
       {!task.completed && (
@@ -100,36 +109,36 @@ export function TaskItem({ task, onToggleComplete, onDelete,
           <button
             onClick={() => onMoveToInbox(task.id)}
             title="Přesunout do Inboxu"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+            className={`p-1.5 rounded-lg text-gray-400 ${CATEGORY_ACTION.inbox.hover} transition-colors`}
           >
-            <Inbox className="w-4 h-4" />
+            <CATEGORY_ACTION.inbox.icon className="w-4 h-4" />
           </button>
         )}
         {(isInbox || task.category === 'next') && (
           <button
             onClick={() => onMoveToToday(task.id)}
             title="Přesunout do Today"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+            className={`p-1.5 rounded-lg text-gray-400 ${CATEGORY_ACTION.today.hover} transition-colors`}
           >
-            <Sun className="w-4 h-4" />
+            <CATEGORY_ACTION.today.icon className="w-4 h-4" />
           </button>
         )}
         {isInbox && (
           <button
             onClick={() => onMoveToNextActions(task.id)}
             title="Přesunout do Next Actions"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+            className={`p-1.5 rounded-lg text-gray-400 ${CATEGORY_ACTION.next.hover} transition-colors`}
           >
-            <ListTodo className="w-4 h-4" />
+            <CATEGORY_ACTION.next.icon className="w-4 h-4" />
           </button>
         )}
         {isInbox && (
           <button
             onClick={() => onMoveToSomeday(task.id)}
             title="Přesunout do Někdy / Možná"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+            className={`p-1.5 rounded-lg text-gray-400 ${CATEGORY_ACTION.someday.hover} transition-colors`}
           >
-            <Archive className="w-4 h-4" />
+            <CATEGORY_ACTION.someday.icon className="w-4 h-4" />
           </button>
         )}
         <button

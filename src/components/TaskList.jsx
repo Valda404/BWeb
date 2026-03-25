@@ -8,48 +8,54 @@ const VIEW_CONFIG = {
   inbox: {
     label: "Inbox",
     Icon: Inbox,
-    color: 'text-gray-900',
-    badge: 'bg-gray-100 text-gray-700',
+    titleColor: 'text-blue-700',
+    color: 'text-blue-500',
+    badge: 'bg-blue-50 text-blue-600',
     emptyText: 'Sběrná schránka je prázdná.',
     helpText: 'Sem přidávej všechny nové úkoly, nápady a připomínky. Odtud je pak můžeš snadno roztřídit do dalších kategorií.',
   },
   today: {
     label: 'Dnešní úkoly',
     Icon: CalendarDays,
-    color: 'text-gray-900',
-    badge: 'bg-gray-100 text-gray-700',
+    titleColor: 'text-amber-700',
+    color: 'text-amber-500',
+    badge: 'bg-amber-50 text-amber-600',
     emptyText: 'Máš hotovo! Užij si volný čas.',
     helpText: 'Zde se zobrazí všechny úkoly, které jsi si z inboxu přesunul na dnešek.',
   },
   next: {
     label: 'Další kroky',
     Icon: ListTodo,
-    color: 'text-gray-900',
-    badge: 'bg-gray-100 text-gray-700',
+    titleColor: 'text-purple-700',
+    color: 'text-purple-500',
+    badge: 'bg-purple-50 text-purple-600',
     emptyText: 'Žádné další akce. Skvěle!',
     helpText: 'Tato kategorie slouží pro úkoly, které nejsou urgentní, ale chceš je mít na paměti jako další kroky k dosažení svých cílů. Jde hlavně o krátké úkoly do dvou minut.',
   },
   dash : {
     label: 'Přehled',
     Icon: Circle,
-    color: 'text-gray-500',
+    titleColor: 'text-gray-700',
+    color: 'text-gray-400',
     badge: 'bg-gray-100 text-gray-600',
     emptyText: 'Žádné úkoly — čím začneme?',
     helpText: 'Toto je přehled všech tvých úkolů. Zde můžeš rychle vidět, co je potřeba udělat a co je již hotovo spolu s tvými cíli a jejich postupem.',
   },
   someday: {
-  label: 'Někdy / Možná',
-  Icon: Archive,
-  color: 'text-gray-900',
-  badge: 'bg-gray-100 text-gray-700',
-  emptyText: 'Žádné odložené nápady.',
-  helpText: 'Tato kategorie slouží pro úkoly, které nechceš řešit, ale nechceš je ztratit.',
+    label: 'Někdy / Možná',
+    Icon: Archive,
+    titleColor: 'text-orange-700',
+    color: 'text-orange-500',
+    badge: 'bg-orange-50 text-orange-600',
+    emptyText: 'Žádné odložené nápady.',
+    helpText: 'Tato kategorie slouží pro úkoly, které nechceš řešit, ale nechceš je ztratit.',
   },
   completed: {
     label: 'Dokončené',
     Icon: CheckSquare,
-    color: 'text-gray-900',
-    badge: 'bg-gray-100 text-gray-700',
+    titleColor: 'text-emerald-700',
+    color: 'text-emerald-500',
+    badge: 'bg-emerald-50 text-emerald-600',
     emptyText: 'Zatím nic dokončeno.',
     helpText: 'Zde se zobrazí všechny úkoly, které jsi dokončil. Můžeš si zde prohlédnout svůj pokrok a úspěchy.',
   },
@@ -63,7 +69,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete,
   onMoveToToday, onMoveToNextActions, onMoveToSomeday, onEditTask,
   currentView, onMoveToInbox, goals, onOpenEditModal }) {
   const config = VIEW_CONFIG[currentView] ?? DEFAULT_VIEW
-  const { label, Icon, color, badge, emptyText, helpText } = config
+  const { label, Icon, titleColor, color, badge, emptyText, helpText } = config
 
 
   return (
@@ -73,7 +79,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete,
 
         {/* === HLAVIČKA A NÁPOVĚDA ===
          Využití Tailwind group-hover pro vytvoření vlastního, plně stylovatelného tooltipu, který nahrazuje pomalý nativní HTML atribut 'title' */}
-        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+        <h2 className={`text-xl font-semibold flex items-center gap-2 ${titleColor}`}>
           {label}
         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge}`}>
           {tasks.length}
