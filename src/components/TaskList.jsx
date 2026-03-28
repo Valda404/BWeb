@@ -66,7 +66,7 @@ const DEFAULT_VIEW = VIEW_CONFIG['dash']
 // === HLAVNÍ KOMPONENTA SEZNAMU ===
 // Vykresluje obalovou kartu, dynamickou hlavičku s Tailwind tooltipem a iteruje přes pole úkolů
 export function TaskList({ tasks, onToggleComplete, onDelete, 
-  onMoveToToday, onMoveToNextActions, onMoveToSomeday, onEditTask,
+  onMoveToToday, onMoveToNextActions, onMoveToSomeday,
   currentView, onMoveToInbox, goals, onOpenEditModal }) {
   const config = VIEW_CONFIG[currentView] ?? DEFAULT_VIEW
   const { label, Icon, titleColor, color, badge, emptyText, helpText } = config
@@ -116,7 +116,6 @@ export function TaskList({ tasks, onToggleComplete, onDelete,
               onMoveToNextActions={onMoveToNextActions}
               onMoveToSomeday={onMoveToSomeday}
               onOpenEditModal={onOpenEditModal}
-              onEditTask={onEditTask}
               showCategory={currentView === 'dash'}
               onMoveToInbox={onMoveToInbox}
               goals={goals}

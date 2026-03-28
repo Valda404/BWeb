@@ -25,20 +25,9 @@ export const listenToGoals = (callback) => {
   return onValue(goalsRef, (snapshot) => callback(snapshot.val() || []));
 };
 
-export const listenToUserData = (callback) => {
-  if (!auth.currentUser) return;
-  const userRef = ref(db, 'users/' + auth.currentUser.uid);
-  onValue(userRef, (snapshot) => callback(snapshot.val()));
-};
-
 
 // === OPERACE PRO ÚKOLY ===
 // Zápis, úprava a mazání. Cesty jsou vždy striktně vázány na UID aktuálně přihlášeného uživatele (bezpečnostní pravidlo a izolace dat)
-export const saveTasks = async (tasks) => {
-  if (!auth.currentUser) return Promise.reject('Not authenticated');
-  await set(ref(db, 'tasks/' + auth.currentUser.uid), tasks);
-};
-
 export const addTask = async (task) => {
   if (!auth.currentUser) return Promise.reject('Not authenticated');
   const newTaskRef = push(ref(db, 'tasks/' + auth.currentUser.uid));
@@ -73,11 +62,4 @@ export const updateGoal = async (goalId, goalData) => {
 export const deleteGoal = async (goalId) => {
   if (!auth.currentUser) return Promise.reject('Not authenticated');
   await remove(ref(db, 'goals/' + auth.currentUser.uid + '/' + goalId));
-};
-
-
-// === ZÁPIS UŽIVATELSKÝCH DAT ===
-export const writeUserData = (data) => {
-  if (!auth.currentUser) return;
-  set(ref(db, 'users/' + auth.currentUser.uid), data);
 };
