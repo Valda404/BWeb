@@ -15,14 +15,14 @@ import { getDatabase } from 'firebase/database';
 // ===== KONFIGURACE FIREBASE PROJEKTU =====
 // Soubor s přístupovými údaji k Firebase projektu
 const firebaseConfig = {
-  apiKey: "AIzaSyD7eXWQRlvmJpuE3MSjopUtctvZiS9oQZQ",
-  authDomain: "bweb-9f2f1.firebaseapp.com",
-  databaseURL: "https://bweb-9f2f1-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "bweb-9f2f1",
-  storageBucket: "bweb-9f2f1.firebasestorage.app",
-  messagingSenderId: "490498795009",
-  appId: "1:490498795009:web:58dcd0689ce46c60768200",
-  measurementId: "G-2DCRKJV60M"
+  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL:       import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId:             import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId:     import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 
