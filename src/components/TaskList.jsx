@@ -30,7 +30,7 @@ const VIEW_CONFIG = {
     color: 'text-purple-500',
     badge: 'bg-purple-50 text-purple-600',
     emptyText: 'Žádné další akce. Skvěle!',
-    helpText: 'Tato kategorie slouží pro úkoly, které nejsou urgentní, ale chceš je mít na paměti jako další kroky k dosažení svých cílů. Jde hlavně o krátké úkoly do dvou minut.',
+    helpText: 'Tato kategorie slouží pro úkoly, které nejsou urgentní, ale chceš je mít na paměti jako další kroky k dosažení svých cílů.',
   },
   dash : {
     label: 'Přehled',
@@ -48,7 +48,7 @@ const VIEW_CONFIG = {
     color: 'text-orange-500',
     badge: 'bg-orange-50 text-orange-600',
     emptyText: 'Žádné odložené nápady.',
-    helpText: 'Tato kategorie slouží pro úkoly, které nechceš řešit, ale nechceš je ztratit.',
+    helpText: 'Tato kategorie slouží pro úkoly, které nechceš v blízké době řešit, ale nechceš je ztratit.',
   },
   completed: {
     label: 'Dokončené',
